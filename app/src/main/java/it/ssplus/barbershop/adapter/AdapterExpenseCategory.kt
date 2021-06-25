@@ -100,11 +100,9 @@ class AdapterExpenseCategory(
         if (selectedItems.contains(image)) {
             selectedItems.remove(image)
             holder.itemView.setBackgroundColor(android.R.color.transparent)
-            holder.itemSelectExpenseCategoryIndicator.visibility = View.GONE
         } else {
             selectedItems.add(image)
             holder.itemView.setBackgroundColor(R.color.boxBackgroundDefault)
-            holder.itemSelectExpenseCategoryIndicator.visibility = View.VISIBLE
         }
     }
 
@@ -112,7 +110,6 @@ class AdapterExpenseCategory(
         internal val tvNameExpenseCategory: TextView
         internal val ivItemIconExpenseCategory: ImageView
         internal val tvDescriptionExpenseCategory: TextView
-        internal val itemSelectExpenseCategoryIndicator: ImageView
 
         init {
             tvNameExpenseCategory =
@@ -121,8 +118,6 @@ class AdapterExpenseCategory(
                 itemView.findViewById<View>(R.id.ivIconExpenseCategory) as ImageView
             tvDescriptionExpenseCategory =
                 itemView.findViewById<View>(R.id.tvDescriptionExpenseCategory) as TextView
-            itemSelectExpenseCategoryIndicator =
-                itemView.findViewById(R.id.itemSelectExpenseCategoryIndicator)
         }
     }
 

@@ -46,7 +46,7 @@
             android:textColor="@color/primaryTextColor"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/tvDescriptionExpenseCategory"
-            app:layout_constraintEnd_toStartOf="@+id/itemSelectExpenseCategoryIndicator"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivIconExpenseCategory"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,27 +60,9 @@
             android:text="TextView"
             android:textColor="@color/primaryTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/itemSelectExpenseCategoryIndicator"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivIconExpenseCategory"
             app:layout_constraintTop_toBottomOf="@+id/tvNameExpenseCategory" />
-
-        <ImageView
-            android:id="@+id/itemSelectExpenseCategoryIndicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:adjustViewBounds="true"
-            android:clickable="true"
-            android:cropToPadding="true"
-            android:foreground="?selectableItemBackgroundBorderless"
-            android:padding="4dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_check_circle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
