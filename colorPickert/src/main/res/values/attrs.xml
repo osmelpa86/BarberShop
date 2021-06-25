@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ColorPickert">
+        <attr name="custom_layout" format="reference" />
+        <attr name="drawableList" format="reference"/>
+        <attr name="nameList" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="Themes">
+        <attr name="ColorPickertLayout" format="reference" />
+    </declare-styleable>
+
+</resources>

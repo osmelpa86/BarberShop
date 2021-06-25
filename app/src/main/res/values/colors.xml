@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    <color name="primaryColor">#1564bf</color>-->
+    <!--    <color name="primaryLightColor">#5e91f2</color>-->
+    <!--    <color name="primaryDarkColor">#003b8e</color>-->
+    <!--    <color name="secondaryColor">#01579b</color>-->
+    <!--    <color name="secondaryLightColor">#4f83cc</color>-->
+    <!--    <color name="secondaryDarkColor">#002f6c</color>-->
+    <!--    <color name="primaryTextColor">#ffffff</color>-->
+    <!--    <color name="secondaryTextColor">#ffffff</color> -->
+
+<!--    <color name="primaryColor">#252f4a</color>-->
+<!--    <color name="primaryLightColor">#252f4a</color>-->
+<!--    <color name="primaryDarkColor">#252f4a</color>-->
+<!--    <color name="secondaryColor">#252f4a</color>-->
+<!--    <color name="secondaryLightColor">#252f4a</color>-->
+<!--    <color name="secondaryDarkColor">#ffffff</color>-->
+
+
+
+    <color name="primaryColor">#252f4a</color>
+    <color name="primaryDarkColor">#262F49</color>
+    <color name="secondaryColor">#4CAF50</color>
+    <!--    <color name="primaryLightColor">#009688</color>-->
+    <color name="primaryLightColor">#252f4a</color>
+    <color name="secondaryLightColor">#252f4a</color>
+
+    <color name="secondaryDarkColor">#ffffff</color>
+    <color name="accentSecondaryColor">#009688</color>
+
+
+
+
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">#B3FFFFFF</color>
+    <color name="boxBackgroundDefault">#414960</color>
+    <color name="errorColor">#b71c1c</color>
+
+
+</resources>

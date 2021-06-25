@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="IconPickert">
+        <attr name="custom_layout" format="reference" />
+        <attr name="value" format="reference"/>
+        <attr name="transparent" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="Themes">
+        <attr name="IconPickertLayout" format="reference" />
+    </declare-styleable>
+
+</resources>

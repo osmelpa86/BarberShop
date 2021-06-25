@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="it.ssplus.barbershop.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_client"
+        android:name="it.ssplus.barbershop.ui.client.ClientFragment"
+        android:label="@string/menu_client"
+        tools:layout="@layout/fragment_client" />
+
+    <fragment
+        android:id="@+id/nav_service"
+        android:name="it.ssplus.barbershop.ui.service.ServiceFragment"
+        android:label="@string/menu_service"
+        tools:layout="@layout/fragment_service">
+        <action
+            android:id="@+id/action_nav_service_to_nav_type_service"
+            app:destination="@id/nav_type_service"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_type_service"
+        android:name="it.ssplus.barbershop.ui.type_service.TypeServiceFragment"
+        android:label="@string/menu_type_service"
+        tools:layout="@layout/fragment_type_service">
+        <action
+            android:id="@+id/action_nav_type_service_to_nav_service"
+            app:destination="@id/nav_service"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/nav_service"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_expense"
+        android:name="it.ssplus.barbershop.ui.expense.ExpenseFragment"
+        android:label="@string/menu_expense"
+        tools:layout="@layout/fragment_expense">
+        <action
+            android:id="@+id/action_nav_expense_to_expense_category"
+            app:destination="@id/expense_category"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/expense_category"
+        android:name="it.ssplus.barbershop.ui.expense_category.ExpenseCategoryFragment"
+        android:label="@string/menu_expense_category"
+        tools:layout="@layout/fragment_expense_category">
+        <action
+            android:id="@+id/action_expense_category_to_nav_expense"
+            app:destination="@id/nav_expense"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/nav_expense"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_turn"
+        android:name="it.ssplus.barbershop.ui.turn.TurnFragment"
+        android:label="@string/menu_turn"
+        tools:layout="@layout/fragment_turn" />
+</navigation>

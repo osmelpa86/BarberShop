@@ -1,0 +1,134 @@
+<resources xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.BarberShop" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryLightColor</item>
+        <item name="colorOnPrimary">@color/primaryDarkColor</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryLightColor</item>
+        <item name="colorOnSecondary">@color/secondaryDarkColor</item>
+        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+        <item name="android:textColorSecondary">@color/secondaryTextColor</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+
+        <item name="android:windowBackground">@color/primaryColor</item>
+    </style>
+
+    <style name="Theme.BarberShop.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.BarberShop.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="elevation">0dp</item>
+    </style>
+
+    <style name="Theme.BarberShop.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="NoFullScreenDialogStyle" parent="Theme.AppCompat.Dialog">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryColor</item>
+        <item name="colorAccent">@color/primaryColor</item>
+        <!-- darker variant for the status bar and contextual app bars -->
+        <item name="colorPrimaryVariant">@color/primaryColor</item>
+        <!-- theme UI controls like checkboxes and text fields -->
+        <!--        <item name="colorOnPrimary">@color/colorAccent</item>-->
+        <!--        <item name="colorSecondary">@color/colorAccent</item>-->
+        <!--        <item name="colorError">@color/colorError</item>-->
+        <!--        <item name="colorOnError">@color/colorError</item>-->
+
+        <!-- Set this to true if you want Full Screen without status bar -->
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">false</item>
+        <!--        <item name="colorControlActivated">@color/colorPrimaryDark</item>-->
+    </style>
+
+    <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxBackgroundColor">@color/boxBackgroundDefault</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="boxCornerRadiusBottomEnd">@android:dimen/thumbnail_width</item>
+        <item name="boxCornerRadiusBottomStart">@android:dimen/thumbnail_width</item>
+        <item name="boxCornerRadiusTopEnd">@android:dimen/thumbnail_width</item>
+        <item name="boxCornerRadiusTopStart">@android:dimen/thumbnail_width</item>
+
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorHighlight">@color/secondaryTextColor</item>
+        <item name="android:textColorHint">@color/primaryTextColor</item>
+        <item name="hintTextColor">@color/secondaryTextColor</item>
+    </style>
+
+    <style name="CustomMultilineTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxBackgroundColor">@color/boxBackgroundDefault</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="boxCornerRadiusBottomEnd">25dp</item>
+        <item name="boxCornerRadiusBottomStart">25dp</item>
+        <item name="boxCornerRadiusTopEnd">25dp</item>
+        <item name="boxCornerRadiusTopStart">25dp</item>
+
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorHighlight">@color/secondaryTextColor</item>
+        <item name="android:textColorHint">@color/primaryTextColor</item>
+        <item name="hintTextColor">@color/secondaryTextColor</item>
+    </style>
+
+    <style name="CustomEditText" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
+        <item name="colorControlNormal">@color/primaryTextColor</item>
+        <item name="colorControlActivated">@color/primaryTextColor</item>
+        <item name="android:editTextColor">@color/primaryTextColor</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorHighlight">@color/secondaryTextColor</item>
+        <item name="android:textColorHint">@color/secondaryTextColor</item>
+        <!--        <item name="android:background">@drawable/edit_text_roud_shape</item>-->
+        <item name="android:background">@null</item>
+
+    </style>
+
+    <style name="CustomEditTextIconRight" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
+        <item name="colorControlNormal">@color/primaryTextColor</item>
+        <item name="colorControlActivated">@color/primaryTextColor</item>
+        <item name="android:editTextColor">@color/primaryTextColor</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorHighlight">@color/secondaryTextColor</item>
+        <item name="android:textColorHint">@color/secondaryTextColor</item>
+        <item name="android:background">@drawable/edit_text_combine_roud_shape</item>
+        <!--        <item name="android:background">@null</item>-->
+
+    </style>
+
+    <style name="SpinnerRound">
+<!--        <item name="android:background">@drawable/edit_text_roud_shape</item>-->
+        <item name="colorAccent">@color/primaryTextColor</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorHint">@color/secondaryTextColor</item>
+    </style>
+
+    <!--    <style name="CustomMultilineEditText" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">-->
+    <!--        <item name="colorControlNormal">@color/primaryTextColor</item>-->
+    <!--        <item name="colorControlActivated">@color/primaryTextColor</item>-->
+    <!--        <item name="android:editTextColor">@color/primaryTextColor</item>-->
+    <!--        <item name="android:textSize">14sp</item>-->
+    <!--        <item name="android:textColor">@color/primaryTextColor</item>-->
+    <!--        <item name="android:textColorHighlight">@color/secondaryTextColor</item>-->
+    <!--        <item name="android:textColorHint">@color/secondaryTextColor</item>-->
+    <!--        <item name="android:background">@drawable/edit_text_multiline_roud_shape</item>-->
+    <!--    </style>-->
+
+    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/primaryDarkColor</item>
+        <!--<item name="android:textColorPrimary">#FFFFFF</item>-->
+        <item name="android:background">@drawable/dialog_background_roud_shape</item>
+    </style>
+
+</resources>

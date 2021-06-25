@@ -1,0 +1,4 @@
+include ':colorPickert'
+include ':iconPickert'
+include ':app'
+rootProject.name = "BarberShop+"
