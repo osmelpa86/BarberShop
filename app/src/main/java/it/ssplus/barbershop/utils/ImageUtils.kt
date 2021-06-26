@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.VectorDrawable
 import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
@@ -191,6 +192,11 @@ object ImageUtils {
             Log.e("TAG", "Vector creation failed", e)
         }
         return null
+    }
+
+    fun bitmapToDrawable(bitmap: Bitmap?): Drawable? {
+        val bd = BitmapDrawable(null,bitmap)
+        return bd
     }
 }
 

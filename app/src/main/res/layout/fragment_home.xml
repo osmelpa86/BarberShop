@@ -32,7 +32,7 @@
                 android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <it.ssplus.iconpickert.IconPickert
+        <it.ssplus.iconpickert.IconPicker
             android:id="@+id/iconPickert"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             app:layout_constraintTop_toTopOf="@+id/tilNombreEntrenador"
             app:transparent="true">
 
-        </it.ssplus.iconpickert.IconPickert>
+        </it.ssplus.iconpickert.IconPicker>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

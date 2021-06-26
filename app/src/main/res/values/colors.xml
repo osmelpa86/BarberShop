@@ -24,17 +24,23 @@
     <!--    <color name="primaryLightColor">#009688</color>-->
     <color name="primaryLightColor">#252f4a</color>
     <color name="secondaryLightColor">#252f4a</color>
+    <color name="baseColor">#3A4567</color>
 
     <color name="secondaryDarkColor">#ffffff</color>
     <color name="accentSecondaryColor">#009688</color>
-
-
-
 
     <color name="primaryTextColor">#ffffff</color>
     <color name="secondaryTextColor">#B3FFFFFF</color>
     <color name="boxBackgroundDefault">#414960</color>
     <color name="errorColor">#b71c1c</color>
+
+    <color name="colorLightRed">#E57373</color>
+    <color name="colorDarkRed">#D32F2F</color>
+    <color name="colorLightGrey">#C0C0C0</color>
+
+    <color name="colorRippleTheme">#8A4CAF50</color>
+    <color name="colorRippleDefault">#4DFFFFFF</color>
+    <color name="colorRippleDefaultLight">#26000000</color>
 
 
 </resources>

@@ -108,7 +108,7 @@
     </style>
 
     <style name="SpinnerRound">
-<!--        <item name="android:background">@drawable/edit_text_roud_shape</item>-->
+        <!--        <item name="android:background">@drawable/edit_text_roud_shape</item>-->
         <item name="colorAccent">@color/primaryTextColor</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textColorHint">@color/secondaryTextColor</item>
@@ -131,4 +131,36 @@
         <item name="android:background">@drawable/dialog_background_roud_shape</item>
     </style>
 
+    <style name="Button.Round" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/button_normal_round</item>
+    </style>
+
+    <style name="Button.White.Round" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/button_white_round</item>
+        <item name="android:textColor">@color/secondaryColor</item>
+    </style>
+
+    <style name="Button.Red.Round" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/button_red_round</item>
+        <item name="android:textColor">@color/secondaryDarkColor</item>
+    </style>
+
+    <!--    BottomSheet Dialog-->
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+        <item name="android:layout_marginBottom">1dp</item>
+        <item name="android:layout_marginLeft">1dp</item>
+        <item name="android:layout_marginRight">1dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 </resources>

@@ -2,9 +2,9 @@ package it.ssplus.iconpickert
 
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -14,19 +14,21 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.graphics.drawable.toBitmap
 import androidx.gridlayout.widget.GridLayout
+import it.ssplus.iconpickert.ResourceUtil.getBitmap
 
 
-class IconPickert : LinearLayout {
+class IconPicker : LinearLayout {
     private val DEFAULT_LAYOUT = R.layout.icon_pickert_layout
     private var layout = 0
     private var mContext: Context? = null
-    private var selectIconPickert: ConstraintLayout? = null
+    private var selectIconPicker: ConstraintLayout? = null
     private var selectIconOpen: ImageView? = null
-    private var currentValue: Drawable? = null
+    private var currentValue: Bitmap? = null
     var transparent = false
 
-    constructor(context: Context?) : super(context, null) {}
+    constructor(context: Context?) : super(context, null)
     constructor(
         context: Context,
         attrs: AttributeSet?
@@ -38,8 +40,7 @@ class IconPickert : LinearLayout {
         context: Context?,
         attrs: AttributeSet?,
         defStyleAttr: Int
-    ) : super(context, attrs, defStyleAttr) {
-    }
+    ) : super(context, attrs, defStyleAttr)
 
     private fun initialize(
         context: Context,
@@ -51,25 +52,33 @@ class IconPickert : LinearLayout {
             attributes.getResourceId(R.styleable.IconPickert_custom_layout, DEFAULT_LAYOUT)
         mContext = context
         LayoutInflater.from(mContext).inflate(layout, this, true)
-        selectIconPickert =
+        selectIconPicker =
             findViewById<View>(R.id.selectIconPickert) as ConstraintLayout
         selectIconOpen =
             findViewById<View>(R.id.selectIconOpen) as ImageView
-        currentValue = selectIconOpen!!.drawable
-        selectIconPickert!!.setOnClickListener {
+
+        currentValue = selectIconOpen!!.drawable.toBitmap(
+            ResourceUtil.convertDpToPx(
+                mContext!!,
+                24F
+            ).toInt(), ResourceUtil.convertDpToPx(
+                mContext!!,
+                24F
+            ).toInt(), null
+        )
+
+        selectIconPicker!!.setOnClickListener {
             dialogIconList()
         }
 
-
         transparent = attributes.getBoolean(R.styleable.IconPickert_transparent, false)
 
-        if (transparent == true) {
-            selectIconPickert!!.setBackgroundResource(android.R.color.transparent)
+        if (transparent) {
+            selectIconPicker!!.setBackgroundResource(android.R.color.transparent)
         }
-
     }
 
-    fun dialogIconList() {
+    private fun dialogIconList() {
         val builderAdd =
             AlertDialog.Builder(mContext, R.style.AppCompatAlertDialogStyleLibrary)
         val inflater = LayoutInflater.from(mContext)
@@ -89,13 +98,13 @@ class IconPickert : LinearLayout {
         val ll = convertView.findViewById<View>(R.id.tlListIcons) as GridLayout
 
         val dialogAdd: AlertDialog = builderAdd.create()
-        dialogAdd.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogAdd.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialogAdd.setCanceledOnTouchOutside(false)
 
         titleIcon.setOnClickListener { dialogAdd.dismiss() }
 
         for (i in 0 until Utils.icons.size) {
-            var imageView = ImageView(mContext)
+            val imageView = ImageView(mContext)
             imageView.isClickable = true
             imageView.adjustViewBounds = true
             imageView.cropToPadding = true
@@ -106,10 +115,10 @@ class IconPickert : LinearLayout {
 
                 )
 
-            val marginParams1 = MarginLayoutParams(imageView.getLayoutParams())
+            val marginParams1 = MarginLayoutParams(imageView.layoutParams)
             marginParams1.setMargins(95, 60, 95, 60)
             val layoutParams1 = LayoutParams(marginParams1)
-            imageView.setLayoutParams(layoutParams1)
+            imageView.layoutParams = layoutParams1
 
 
             val outValue = TypedValue()
@@ -122,7 +131,7 @@ class IconPickert : LinearLayout {
             imageView.setImageResource(Utils.icons[i])
             imageView.setOnClickListener {
                 selectIconOpen!!.setImageDrawable(imageView.drawable)
-                value = selectIconOpen!!.drawable
+                value = getBitmap(mContext, Utils.icons[i])
                 dialogAdd.dismiss()
             }
             ll.addView(imageView)
@@ -131,11 +140,11 @@ class IconPickert : LinearLayout {
         dialogAdd.show()
     }
 
-    fun refresh() {
-        selectIconOpen!!.setImageDrawable(currentValue)
+    private fun refresh() {
+        selectIconOpen!!.setImageBitmap(currentValue)
     }
 
-    var value: Drawable
+    var value: Bitmap
         get() = currentValue!!
         set(value) {
             currentValue = value

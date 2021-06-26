@@ -9,12 +9,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import it.ssplus.barbershop.R
 import it.ssplus.barbershop.model.entity.ExpenseCategory
 import it.ssplus.barbershop.ui.expense_category.ExpenseCategoryFragment
 import it.ssplus.barbershop.utils.Constants
+import it.ssplus.barbershop.utils.ImageUtils
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -27,7 +30,7 @@ class AdapterExpenseCategory(
     internal var expenseCategories = arrayListOf<ExpenseCategory>()
     lateinit var parentAux: ViewGroup
     var multiSelect = false
-    private val selectedItems = arrayListOf<ExpenseCategory>()
+    val selectedItems = arrayListOf<ExpenseCategory>()
     private lateinit var holderAux: ExpenseCategoryViewHolder
 
     fun setData(expenseCategories: ArrayList<ExpenseCategory>) {
@@ -75,9 +78,48 @@ class AdapterExpenseCategory(
                 toolbar.title =
                     activity.resources.getString(R.string.title_selected) + " " + this.selectedItems.size.toString()
             } else {
-                // else, simply show the image to the user
-//                showPopup(currentImage.file)
-                println("Mostrar Bottom Sheet")
+                val view = LayoutInflater.from(activity)
+                    .inflate(R.layout.bottom_sheet_expense_category_details, null, false)
+
+                val toolbar: Toolbar = view.findViewById(R.id.toolbar)
+                val imageViewIcon: ImageView = view.findViewById(R.id.imageViewIcon)
+                val textViewName: TextView = view.findViewById(R.id.textViewName)
+                val textViewDescription: TextView = view.findViewById(R.id.textViewDescription)
+
+                textViewName.text = expenseCategories.get(position).name
+                textViewDescription.text = expenseCategories.get(position).description
+                toolbar.inflateMenu(R.menu.expense_category_details)
+
+                imageViewIcon.setBackgroundResource(
+                    Constants.roundIcons[expenseCategories.get(
+                        position
+                    ).color]
+                )
+
+                imageViewIcon.setImageBitmap(expenseCategories.get(position).image?.let { it1 ->
+                    ImageUtils.getImage(
+                        it1
+                    )
+                })
+
+                val dialog = BottomSheetDialog(activity, R.style.BottomSheetDialogTheme)
+                dialog.setContentView(view)
+
+                toolbar.setNavigationOnClickListener { dialog.dismiss() }
+                toolbar.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.expense_category_edit -> {
+                            expenseCategoryFragment.expenseCategory =
+                                expenseCategories.get(position)
+                            expenseCategoryFragment.add()
+                            dialog.dismiss()
+                            true
+                        }
+                        else -> false
+                    }
+                }
+
+                dialog.show()
             }
         }
 
@@ -89,7 +131,7 @@ class AdapterExpenseCategory(
             expenseCategory.image!!.size
         )
         holder.ivItemIconExpenseCategory.setImageBitmap(bitmap)
-        holder.ivItemIconExpenseCategory.background = expenseCategoryFragment.resources.getDrawable(
+        holder.clIconExpenseCategory.background = expenseCategoryFragment.resources.getDrawable(
             Constants.roundIcons[expenseCategory.color],
             null
         )
@@ -110,6 +152,7 @@ class AdapterExpenseCategory(
         internal val tvNameExpenseCategory: TextView
         internal val ivItemIconExpenseCategory: ImageView
         internal val tvDescriptionExpenseCategory: TextView
+        internal val clIconExpenseCategory: ConstraintLayout
 
         init {
             tvNameExpenseCategory =
@@ -118,6 +161,8 @@ class AdapterExpenseCategory(
                 itemView.findViewById<View>(R.id.ivIconExpenseCategory) as ImageView
             tvDescriptionExpenseCategory =
                 itemView.findViewById<View>(R.id.tvDescriptionExpenseCategory) as TextView
+            clIconExpenseCategory =
+                itemView.findViewById<View>(R.id.clIconExpenseCategory) as ConstraintLayout
         }
     }
 
@@ -170,6 +215,21 @@ class AdapterExpenseCategory(
     fun handleCancel() {
         multiSelect = false
         selectedItems.clear()
+        notifyDataSetChanged()
+    }
+
+    fun handleSelectAll() {
+        if (this.selectedItems.size == 0) {
+            this.selectedItems.addAll(this.expenseCategories)
+        } else if (this.selectedItems.size != itemCount) {
+            this.selectedItems.clear()
+            this.selectedItems.addAll(this.expenseCategories)
+        } else if (this.selectedItems.size == itemCount) {
+            this.selectedItems.clear()
+        }
+        var toolbar = activity.findViewById<Toolbar>(R.id.toolbar)
+        toolbar.title =
+            activity.resources.getString(R.string.title_selected) + " " + this.selectedItems.size.toString()
         notifyDataSetChanged()
     }
 }

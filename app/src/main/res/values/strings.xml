@@ -25,7 +25,9 @@
     <string name="message_success_edit">Editado satisfactoriamente</string>
     <string name="message_success_delete">Elimiando satisfactoriamente</string>
     <string name="message_no_data_avaliable">No hay datos disponibles</string>
-
+    <string name="message_confirm_delete_selected_expense_category">¿Seguro que desea eliminar las categorías de gastos seleccionados?</string>
+    <string name="message_delete_expense_categories">Eliminar categorías de gastos</string>
+    <string name="message_cant_be_undone">Esta acción no se puede deshacer</string>
     <!--    Hint-->
     <string name="message_hint_name">Nombre</string>
     <string name="message_hint_description">Descripción</string>
