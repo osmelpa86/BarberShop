@@ -45,7 +45,7 @@ class ExpenseCategoryFragment : Fragment(), View.OnClickListener {
     private lateinit var noDataContainerExpenseCategory: LinearLayout
     private lateinit var svExpenseCategory: SearchView
     var expenseCategory: ExpenseCategory? = null
-    private var coloSelected = -1
+    private var colorSelected = -1
     private lateinit var tilColorExpenseCategory: TextInputLayout
     private lateinit var fabAddExpenseCategory: FloatingActionButton
     private lateinit var menu: Menu
@@ -208,11 +208,11 @@ class ExpenseCategoryFragment : Fragment(), View.OnClickListener {
             tilNameExpenseCategory.editText!!.setText(expenseCategory!!.name)
             tilDescriptionExpenseCategory.editText!!.setText(expenseCategory!!.description)
             iconPicker.value = ImageUtils.getImage(expenseCategory!!.image!!)
-            coloSelected = expenseCategory!!.color
+            colorSelected = expenseCategory!!.color
             tilColorExpenseCategory.editText!!.setText(
-                resources.getString(Constants.colorNames[coloSelected])
+                resources.getString(Constants.colorNames[colorSelected])
             )
-            tilColorExpenseCategory.setStartIconDrawable(Constants.roundIcons[coloSelected])
+            tilColorExpenseCategory.setStartIconDrawable(Constants.roundIcons[colorSelected])
 
         }
 
@@ -232,22 +232,27 @@ class ExpenseCategoryFragment : Fragment(), View.OnClickListener {
                     allExpenseCategoryNames
                 ).validate(tilNameExpenseCategory.editText!!.text.toString())
 
+                val validColor = RequiredFieldValidator(
+                    tilColorExpenseCategory,
+                    requireActivity()
+                ).validate(tilColorExpenseCategory.editText!!.text.toString())
+
                 val validDescription = RequiredFieldValidator(
                     tilDescriptionExpenseCategory,
                     requireActivity()
                 ).validate(tilDescriptionExpenseCategory.editText!!.text.toString())
 
-                if (validName && validDescription) {
+                if (validName && validColor && validDescription) {
                     expenseCategoryViewModel.insert(
                         ExpenseCategory(
                             name = tilNameExpenseCategory.editText!!.text.toString(),
                             description = tilDescriptionExpenseCategory.editText!!.text.toString(),
                             image = ImageUtils.getImageBytes(iconPicker.value),
-                            color = coloSelected
+                            color = colorSelected
                         )
                     )
                     dialogAdd.dismiss()
-                    coloSelected = -1
+                    colorSelected = -1
                     val customSnackBar: Snackbar = Snackbar.make(
                         requireActivity().findViewById(R.id.expenseCategoryFragment),
                         "",
@@ -280,28 +285,33 @@ class ExpenseCategoryFragment : Fragment(), View.OnClickListener {
                 val validName = ExpenseCategoryFieldValidator(
                     tilNameExpenseCategory,
                     requireActivity(),
-                    tilNameExpenseCategory.editText!!.text.toString(),
+                    expenseCategory!!.name,
                     true,
                     allExpenseCategoryNames
                 ).validate(tilNameExpenseCategory.editText!!.text.toString())
+
+                val validColor = RequiredFieldValidator(
+                    tilColorExpenseCategory,
+                    requireActivity()
+                ).validate(tilColorExpenseCategory.editText!!.text.toString())
 
                 val validDescription = RequiredFieldValidator(
                     tilDescriptionExpenseCategory,
                     requireActivity()
                 ).validate(tilDescriptionExpenseCategory.editText!!.text.toString())
 
-                if (validName && validDescription) {
+                if (validName && validColor && validDescription) {
                     expenseCategoryViewModel.update(
                         ExpenseCategory(
                             id = expenseCategory!!.id,
                             name = tilNameExpenseCategory.editText!!.text.toString(),
                             description = tilDescriptionExpenseCategory.editText!!.text.toString(),
                             image = ImageUtils.getImageBytes(iconPicker.value),
-                            color = coloSelected
+                            color = colorSelected
                         )
                     )
                     dialogAdd.dismiss()
-                    coloSelected = -1
+                    colorSelected = -1
                     val customSnackBar: Snackbar = Snackbar.make(
                         requireActivity().findViewById(R.id.expenseCategoryFragment),
                         "",
@@ -329,11 +339,16 @@ class ExpenseCategoryFragment : Fragment(), View.OnClickListener {
                     layout.setPadding(0, 0, 0, 0)
                     layout.addView(customSnackView, 0)
                     customSnackBar.show()
+                    expenseCategory = null
                 }
             }
         }
 
-        titleIcon.setOnClickListener { dialogAdd.dismiss() }
+        titleIcon.setOnClickListener {
+            dialogAdd.dismiss()
+            if (expenseCategory != null)
+                expenseCategory = null
+        }
 
         dialogAdd.show()
     }
@@ -411,7 +426,7 @@ class ExpenseCategoryFragment : Fragment(), View.OnClickListener {
 
         val rvListColors: RecyclerView =
             convertView.findViewById(R.id.rvListColors)
-        val adapterColorList = AdapterColorList(this, coloSelected)
+        val adapterColorList = AdapterColorList(this, colorSelected)
 
         rvListColors.adapter = adapterColorList
         rvListColors.layoutManager = GridLayoutManager(activity, 4, RecyclerView.VERTICAL, false)
@@ -424,13 +439,13 @@ class ExpenseCategoryFragment : Fragment(), View.OnClickListener {
         val accept: ImageButton =
             titleCustomView.findViewById(R.id.imageButton)
         accept.setOnClickListener {
-            coloSelected = adapterColorList.getSelected()!!
+            colorSelected = adapterColorList.getSelected()!!
             tilColorExpenseCategory.editText!!.setText(
-                resources.getString(Constants.colorNames[coloSelected])
+                resources.getString(Constants.colorNames[colorSelected])
             )
-            tilColorExpenseCategory.setStartIconDrawable(Constants.roundIcons[coloSelected])
+            tilColorExpenseCategory.setStartIconDrawable(Constants.roundIcons[colorSelected])
 //            tilColorExpenseCategory.editText!!.background =
-//                resources.getDrawable(Constants.roundIcons[coloSelected], null)
+//                resources.getDrawable(Constants.roundIcons[colorSelected], null)
             dialogAdd.dismiss()
         }
 

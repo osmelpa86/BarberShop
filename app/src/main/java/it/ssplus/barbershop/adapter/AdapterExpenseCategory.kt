@@ -28,10 +28,8 @@ class AdapterExpenseCategory(
     RecyclerView.Adapter<AdapterExpenseCategory.ExpenseCategoryViewHolder>() {
 
     internal var expenseCategories = arrayListOf<ExpenseCategory>()
-    lateinit var parentAux: ViewGroup
     var multiSelect = false
     val selectedItems = arrayListOf<ExpenseCategory>()
-    private lateinit var holderAux: ExpenseCategoryViewHolder
 
     fun setData(expenseCategories: ArrayList<ExpenseCategory>) {
         this.expenseCategories.clear()
@@ -45,14 +43,12 @@ class AdapterExpenseCategory(
             parent,
             false
         )
-        parentAux = parent
         return ExpenseCategoryViewHolder(v)
     }
 
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: ExpenseCategoryViewHolder, position: Int) {
-        this.holderAux = holder
-        val expenseCategory = expenseCategories.get(position)
+        val expenseCategory = expenseCategories[position]
 
         if (selectedItems.contains(expenseCategory)) {
             holder.itemView.setBackgroundColor(R.color.boxBackgroundDefault)
@@ -74,7 +70,7 @@ class AdapterExpenseCategory(
         holder.itemView.setOnClickListener {
             if (multiSelect) {
                 selectItem(holder, expenseCategory)
-                var toolbar = activity.findViewById<Toolbar>(R.id.toolbar)
+                val toolbar = activity.findViewById<Toolbar>(R.id.toolbar)
                 toolbar.title =
                     activity.resources.getString(R.string.title_selected) + " " + this.selectedItems.size.toString()
             } else {
@@ -86,17 +82,15 @@ class AdapterExpenseCategory(
                 val textViewName: TextView = view.findViewById(R.id.textViewName)
                 val textViewDescription: TextView = view.findViewById(R.id.textViewDescription)
 
-                textViewName.text = expenseCategories.get(position).name
-                textViewDescription.text = expenseCategories.get(position).description
+                textViewName.text = expenseCategories[position].name
+                textViewDescription.text = expenseCategories[position].description
                 toolbar.inflateMenu(R.menu.expense_category_details)
 
                 imageViewIcon.setBackgroundResource(
-                    Constants.roundIcons[expenseCategories.get(
-                        position
-                    ).color]
+                    Constants.roundIcons[expenseCategories[position].color]
                 )
 
-                imageViewIcon.setImageBitmap(expenseCategories.get(position).image?.let { it1 ->
+                imageViewIcon.setImageBitmap(expenseCategories[position].image?.let { it1 ->
                     ImageUtils.getImage(
                         it1
                     )
@@ -110,7 +104,7 @@ class AdapterExpenseCategory(
                     when (it.itemId) {
                         R.id.expense_category_edit -> {
                             expenseCategoryFragment.expenseCategory =
-                                expenseCategories.get(position)
+                                expenseCategories[position]
                             expenseCategoryFragment.add()
                             dialog.dismiss()
                             true
@@ -123,8 +117,8 @@ class AdapterExpenseCategory(
             }
         }
 
-        holder.tvNameExpenseCategory.setText(expenseCategory.name)
-        holder.tvDescriptionExpenseCategory.setText(expenseCategory.description)
+        holder.tvNameExpenseCategory.text = expenseCategory.name
+        holder.tvDescriptionExpenseCategory.text = expenseCategory.description
         val bitmap = BitmapFactory.decodeByteArray(
             expenseCategory.image,
             0,
@@ -166,21 +160,13 @@ class AdapterExpenseCategory(
         }
     }
 
-    override fun getItemId(position: Int): Long {
-        return super.getItemId(position)
-    }
-
     override fun getItemCount(): Int {
         return expenseCategories.size
     }
 
     fun changeDataItem(position: Int, model: ExpenseCategory) {
-        expenseCategories.set(position, model)
+        expenseCategories[position] = model
         notifyDataSetChanged()
-    }
-
-    fun objectPosition(categoria: ExpenseCategory): Int {
-        return expenseCategories.indexOf(categoria)
     }
 
     var filter: Filter = object : Filter() {
@@ -190,10 +176,10 @@ class AdapterExpenseCategory(
             if (filterPattern.isEmpty()) {
                 filteredList.addAll(expenseCategoryFragment.listExpenseCategory)
             } else {
-                for (categoria in expenseCategoryFragment.listExpenseCategory) {
-                    if (categoria.name.toLowerCase(Locale.ROOT).contains(filterPattern)
+                for (category in expenseCategoryFragment.listExpenseCategory) {
+                    if (category.name.toLowerCase(Locale.ROOT).contains(filterPattern)
                     ) {
-                        filteredList.add(categoria)
+                        filteredList.add(category)
                     }
                 }
             }
@@ -219,15 +205,19 @@ class AdapterExpenseCategory(
     }
 
     fun handleSelectAll() {
-        if (this.selectedItems.size == 0) {
-            this.selectedItems.addAll(this.expenseCategories)
-        } else if (this.selectedItems.size != itemCount) {
-            this.selectedItems.clear()
-            this.selectedItems.addAll(this.expenseCategories)
-        } else if (this.selectedItems.size == itemCount) {
-            this.selectedItems.clear()
+        when {
+            this.selectedItems.size == 0 -> {
+                this.selectedItems.addAll(this.expenseCategories)
+            }
+            this.selectedItems.size != itemCount -> {
+                this.selectedItems.clear()
+                this.selectedItems.addAll(this.expenseCategories)
+            }
+            this.selectedItems.size == itemCount -> {
+                this.selectedItems.clear()
+            }
         }
-        var toolbar = activity.findViewById<Toolbar>(R.id.toolbar)
+        val toolbar = activity.findViewById<Toolbar>(R.id.toolbar)
         toolbar.title =
             activity.resources.getString(R.string.title_selected) + " " + this.selectedItems.size.toString()
         notifyDataSetChanged()

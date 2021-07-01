@@ -1,6 +1,7 @@
 package it.ssplus.barbershop.model.pojo
 
 import androidx.room.Embedded
+import androidx.room.Entity
 import androidx.room.Relation
 import it.ssplus.barbershop.model.entity.Expense
 import it.ssplus.barbershop.model.entity.ExpenseCategory

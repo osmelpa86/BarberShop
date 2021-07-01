@@ -10,7 +10,7 @@ import it.ssplus.barbershop.model.repository.ExpenseCategoryRepository
 import kotlinx.coroutines.launch
 
 class ExpenseCategoryViewModel(application: Application) : AndroidViewModel(application) {
-    val expenseCategoryRepository: ExpenseCategoryRepository
+    private val expenseCategoryRepository: ExpenseCategoryRepository
     val all: LiveData<List<ExpenseCategory>>
     val allExpenseCategoryNames: LiveData<List<String>>
 
@@ -22,7 +22,7 @@ class ExpenseCategoryViewModel(application: Application) : AndroidViewModel(appl
     }
 
     fun insert(obj: ExpenseCategory) = viewModelScope.launch {
-        expenseCategoryRepository.insert(obj);
+        expenseCategoryRepository.insert(obj)
     }
 
     fun update(obj: ExpenseCategory) = viewModelScope.launch {

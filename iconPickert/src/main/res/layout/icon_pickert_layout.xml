@@ -17,7 +17,7 @@
         android:layout_marginStart="14dp"
         android:layout_marginTop="14dp"
         android:layout_marginEnd="14dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="13dp"
         android:contentDescription="Select icon"
         android:cropToPadding="true"
         android:tint="@android:color/white"

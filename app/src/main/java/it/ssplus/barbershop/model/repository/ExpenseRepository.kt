@@ -3,11 +3,12 @@ package it.ssplus.barbershop.model.repository
 import androidx.lifecycle.LiveData
 import it.ssplus.barbershop.model.dao.ExpenseDao
 import it.ssplus.barbershop.model.entity.Expense
+import it.ssplus.barbershop.model.pojo.ExpensePojo
 
 class ExpenseRepository(private val expenseDao: ExpenseDao) {
-    val all: LiveData<List<Expense>> = expenseDao.getAll()
+    val all: LiveData<List<ExpensePojo>> = expenseDao.getAll()
 
-    fun get(id: Long): LiveData<Expense> {
+    fun get(id: Long): LiveData<ExpensePojo> {
         return expenseDao.get(id)
     }
 
@@ -27,11 +28,11 @@ class ExpenseRepository(private val expenseDao: ExpenseDao) {
         expenseDao.delete(list)
     }
 
-    fun search(query: String): LiveData<List<Expense>> {
+    fun search(query: String): LiveData<List<ExpensePojo>> {
         return expenseDao.search("%$query%")
     }
 
-    fun lastInserted(): LiveData<Expense> {
+    fun lastInserted(): LiveData<ExpensePojo> {
         return expenseDao.lastInserted()
     }
 }

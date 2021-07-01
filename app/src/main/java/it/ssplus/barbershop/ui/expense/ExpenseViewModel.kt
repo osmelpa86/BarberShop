@@ -1,13 +1,47 @@
 package it.ssplus.barbershop.ui.expense
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
+import it.ssplus.barbershop.model.DatabaseConfig
+import it.ssplus.barbershop.model.entity.Expense
+import it.ssplus.barbershop.model.pojo.ExpensePojo
+import it.ssplus.barbershop.model.repository.ExpenseRepository
+import kotlinx.coroutines.launch
 
-class ExpenseViewModel : ViewModel() {
+class ExpenseViewModel (application: Application) : AndroidViewModel(application) {
+    private val expenseRepository: ExpenseRepository
+    val all: LiveData<List<ExpensePojo>>
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is expense Fragment"
+    init {
+        val dao = DatabaseConfig.getDatabase(application).expenseDao()
+        expenseRepository = ExpenseRepository(dao)
+        all = expenseRepository.all
     }
-    val text: LiveData<String> = _text
+
+    fun insert(obj: Expense) = viewModelScope.launch {
+        expenseRepository.insert(obj)
+    }
+
+    fun update(obj: Expense) = viewModelScope.launch {
+        expenseRepository.update(obj)
+    }
+
+    fun delete(obj: Expense) = viewModelScope.launch {
+        expenseRepository.delete(obj)
+    }
+
+    fun delete(list: List<Expense>) = viewModelScope.launch {
+        expenseRepository.delete(list)
+    }
+
+    fun search(query: String): LiveData<List<ExpensePojo>> =
+        expenseRepository.search(query)
+
+    fun getItem(position: Int): ExpensePojo? {
+        return all.value?.get(position)
+    }
+
+    fun lastInserted(): LiveData<ExpensePojo> {
+        return expenseRepository.lastInserted()
+    }
 }

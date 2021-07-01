@@ -12,18 +12,15 @@ import it.ssplus.barbershop.ui.expense_category.ExpenseCategoryFragment
 import it.ssplus.barbershop.utils.Constants
 
 
-class AdapterColorList :
-    RecyclerView.Adapter<AdapterColorList.ColorViewHolder> {
+class AdapterColorList(
+    internal var expenseCategoryFragment: ExpenseCategoryFragment,
+    selected: Int
+) :
+    RecyclerView.Adapter<AdapterColorList.ColorViewHolder>() {
 
-    internal var icons = Constants.roundIcons
-    internal var names = Constants.colorNames
-    internal var expenseCategoryFragment: ExpenseCategoryFragment
-    private var checkedPosition = -1
-
-    constructor(expenseCategoryFragment: ExpenseCategoryFragment, selected: Int) {
-        this.expenseCategoryFragment = expenseCategoryFragment
-        checkedPosition = selected
-    }
+    private var icons = Constants.roundIcons
+    private var names = Constants.colorNames
+    private var checkedPosition = selected
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorViewHolder {
         val v =
@@ -37,7 +34,7 @@ class AdapterColorList :
 
     inner class ColorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageViewIndicator: ImageView
-        val textViewColor: TextView
+        private val textViewColor: TextView
         val itemColorContainer: ConstraintLayout
 
         init {
@@ -73,10 +70,6 @@ class AdapterColorList :
         }
     }
 
-    override fun getItemId(position: Int): Long {
-        return super.getItemId(position)
-    }
-
     override fun getItemCount(): Int {
         return icons.size
     }
@@ -85,10 +78,6 @@ class AdapterColorList :
         return if (checkedPosition != -1) {
             checkedPosition
         } else null
-    }
-
-    fun objectPosition(color: Int): Int {
-        return icons.indexOf(color)
     }
 }
 

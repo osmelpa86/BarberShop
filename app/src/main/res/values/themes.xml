@@ -64,6 +64,25 @@
         <item name="hintTextColor">@color/secondaryTextColor</item>
     </style>
 
+    <style name="CustomTextInputLayoutLeftRadius" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxBackgroundColor">@color/boxBackgroundDefault</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="boxCornerRadiusTopStart">26dp</item>
+        <item name="boxCornerRadiusBottomStart">26dp</item>
+        <item name="boxCornerRadiusBottomEnd">0dp</item>
+        <item name="boxCornerRadiusTopEnd">0dp</item>
+<!--        <item name="boxCornerRadiusBottomStart">@android:dimen/thumbnail_width</item>-->
+<!--        <item name="boxCornerRadiusTopStart">@android:dimen/thumbnail_width</item>-->
+
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorHighlight">@color/secondaryTextColor</item>
+        <item name="android:textColorHint">@color/primaryTextColor</item>
+        <item name="hintTextColor">@color/secondaryTextColor</item>
+    </style>
+
     <style name="CustomMultilineTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxStrokeWidthFocused">0dp</item>
@@ -104,7 +123,22 @@
         <item name="android:textColorHint">@color/secondaryTextColor</item>
         <item name="android:background">@drawable/edit_text_combine_roud_shape</item>
         <!--        <item name="android:background">@null</item>-->
+    </style>
 
+    <style name="CustomTextInputSpinner" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxBackgroundColor">@color/boxBackgroundDefault</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="boxCornerRadiusBottomEnd">@android:dimen/thumbnail_width</item>
+        <item name="boxCornerRadiusBottomStart">@android:dimen/thumbnail_width</item>
+        <item name="boxCornerRadiusTopEnd">@android:dimen/thumbnail_width</item>
+        <item name="boxCornerRadiusTopStart">@android:dimen/thumbnail_width</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorHighlight">@color/secondaryTextColor</item>
+        <item name="android:textColorHint">@color/primaryTextColor</item>
+        <item name="hintTextColor">@color/secondaryTextColor</item>
     </style>
 
     <style name="SpinnerRound">
@@ -145,6 +179,11 @@
         <item name="android:textColor">@color/secondaryDarkColor</item>
     </style>
 
+    <style name="Button.Accent.Round" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/button_accent_round</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+    </style>
+
     <!--    BottomSheet Dialog-->
     <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
@@ -162,5 +201,14 @@
 
     <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog">
         <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <!--De esta forma coje todo la pantalla como si fuera una actividad-->
+    <!--<style name="DialogPickerTheme" parent="Theme.AppCompat.Light">-->
+    <!--<item name="colorAccent">@color/colorPrimaryDark</item>-->
+    <!--</style>-->
+    <style name="DialogPickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/primaryDarkColor</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
 </resources>
