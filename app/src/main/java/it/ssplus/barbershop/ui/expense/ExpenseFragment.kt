@@ -204,7 +204,7 @@ class ExpenseFragment : Fragment(), View.OnClickListener {
         requireActivity().menuInflater.inflate(R.menu.expense_action, this.menu)
         requireActivity().findViewById<Toolbar>(R.id.toolbar).title =
             requireActivity().resources.getString(R.string.title_selected) + " 1"
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         fabAddExpense.visibility = View.GONE
     }
 
@@ -213,7 +213,7 @@ class ExpenseFragment : Fragment(), View.OnClickListener {
         requireActivity().menuInflater.inflate(R.menu.expense, this.menu)
         requireActivity().findViewById<Toolbar>(R.id.toolbar).title =
             requireActivity().resources.getString(R.string.menu_expense)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         fabAddExpense.visibility = View.VISIBLE
         adapterExpense.handleCancel()
     }
