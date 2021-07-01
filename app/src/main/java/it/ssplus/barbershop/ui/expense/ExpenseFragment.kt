@@ -250,7 +250,7 @@ class ExpenseFragment : Fragment(), View.OnClickListener {
 
     private fun deleteSelection() {
         val items = adapterExpense.selectedItems
-        var expenses = items.map(ExpensePojo::expense)
+        val expenses = items.map(ExpensePojo::expense)
         expenseViewModel.delete(expenses)
         handleCancel()
     }
