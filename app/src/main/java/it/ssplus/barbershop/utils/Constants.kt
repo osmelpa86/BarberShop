@@ -42,5 +42,6 @@ object Constants {
     object Actions {
         const val expense_category_item_selected = "expense_category_item_selected"
         const val expense_item_selected = "expense_item_selected"
+        const val turn_item_selected = "turn_item_selected"
     }
 }

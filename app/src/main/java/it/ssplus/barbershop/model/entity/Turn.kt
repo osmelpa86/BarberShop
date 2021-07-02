@@ -16,7 +16,7 @@ data class Turn(
     @ColumnInfo(name = "id_turn")
     val id: Long = 0,
     val name: String,
-    val hour: Date
+    val hour: String
 ) : Serializable {
 
     override fun equals(other: Any?): Boolean {
