@@ -3,13 +3,16 @@ package it.ssplus.barbershop.adapter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -17,7 +20,6 @@ import it.ssplus.barbershop.R
 import it.ssplus.barbershop.model.pojo.ExpensePojo
 import it.ssplus.barbershop.ui.expense.ExpenseFragment
 import it.ssplus.barbershop.utils.Constants
-import it.ssplus.barbershop.utils.ImageUtils
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -31,6 +33,7 @@ class AdapterExpense(
     internal var expenses = arrayListOf<ExpensePojo>()
     var multiSelect = false
     val selectedItems = arrayListOf<ExpensePojo>()
+    @SuppressLint("SimpleDateFormat")
     private val df = SimpleDateFormat("d/M/yyyy")
 
     fun setData(expenses: ArrayList<ExpensePojo>) {
@@ -89,10 +92,9 @@ class AdapterExpense(
                 val tvAmountExpense: TextView = view.findViewById(R.id.tvAmountExpense)
                 val tvDescriptionExpense: TextView = view.findViewById(R.id.tvDescriptionExpense)
 
-
-                clIconExpenseCategory.background = activity.resources.getDrawable(
-                    Constants.roundIcons[expenses[position].expenseCategory.color],
-                    null
+                clIconExpenseCategory.background = ResourcesCompat.getDrawable(
+                    activity.resources,
+                    Constants.roundIcons[expenses[position].expenseCategory.color], null
                 )
                 val bitmap = BitmapFactory.decodeByteArray(
                     expense.expenseCategory.image,
@@ -127,7 +129,7 @@ class AdapterExpense(
         }
 
         holder.tvNameExpense.text = expense.expenseCategory.name
-        holder.tvDescriptionExpense.text = expense.expenseCategory.description
+        holder.tvDescriptionExpense.text = expense.expense.description
         holder.tvExpenseAmount.text = expense.expense.amount.toString()
         holder.tvExpenseDate.text = df.format(expense.expense.date)
         val bitmap = BitmapFactory.decodeByteArray(
@@ -136,7 +138,7 @@ class AdapterExpense(
             expense.expenseCategory.image!!.size
         )
         holder.ivItemIconExpense.setImageBitmap(bitmap)
-        holder.clIconExpense.background = expenseFragment.resources.getDrawable(
+        holder.clIconExpense.background = ResourcesCompat.getDrawable(activity.resources,
             Constants.roundIcons[expense.expenseCategory.color],
             null
         )
@@ -189,12 +191,12 @@ class AdapterExpense(
     var filter: Filter = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             val filteredList = ArrayList<ExpensePojo>()
-            val filterPattern: String = constraint.toString().toLowerCase(Locale.ROOT).trim()
+            val filterPattern: String = constraint.toString().lowercase(Locale.ROOT).trim()
             if (filterPattern.isEmpty()) {
                 filteredList.addAll(expenseFragment.listExpense)
             } else {
                 for (expense in expenseFragment.listExpense) {
-                    if (expense.expenseCategory.name.toLowerCase(Locale.ROOT)
+                    if (expense.expenseCategory.name.lowercase(Locale.ROOT)
                             .contains(filterPattern)
                     ) {
                         filteredList.add(expense)

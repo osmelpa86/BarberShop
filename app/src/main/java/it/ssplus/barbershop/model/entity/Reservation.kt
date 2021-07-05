@@ -2,7 +2,6 @@ package it.ssplus.barbershop.model.entity
 
 import androidx.room.*
 import java.io.Serializable
-import java.util.*
 
 @Entity(
     tableName = "reservation",

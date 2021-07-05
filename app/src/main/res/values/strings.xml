@@ -20,6 +20,8 @@
     <string name="menu_cancel">Cancelar</string>
     <string name="menu_accept">Aceptar</string>
     <string name="menu_select_all">Seleccionar todos</string>
+    <string name="menu_select">Seleccionar</string>
+    <string name="menu_capture">Capturar</string>
 
     <string name="message_success_add">Adicionado satisfactoriamente</string>
     <string name="message_success_edit">Editado satisfactoriamente</string>
@@ -35,6 +37,9 @@
     <string name="message_confirm_delete_selected_turn">¿Seguro que desea eliminar los turnos seleccionados?</string>
     <string name="message_delete_turns">Eliminar turnos</string>
 
+    <string name="message_confirm_delete_selected_client">¿Seguro que desea eliminar los clientes seleccionados?</string>
+    <string name="message_delete_clients">Eliminar clientes</string>
+
     <!--    Hint-->
     <string name="message_hint_name">Nombre</string>
     <string name="message_hint_description">Descripción</string>
@@ -43,6 +48,8 @@
     <string name="message_hint_date">Fecha</string>
     <string name="message_hint_amount">Cantidad</string>
     <string name="message_hint_hour">Hora</string>
+    <string name="message_hint_phone_number">Télefono</string>
+    <string name="message_hint_cell">Celular</string>
 
     <!--    Validaciones-->
     <string name="message_validation_entry_field">El campo no puede estar vacío</string>
@@ -50,6 +57,8 @@
     <string name="message_validation_exits_expense_category">Ya existe una categoría de gasto con ese nombre</string>
     <string name="message_validation_exits_turn_name">Ya existe un turno con ese nombre</string>
     <string name="message_validation_exits_turn_hour">Ya existe un turno con esa hora</string>
+    <string name="message_validation_incorrect_start_cell">El número debe empezar con 5</string>
+    <string name="message_validation_lenght_phone">El número debe contener 11 digitos</string>
 
     <string name="title_list_color_select">Seleccionar color</string>
     <string name="title_list_expense_category_select">Seleccionar categoría de gastos</string>
@@ -66,4 +75,10 @@
     <string name="deep_purple">Morado oscuro</string>
     <string name="indigo">Azul oscuro</string>
     <string name="blue">Azul</string>
+
+    <string name="you_must_grant_camera_and_external_storage_permission">Debes conceder el permiso de usar la cámara y el almacenamiento externo</string>
+    <string name="you_must_grant_read_external_storage_permission">Debes conceder el permiso de leer el almacenamiento externo</string>
+    <string name="you_must_grant_write_external_storage_permission">Debes conceder el permiso de escribir en el almacenamiento externo</string>
+    <string name="you_must_grant_call_permission">Debes conceder el permiso de llamadas</string>
+    <string name="crop_image">Recortar imágen</string>
 </resources>

@@ -5,7 +5,7 @@
         android:id="@+id/expense_delete"
         android:icon="@drawable/ic_delete"
         android:title="@string/menu_add"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/expense_select"
         android:icon="@drawable/ic_select_all"

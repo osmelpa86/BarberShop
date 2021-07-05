@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/client_select_image_delete"
+        android:icon="@drawable/ic_delete"
+        android:iconTint="@color/primaryDarkColor"
+        android:title="@string/menu_delete"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/client_select_image_select"
+        android:icon="@drawable/ic_add_photo_24"
+        android:iconTint="@color/primaryDarkColor"
+        android:title="@string/menu_select"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/client_select_image_capture"
+        android:icon="@drawable/ic_add_a_photo"
+        android:iconTint="@color/primaryDarkColor"
+        android:title="@string/menu_capture"
+        app:showAsAction="always|withText" />
+</menu>

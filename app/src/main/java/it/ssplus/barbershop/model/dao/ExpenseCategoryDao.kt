@@ -2,7 +2,6 @@ package it.ssplus.barbershop.model.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import it.ssplus.barbershop.model.entity.Client
 import it.ssplus.barbershop.model.entity.ExpenseCategory
 
 @Dao

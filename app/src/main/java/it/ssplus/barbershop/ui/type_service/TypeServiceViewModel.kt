@@ -10,17 +10,17 @@ import it.ssplus.barbershop.model.repository.TypeServiceRepository
 import kotlinx.coroutines.launch
 
 class TypeServiceViewModel(application: Application) : AndroidViewModel(application) {
-    val typeServiceRepository: TypeServiceRepository = TODO()
+    private val typeServiceRepository: TypeServiceRepository = TODO()
     val all: LiveData<List<TypeService>>
 
     init {
         val dao = DatabaseConfig.getDatabase(application).typeServiceDao()
-        typeServiceRepository = TypeServiceRepository(dao);
+        typeServiceRepository = TypeServiceRepository(dao)
         all = typeServiceRepository.all
     }
 
     fun insert(obj: TypeService) = viewModelScope.launch {
-        typeServiceRepository.insert(obj);
+        typeServiceRepository.insert(obj)
     }
 
     fun update(obj: TypeService) = viewModelScope.launch {

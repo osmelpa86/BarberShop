@@ -2,7 +2,6 @@ package it.ssplus.barbershop.model.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import it.ssplus.barbershop.model.entity.Client
 import it.ssplus.barbershop.model.entity.Service
 import it.ssplus.barbershop.model.entity.ServiceTypeService
 import it.ssplus.barbershop.model.entity.TypeService
@@ -20,7 +19,7 @@ interface ServiceDao {
     ) {
         val id = insert(obj)
         for (typeService in listTypesService) {
-            var typeServiceType = ServiceTypeService(id, typeService.id)
+            val typeServiceType = ServiceTypeService(id, typeService.id)
             serviceTypeServiceDao.insert(typeServiceType)
         }
     }
@@ -38,12 +37,12 @@ interface ServiceDao {
 
         for (typeService in listTypesService) {
             if (typeService.id == null) {
-                var typeServiceType = ServiceTypeService(obj.id, typeService.id)
+                val typeServiceType = ServiceTypeService(obj.id, typeService.id)
                 serviceTypeServiceDao.insert(typeServiceType)
             }
         }
 
-        if (!listTypesServiceDelete.isEmpty()) {
+        if (listTypesServiceDelete.isNotEmpty()) {
             for (item in listTypesServiceDelete) {
                 serviceTypeServiceDao.deleteByTypeService(item.id)
             }

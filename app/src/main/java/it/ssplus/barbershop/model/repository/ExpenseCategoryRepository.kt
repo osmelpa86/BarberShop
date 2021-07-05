@@ -1,7 +1,6 @@
 package it.ssplus.barbershop.model.repository
 
 import androidx.lifecycle.LiveData
-import androidx.room.Query
 import it.ssplus.barbershop.model.dao.ExpenseCategoryDao
 import it.ssplus.barbershop.model.entity.ExpenseCategory
 

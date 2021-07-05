@@ -28,8 +28,8 @@ import it.ssplus.barbershop.adapter.AdapterTurn
 import it.ssplus.barbershop.model.entity.Turn
 import it.ssplus.barbershop.utils.Constants
 import it.ssplus.barbershop.utils.SnackBarUtil
-import it.ssplus.barbershop.utils.validation.TurnHourFieldValidator
-import it.ssplus.barbershop.utils.validation.TurnNameFieldValidator
+import it.ssplus.barbershop.utils.validators.TurnHourFieldValidator
+import it.ssplus.barbershop.utils.validators.TurnNameFieldValidator
 import java.util.*
 
 class TurnFragment : Fragment(), View.OnClickListener {

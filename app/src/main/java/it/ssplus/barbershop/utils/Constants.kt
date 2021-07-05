@@ -43,5 +43,8 @@ object Constants {
         const val expense_category_item_selected = "expense_category_item_selected"
         const val expense_item_selected = "expense_item_selected"
         const val turn_item_selected = "turn_item_selected"
+        const val client_item_selected = "client_item_selected"
+
+        const val call_phone = "call_phone"
     }
 }

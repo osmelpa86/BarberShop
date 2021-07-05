@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".ui.expense.AddExpenseFragment">
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/containerSelectExpenseCategory"
@@ -37,7 +35,8 @@
                 android:enabled="false"
                 android:hint="@string/menu_expense_category"
                 android:imeOptions="actionNext"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                 />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -45,7 +44,6 @@
             android:id="@+id/clSelectExpenseCategory"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginTop="1dp"
             android:background="@drawable/icon_picker_roud_shape"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tilExpenseCategory"
@@ -55,20 +53,21 @@
                 android:id="@+id/ivSelectExpenseCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="13dp"
-                android:layout_marginEnd="14dp"
-                android:layout_marginBottom="13dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
                 android:adjustViewBounds="true"
                 android:clickable="true"
                 android:cropToPadding="true"
                 android:foreground="?selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_request_quote"
-                android:tint="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@android:color/white"
+                android:focusable="true" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -117,7 +116,8 @@
                 android:hint="@string/message_hint_date"
                 android:imeOptions="actionNone"
                 android:inputType="none"
-                android:lines="1" />
+                android:lines="1"
+                 />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -125,7 +125,6 @@
             android:id="@+id/clSelectDateExpense"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginTop="1dp"
             android:background="@drawable/icon_picker_roud_shape"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tilDateExpense"
@@ -135,20 +134,21 @@
                 android:id="@+id/ivSelectDateExpense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="13dp"
-                android:layout_marginEnd="14dp"
-                android:layout_marginBottom="13dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
                 android:adjustViewBounds="true"
                 android:clickable="true"
                 android:cropToPadding="true"
                 android:foreground="?selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_calendar_today"
-                android:tint="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@android:color/white"
+                android:focusable="true" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -176,7 +176,8 @@
             android:hint="@string/message_hint_amount"
             android:imeOptions="actionNext"
             android:inputType="numberDecimal"
-            android:lines="1" />
+            android:lines="1"
+             />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -202,6 +203,7 @@
             android:hint="@string/message_hint_description"
             android:imeOptions="actionDone"
             android:inputType="textMultiLine"
-            android:lines="4" />
+            android:lines="4"
+             />
     </com.google.android.material.textfield.TextInputLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,7 +30,7 @@ import it.ssplus.barbershop.model.entity.ExpenseCategory
 import it.ssplus.barbershop.utils.Constants
 import it.ssplus.barbershop.utils.ImageUtils
 import it.ssplus.barbershop.utils.SnackBarUtil
-import it.ssplus.barbershop.utils.validation.ExpenseCategoryFieldValidator
+import it.ssplus.barbershop.utils.validators.ExpenseCategoryFieldValidator
 import it.ssplus.barbershop.utils.validators.RequiredFieldValidator
 import it.ssplus.iconpickert.IconPicker
 

@@ -1,36 +1,22 @@
-package it.ssplus.barbershop.utils.validation
+package it.ssplus.barbershop.utils.validators
 
 import android.app.Activity
 import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.textfield.TextInputLayout
 import it.ssplus.barbershop.R
 
-open class BaseValidator {
-    var mainActivity: Activity
-    protected lateinit var mErrorContainer: TextInputLayout
+open class BaseValidator(errorContainer: TextInputLayout, var mainActivity: Activity) {
+    private var mErrorContainer: TextInputLayout = errorContainer
     protected var mErrorContainers: Array<TextInputLayout>? = null
     protected var mErrorMessage = ""
     protected var mEmptyMessage: String? = "This field is required"
 
-    constructor(errorContainer: TextInputLayout, mainActivity: Activity) {
-        mErrorContainer = errorContainer
-        this.mainActivity = mainActivity
-    }
-
-    constructor(mErrorContainers: Array<TextInputLayout>, mainActivity: Activity) {
-        var mErrorContainers = mErrorContainers
-        mErrorContainers = mErrorContainers
-        this.mainActivity = mainActivity
-    }
-
     protected open fun isValid(charSequence: String): Boolean {
-        //other classed shall overide this method and have thrie custom
-        //implementation
         return true
     }
 
     fun validate(charSequence: String?): Boolean {
-        if (mEmptyMessage != null && (charSequence == null || charSequence.length == 0)) {
+        if (mEmptyMessage != null && (charSequence == null || charSequence.isEmpty())) {
             mErrorContainer.error = mEmptyMessage
             mErrorContainer.setErrorIconTintList(
                 AppCompatResources.getColorStateList(
@@ -54,7 +40,7 @@ open class BaseValidator {
             return false
         } else if (isValid(charSequence!!)) {
             mErrorContainer.error = null
-            mErrorContainer.setErrorEnabled(false)
+            mErrorContainer.isErrorEnabled = false
             mErrorContainer.boxBackgroundColor = AppCompatResources.getColorStateList(
                 mainActivity,
                 R.color.boxBackgroundDefault
@@ -89,7 +75,7 @@ open class BaseValidator {
     fun validateIgnoreNull(charSequence: String): Boolean {
         if (isValid(charSequence)) {
             mErrorContainer.error = null
-            mErrorContainer.setErrorEnabled(false)
+            mErrorContainer.isErrorEnabled = false
             mErrorContainer.boxBackgroundColor = AppCompatResources.getColorStateList(
                 mainActivity,
                 R.color.boxBackgroundDefault
@@ -120,7 +106,6 @@ open class BaseValidator {
             return false
         }
     }
-
 
     fun confirm(s1: String, s2: String): Boolean {
         return s1 == s2

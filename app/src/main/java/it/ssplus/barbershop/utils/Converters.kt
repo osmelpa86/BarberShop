@@ -1,11 +1,12 @@
 package it.ssplus.barbershop.utils
 
+import android.annotation.SuppressLint
 import androidx.room.TypeConverter
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
 class Converters {
+    @SuppressLint("SimpleDateFormat")
     private val df = SimpleDateFormat("d/M/yyyy")
 
     @TypeConverter
@@ -15,7 +16,7 @@ class Converters {
 
     @TypeConverter
     fun dateToTimestamp(date: Date?): Long? {
-        return date?.time?.toLong()
+        return date?.time
     }
 
     @TypeConverter
@@ -26,6 +27,4 @@ class Converters {
             null
         }
     }
-
-
 }

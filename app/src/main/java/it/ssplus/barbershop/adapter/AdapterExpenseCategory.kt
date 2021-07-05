@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -125,7 +126,7 @@ class AdapterExpenseCategory(
             expenseCategory.image!!.size
         )
         holder.ivItemIconExpenseCategory.setImageBitmap(bitmap)
-        holder.clIconExpenseCategory.background = expenseCategoryFragment.resources.getDrawable(
+        holder.clIconExpenseCategory.background = ResourcesCompat.getDrawable(activity.resources,
             Constants.roundIcons[expenseCategory.color],
             null
         )
@@ -172,12 +173,12 @@ class AdapterExpenseCategory(
     var filter: Filter = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             val filteredList = ArrayList<ExpenseCategory>()
-            val filterPattern: String = constraint.toString().toLowerCase(Locale.ROOT).trim()
+            val filterPattern: String = constraint.toString().lowercase(Locale.ROOT).trim()
             if (filterPattern.isEmpty()) {
                 filteredList.addAll(expenseCategoryFragment.listExpenseCategory)
             } else {
                 for (category in expenseCategoryFragment.listExpenseCategory) {
-                    if (category.name.toLowerCase(Locale.ROOT).contains(filterPattern)
+                    if (category.name.lowercase(Locale.ROOT).contains(filterPattern)
                     ) {
                         filteredList.add(category)
                     }

@@ -20,5 +20,4 @@ data class ServiceTypeServicePojo(
         )
     )
     val typeServiceList: List<TypeService>
-) {
-}
+)

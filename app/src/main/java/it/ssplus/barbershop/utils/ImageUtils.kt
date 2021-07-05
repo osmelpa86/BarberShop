@@ -8,21 +8,17 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.VectorDrawable
 import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
 import android.util.Xml
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import org.xmlpull.v1.XmlPullParser
 import java.io.ByteArrayOutputStream
 import java.lang.reflect.Method
-import java.util.*
 
 
 object ImageUtils {
@@ -83,7 +79,7 @@ object ImageUtils {
 
     /*Se compara dos images utilizado los arreglos de bytes que las conforman*/
     fun compareImagesInBytes(image1: ByteArray, image2: ByteArray): Boolean {
-        return Arrays.equals(image1, image2)
+        return image1.contentEquals(image2)
     }
 
     /*Obtener un Bitmap desde una imagen ubicada en la carpeta Drawable*/
@@ -113,7 +109,7 @@ object ImageUtils {
         var oldSize = image.byteCount
 
         // attempt to resize the image as much as possible while valid
-        while (image != null && image.byteCount > maxBytes) {
+        while (image.byteCount > maxBytes) {
 
             // Prevent image from becoming too small
             if (image.width <= 20 || image.height <= 20)
@@ -135,26 +131,21 @@ object ImageUtils {
     fun getBytesFromDrawable(d: Drawable): ByteArray {
         val bitmap = (d as BitmapDrawable).bitmap
         val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-        val bitmapdata = stream.toByteArray()
-        return bitmapdata
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        return stream.toByteArray()
     }
 
     //    Obtner Bitmap de un VectorDrawable
     fun getBitmapFromVectorDrawable(
-        context: Context?,
         drawable: Drawable /*drawableId: Int*/
     ): Bitmap? {
 //        var drawable = ContextCompat.getDrawable(context!!, drawableId)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            DrawableCompat.wrap(drawable!!).mutate()
-        }
         val bitmap = Bitmap.createBitmap(
-            drawable!!.intrinsicWidth,
+            drawable.intrinsicWidth,
             drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
         )
         val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
         return bitmap
     }
@@ -172,8 +163,8 @@ object ImageUtils {
             @SuppressLint("PrivateApi") val xmlBlock = Class.forName("android.content.res.XmlBlock")
             val xmlBlockConstr = xmlBlock.getConstructor(ByteArray::class.java)
             val xmlParserNew: Method = xmlBlock.getDeclaredMethod("newParser")
-            xmlBlockConstr.setAccessible(true)
-            xmlParserNew.setAccessible(true)
+            xmlBlockConstr.isAccessible = true
+            xmlParserNew.isAccessible = true
             val parser: XmlPullParser = xmlParserNew.invoke(
                 xmlBlockConstr.newInstance(binXml as Any)
             ) as XmlPullParser
@@ -194,9 +185,8 @@ object ImageUtils {
         return null
     }
 
-    fun bitmapToDrawable(bitmap: Bitmap?): Drawable? {
-        val bd = BitmapDrawable(null,bitmap)
-        return bd
+    fun bitmapToDrawable(bitmap: Bitmap?): Drawable {
+        return BitmapDrawable(null, bitmap)
     }
 }
 

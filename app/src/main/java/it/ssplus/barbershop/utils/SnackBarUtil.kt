@@ -95,7 +95,7 @@ object SnackBarUtil {
      * @param actionColor
      * @return
      */
-    fun getColorfulSnackBar(
+    private fun getColorfulSnackBar(
         snackbar: Snackbar,
         background: String,
         textColor: String?,
@@ -146,7 +146,7 @@ object SnackBarUtil {
      * @param actionColor
      * @return
      */
-    fun getColorfulSnackBar(
+    private fun getColorfulSnackBar(
         snackbar: Snackbar,
         context: Context,
         background: Int,

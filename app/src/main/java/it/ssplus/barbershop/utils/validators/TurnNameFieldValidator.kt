@@ -1,9 +1,8 @@
-package it.ssplus.barbershop.utils.validation
+package it.ssplus.barbershop.utils.validators
 
 import android.app.Activity
 import com.google.android.material.textfield.TextInputLayout
 import it.ssplus.barbershop.R
-import it.ssplus.barbershop.utils.validators.ValidationUtils
 
 class TurnNameFieldValidator(
     errorContainer: TextInputLayout,
@@ -13,7 +12,7 @@ class TurnNameFieldValidator(
     allTurnNames: ArrayList<String>
 ) : BaseValidator(errorContainer, mainActivity) {
 
-    internal var allTurnNames: ArrayList<String>
+    private var allTurnNames: ArrayList<String>
 
     init {
         mEmptyMessage = mainActivity.resources.getString(R.string.message_validation_entry_field)
@@ -24,20 +23,20 @@ class TurnNameFieldValidator(
     override fun isValid(charSequence: String): Boolean {
         var flag = true
 
-        if (charSequence == null || charSequence.length == 0 || ValidationUtils.onlySpaces(
+        if (charSequence.isEmpty() || ValidationUtils.onlySpaces(
                 charSequence
             )
         ) {
             flag = false
         } else {
-            if (isUpdate == true) {
-                if (!charSequence.equals(inputValue) && charSequence in allTurnNames) {
+            if (isUpdate) {
+                if (charSequence != inputValue && charSequence in allTurnNames) {
                     flag = false
                     mErrorMessage = mainActivity.resources.getString(R.string.message_validation_exits_turn_name)
                 } else {
                     flag = true
                 }
-            } else if (isUpdate == false) {
+            } else if (!isUpdate) {
                 if (charSequence in allTurnNames) {
                     flag = false
                     mErrorMessage = mainActivity.resources.getString(R.string.message_validation_exits_turn_name)

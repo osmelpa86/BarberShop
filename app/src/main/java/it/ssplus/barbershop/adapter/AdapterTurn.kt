@@ -144,12 +144,12 @@ class AdapterTurn(
     var filter: Filter = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             val filteredList = ArrayList<Turn>()
-            val filterPattern: String = constraint.toString().toLowerCase(Locale.ROOT).trim()
+            val filterPattern: String = constraint.toString().lowercase(Locale.ROOT).trim()
             if (filterPattern.isEmpty()) {
                 filteredList.addAll(turnFragment.listTurn)
             } else {
                 for (turn in turnFragment.listTurn) {
-                    if (turn.name.toLowerCase(Locale.ROOT)
+                    if (turn.name.lowercase(Locale.ROOT)
                             .contains(filterPattern) || turn.name.contains(filterPattern)
                     ) {
                         filteredList.add(turn)

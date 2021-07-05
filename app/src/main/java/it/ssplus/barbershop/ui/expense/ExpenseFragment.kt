@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -294,8 +293,7 @@ class ExpenseFragment : Fragment(), View.OnClickListener {
         adapterExpenseCategories.setData(listExpenseCategories)
 
         rvListExpenseCategories.adapter = adapterExpenseCategories
-        rvListExpenseCategories.layoutManager =
-            GridLayoutManager(activity, 4, RecyclerView.VERTICAL, false)
+        rvListExpenseCategories.layoutManager = LinearLayoutManager(context)
 
         val dialogAdd: AlertDialog = builderAdd.create()
         dialogAdd.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -351,6 +349,7 @@ class ExpenseFragment : Fragment(), View.OnClickListener {
         val mMonth = c.get(Calendar.MONTH)
         val mDay = c.get(Calendar.DAY_OF_MONTH)
 
+        datePicker.minDate = System.currentTimeMillis()
         datePicker.updateDate(mYear, mMonth, mDay)
     }
 

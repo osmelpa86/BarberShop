@@ -4,7 +4,6 @@ import android.app.Activity
 import com.google.android.material.textfield.TextInputLayout
 
 import it.ssplus.barbershop.R
-import it.ssplus.barbershop.utils.validation.BaseValidator
 
 class RequiredFieldValidator(errorContainer: TextInputLayout, mainActivity: Activity) :
     BaseValidator(errorContainer, mainActivity) {
@@ -15,7 +14,7 @@ class RequiredFieldValidator(errorContainer: TextInputLayout, mainActivity: Acti
     }
 
     override fun isValid(charSequence: String): Boolean {
-        return !(charSequence == null || charSequence.length == 0 || ValidationUtils.onlySpaces(
+        return !(charSequence.isEmpty() || ValidationUtils.onlySpaces(
             charSequence
         ))
     }

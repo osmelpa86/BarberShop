@@ -68,14 +68,14 @@
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxStrokeWidthFocused">0dp</item>
         <item name="boxBackgroundColor">@color/boxBackgroundDefault</item>
-        <item name="android:paddingTop">1dp</item>
-        <item name="android:paddingBottom">1dp</item>
+        <!--        <item name="android:paddingTop">1dp</item>-->
+        <!--        <item name="android:paddingBottom">1dp</item>-->
         <item name="boxCornerRadiusTopStart">26dp</item>
         <item name="boxCornerRadiusBottomStart">26dp</item>
         <item name="boxCornerRadiusBottomEnd">0dp</item>
         <item name="boxCornerRadiusTopEnd">0dp</item>
-<!--        <item name="boxCornerRadiusBottomStart">@android:dimen/thumbnail_width</item>-->
-<!--        <item name="boxCornerRadiusTopStart">@android:dimen/thumbnail_width</item>-->
+        <!--        <item name="boxCornerRadiusBottomStart">@android:dimen/thumbnail_width</item>-->
+        <!--        <item name="boxCornerRadiusTopStart">@android:dimen/thumbnail_width</item>-->
 
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textColorHighlight">@color/secondaryTextColor</item>
@@ -210,5 +210,28 @@
     <style name="DialogPickerTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/primaryDarkColor</item>
         <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <!--    <style name="AppTheme.PopupMenu" parent="Widget.AppCompat.PopupMenu">-->
+    <!--        <item name="android:textColor">@color/primaryDarkColor</item>-->
+    <!--        <item name="iconTint">@color/primaryDarkColor</item>-->
+    <!--    </style>-->
+    <!--    PopupMenu Styles-->
+    <style name="AppTheme.PopupMenu" parent="ThemeOverlay.AppCompat.Dark">
+        <!-- if using android.widget.PopupMenu -->
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <!-- if using android.support.v7.widget.PopupMenu -->
+        <item name="popupMenuStyle">@style/PopupMenu</item>
+        <item name="android:textColor">@color/primaryDarkColor</item>
+        <item name="iconTint">@color/primaryDarkColor</item>
+        <item name="colorControlHighlight">@color/colorRippleDefaultLight</item>
+    </style>
+
+    <style name="PopupMenu" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="android:popupBackground">@drawable/popupmenu_background</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.BarberShop.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 </resources>

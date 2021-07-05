@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import it.ssplus.barbershop.R
 import it.ssplus.barbershop.ui.expense_category.ExpenseCategoryFragment
@@ -45,21 +46,23 @@ class AdapterColorList(
 
         fun bind(name: Int, icon: Int) {
             if (checkedPosition == -1) {
-                itemColorContainer.background = expenseCategoryFragment.requireActivity()
-                    .getDrawable(R.drawable.item_color_bg_transparent)
+                itemColorContainer.background = ContextCompat.getDrawable(
+                    expenseCategoryFragment.requireActivity(),
+                    R.drawable.item_color_bg_transparent
+                )
             } else {
                 if (checkedPosition == adapterPosition) {
-                    itemColorContainer.background = expenseCategoryFragment.requireActivity()
-                        .getDrawable(R.drawable.item_color_bg_roud_shape)
+                    itemColorContainer.background = ContextCompat.getDrawable(
+                        expenseCategoryFragment.requireActivity(),
+                        R.drawable.item_color_bg_roud_shape
+                    )
                 } else {
-                    itemColorContainer.background = expenseCategoryFragment.requireActivity()
-                        .getDrawable(R.drawable.item_color_bg_transparent)
+                    itemColorContainer.background = ContextCompat.getDrawable(expenseCategoryFragment.requireActivity(),R.drawable.item_color_bg_transparent)
                 }
             }
 
             itemView.setOnClickListener {
-                itemColorContainer.background = expenseCategoryFragment.requireActivity()
-                    .getDrawable(R.drawable.item_color_bg_roud_shape)
+                itemColorContainer.background = ContextCompat.getDrawable(expenseCategoryFragment.requireActivity(),R.drawable.item_color_bg_roud_shape)
                 if (checkedPosition != adapterPosition) {
                     notifyItemChanged(checkedPosition)
                     checkedPosition = adapterPosition

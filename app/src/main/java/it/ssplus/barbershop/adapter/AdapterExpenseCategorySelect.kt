@@ -2,31 +2,24 @@ package it.ssplus.barbershop.adapter
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Intent
 import android.graphics.BitmapFactory
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import it.ssplus.barbershop.R
-import it.ssplus.barbershop.model.entity.Expense
 import it.ssplus.barbershop.model.entity.ExpenseCategory
-import it.ssplus.barbershop.ui.expense_category.ExpenseCategoryFragment
 import it.ssplus.barbershop.utils.Constants
-import it.ssplus.barbershop.utils.ImageUtils
-import java.util.*
-import kotlin.collections.ArrayList
 
-class AdapterExpenseCategorySelect(val activity: Activity, var selected: Int) :
+class AdapterExpenseCategorySelect(val activity: Activity, selected: Int) :
     RecyclerView.Adapter<AdapterExpenseCategorySelect.ExpenseCategoryViewHolder>() {
 
-    internal var expenseCategories = arrayListOf<ExpenseCategory>()
+    private var expenseCategories = arrayListOf<ExpenseCategory>()
     private var checkedPosition = selected
 
     fun setData(expenseCategories: ArrayList<ExpenseCategory>) {
@@ -51,9 +44,9 @@ class AdapterExpenseCategorySelect(val activity: Activity, var selected: Int) :
     }
 
     inner class ExpenseCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        internal val tvNameExpenseCategory: TextView
-        internal val ivItemIconExpenseCategory: ImageView
-        internal val clIconExpenseCategory: ConstraintLayout
+        private val tvNameExpenseCategory: TextView
+        private val ivItemIconExpenseCategory: ImageView
+        private val clIconExpenseCategory: ConstraintLayout
         internal val clExpenseCategoryContainer: ConstraintLayout
 
         init {
@@ -70,20 +63,18 @@ class AdapterExpenseCategorySelect(val activity: Activity, var selected: Int) :
         fun bind(expenseCategory: ExpenseCategory) {
             if (checkedPosition == -1) {
                 clExpenseCategoryContainer.background =
-                    activity.getDrawable(R.drawable.item_color_bg_transparent)
+                    ContextCompat.getDrawable(activity,R.drawable.item_color_bg_transparent)
             } else {
                 if (checkedPosition == adapterPosition) {
-                    clExpenseCategoryContainer.background =
-                        activity.getDrawable(R.drawable.item_color_bg_roud_shape)
+                    clExpenseCategoryContainer.background = ContextCompat.getDrawable(activity,R.drawable.item_color_bg_roud_shape)
                 } else {
-                    clExpenseCategoryContainer.background =
-                        activity.getDrawable(R.drawable.item_color_bg_transparent)
+                    clExpenseCategoryContainer.background = ContextCompat.getDrawable(activity,R.drawable.item_color_bg_transparent)
                 }
             }
 
             itemView.setOnClickListener {
                 clExpenseCategoryContainer.background =
-                    activity.getDrawable(R.drawable.item_color_bg_roud_shape)
+                    ContextCompat.getDrawable(activity,R.drawable.item_color_bg_roud_shape)
                 if (checkedPosition != adapterPosition) {
                     notifyItemChanged(checkedPosition)
                     checkedPosition = adapterPosition
@@ -97,10 +88,7 @@ class AdapterExpenseCategorySelect(val activity: Activity, var selected: Int) :
                 expenseCategory.image!!.size
             )
             ivItemIconExpenseCategory.setImageBitmap(bitmap)
-            clIconExpenseCategory.background = activity.resources.getDrawable(
-                Constants.roundIcons[expenseCategory.color],
-                null
-            )
+            clIconExpenseCategory.background = ContextCompat.getDrawable(activity,Constants.roundIcons[expenseCategory.color])
         }
     }
 

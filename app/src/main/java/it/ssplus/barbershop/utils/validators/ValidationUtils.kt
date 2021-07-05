@@ -1,7 +1,7 @@
 package it.ssplus.barbershop.utils.validators
 
 object ValidationUtils {
-    fun emtyField(text: String): Boolean {
+    fun emptyField(text: String): Boolean {
         return text.isEmpty()
     }
 

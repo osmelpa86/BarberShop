@@ -4,34 +4,34 @@ import androidx.lifecycle.LiveData
 import it.ssplus.barbershop.model.dao.TypeServiceDao
 import it.ssplus.barbershop.model.entity.TypeService
 
-class TypeServiceRepository(private val rypeServiceDao: TypeServiceDao) {
-    val all: LiveData<List<TypeService>> = rypeServiceDao.getAll()
+class TypeServiceRepository(private val typeServiceDao: TypeServiceDao) {
+    val all: LiveData<List<TypeService>> = typeServiceDao.getAll()
 
     fun get(id: Long): LiveData<TypeService> {
-        return rypeServiceDao.get(id)
+        return typeServiceDao.get(id)
     }
 
     suspend fun insert(obj: TypeService) {
-        rypeServiceDao.insert(obj)
+        typeServiceDao.insert(obj)
     }
 
     suspend fun update(obj: TypeService) {
-        rypeServiceDao.update(obj)
+        typeServiceDao.update(obj)
     }
 
     suspend fun delete(obj: TypeService) {
-        rypeServiceDao.delete(obj)
+        typeServiceDao.delete(obj)
     }
 
     suspend fun delete(list: List<TypeService>) {
-        rypeServiceDao.delete(list)
+        typeServiceDao.delete(list)
     }
 
     fun search(query: String): LiveData<List<TypeService>> {
-        return rypeServiceDao.search("%$query%")
+        return typeServiceDao.search("%$query%")
     }
 
     fun lastInserted(): LiveData<TypeService> {
-        return rypeServiceDao.lastInserted()
+        return typeServiceDao.lastInserted()
     }
 }
