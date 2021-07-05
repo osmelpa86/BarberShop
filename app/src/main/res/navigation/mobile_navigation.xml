@@ -51,7 +51,7 @@
 
     <fragment
         android:id="@+id/nav_type_service"
-        android:name="it.ssplus.barbershop.ui.type_service.TypeServiceFragment"
+        android:name="it.ssplus.barbershop.ui.type_service.serviceTypeFragment"
         android:label="@string/menu_type_service"
         tools:layout="@layout/fragment_type_service" />
 
