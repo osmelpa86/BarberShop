@@ -12,7 +12,10 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
@@ -24,25 +27,23 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import it.ssplus.barbershop.R
 import it.ssplus.barbershop.adapter.AdapterClient
+import it.ssplus.barbershop.databinding.DialogConfirmDangerBinding
+import it.ssplus.barbershop.databinding.FragmentClientBinding
 import it.ssplus.barbershop.model.entity.Client
 import it.ssplus.barbershop.utils.Constants
-import java.util.ArrayList
+import java.util.*
 
 class ClientFragment : Fragment(), View.OnClickListener {
 
-    private lateinit var root: View
-    private lateinit var clientViewModel: ClientViewModel
+    private var _binding: FragmentClientBinding? = null
+    private val binding get() = _binding!!
 
+    private lateinit var clientViewModel: ClientViewModel
     private lateinit var adapterClient: AdapterClient
-    private lateinit var rvListClient: RecyclerView
     lateinit var listClient: ArrayList<Client>
     private lateinit var noDataContainerClient: LinearLayout
-    private lateinit var svClient: SearchView
-    private lateinit var fabAddClient: FloatingActionButton
     private lateinit var menu: Menu
     private lateinit var phone: String
 
@@ -69,14 +70,13 @@ class ClientFragment : Fragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        root = inflater.inflate(R.layout.fragment_client, container, false)
-
         clientViewModel = ViewModelProvider(this).get(ClientViewModel::class.java)
+        _binding = FragmentClientBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+        
+        binding.fabAddClient.setOnClickListener(this)
 
-        fabAddClient = root.findViewById(R.id.fabAddClient)
-        fabAddClient.setOnClickListener(this)
-
-        noDataContainerClient = root.findViewById(R.id.noDataContainerClient)
+        noDataContainerClient = binding.noDataContainerClient
 
         listClient = arrayListOf()
         adapterClient =
@@ -88,28 +88,27 @@ class ClientFragment : Fragment(), View.OnClickListener {
             noDataContainerClient.visibility =
                 if (items.isEmpty()) View.VISIBLE else View.GONE
         })
+        
+        binding.rvListClient.adapter = adapterClient
+        binding.rvListClient.layoutManager = LinearLayoutManager(context)
 
-        rvListClient = root.findViewById(R.id.rvListClient)
-        rvListClient.adapter = adapterClient
-        rvListClient.layoutManager = LinearLayoutManager(context)
-
-        svClient = root.findViewById(R.id.svClient)
-        svClient.setOnClickListener {
-            svClient.setIconifiedByDefault(true)
-            svClient.isFocusable = true
-            svClient.isIconified = false
-            svClient.requestFocusFromTouch()
+      
+        binding.svClient.setOnClickListener {
+            binding.svClient.setIconifiedByDefault(true)
+            binding.svClient.isFocusable = true
+            binding.svClient.isIconified = false
+            binding.svClient.requestFocusFromTouch()
         }
 
-        svClient.setOnSearchClickListener {
+        binding.svClient.setOnSearchClickListener {
         }
 
-        svClient.setOnCloseListener {
+        binding.svClient.setOnCloseListener {
             false
         }
 
         val searchEditText =
-            svClient.findViewById<View>(androidx.appcompat.R.id.search_src_text) as EditText
+            binding.svClient.findViewById<View>(androidx.appcompat.R.id.search_src_text) as EditText
         searchEditText.setTextColor(
             AppCompatResources.getColorStateList(
                 requireActivity(),
@@ -119,7 +118,7 @@ class ClientFragment : Fragment(), View.OnClickListener {
         searchEditText.textSize = 16f
         searchEditText.hint = requireActivity().resources.getString(R.string.message_hint_search)
         val searchIcon =
-            svClient.findViewById<View>(androidx.appcompat.R.id.search_button) as ImageView
+            binding.svClient.findViewById<View>(androidx.appcompat.R.id.search_button) as ImageView
         searchIcon.drawable.setTint(
             AppCompatResources.getColorStateList(
                 requireActivity(),
@@ -127,15 +126,15 @@ class ClientFragment : Fragment(), View.OnClickListener {
             ).defaultColor
         )
         val searchMagIcon =
-            svClient.findViewById<View>(androidx.appcompat.R.id.search_close_btn) as ImageView
+            binding.svClient.findViewById<View>(androidx.appcompat.R.id.search_close_btn) as ImageView
         searchMagIcon.drawable.setTint(
             AppCompatResources.getColorStateList(
                 requireActivity(),
                 R.color.primaryTextColor
             ).defaultColor
         )
-        svClient.queryHint = this.resources.getString(R.string.message_hint_search)
-        svClient.setOnQueryTextListener(object :
+        binding.svClient.queryHint = this.resources.getString(R.string.message_hint_search)
+        binding.svClient.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 adapterClient.filter.filter(query)
@@ -183,7 +182,7 @@ class ClientFragment : Fragment(), View.OnClickListener {
         requireActivity().findViewById<Toolbar>(R.id.toolbar).title =
             requireActivity().resources.getString(R.string.title_selected) + " 1"
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        fabAddClient.visibility = View.GONE
+        binding.fabAddClient.visibility = View.GONE
     }
 
     private fun handleItemCall(intent: Intent) {
@@ -243,33 +242,26 @@ class ClientFragment : Fragment(), View.OnClickListener {
         requireActivity().findViewById<Toolbar>(R.id.toolbar).title =
             requireActivity().resources.getString(R.string.menu_client)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        fabAddClient.visibility = View.VISIBLE
+        binding.fabAddClient.visibility = View.VISIBLE
         adapterClient.handleCancel()
     }
 
     private fun confirmDeletion() {
         val builder = AlertDialog.Builder(activity, R.style.AppCompatAlertDialogStyle)
-        val view: View =
-            LayoutInflater.from(activity).inflate(R.layout.dialog_confirm_danger, null, false)
-        builder.setView(view)
+        val dBinding =
+            DialogConfirmDangerBinding.inflate(LayoutInflater.from(requireActivity()), null, false)
+        builder.setView(dBinding.root)
         val dialog = builder.create()
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setCanceledOnTouchOutside(false)
-        val textViewTitle: TextView = view.findViewById(R.id.textViewTitle)
-        val textViewMessage: TextView = view.findViewById(R.id.textViewMessage)
-        val buttonCancel: Button = view.findViewById(R.id.buttonCancel)
-        val buttonOk: Button = view.findViewById(R.id.buttonOk)
 
-        textViewTitle.text = getString(R.string.message_delete_clients)
-        textViewMessage.text =
+        dBinding.textViewTitle.text = getString(R.string.message_delete_clients)
+        dBinding.textViewMessage.text =
             getString(R.string.message_confirm_delete_selected_client)
-        buttonCancel.text = getString(android.R.string.cancel)
-        buttonOk.text = getString(R.string.menu_delete)
-
-        buttonCancel.setOnClickListener {
+        dBinding.buttonCancel.setOnClickListener {
             dialog.dismiss()
         }
-        buttonOk.setOnClickListener {
+        dBinding.buttonOk.setOnClickListener {
             deleteSelection()
             dialog.dismiss()
         }

@@ -13,8 +13,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.text.InputFilter.LengthFilter
 import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -27,12 +25,11 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputLayout
 import com.yalantis.ucrop.UCrop
-import de.hdodenhof.circleimageview.CircleImageView
 import it.ssplus.barbershop.R
+import it.ssplus.barbershop.databinding.FragmentManageClientBinding
+import it.ssplus.barbershop.databinding.SnackbarMessageSimpleBinding
 import it.ssplus.barbershop.model.entity.Client
 import it.ssplus.barbershop.utils.ImageUtils
 import it.ssplus.barbershop.utils.SnackBarUtil
@@ -48,13 +45,10 @@ import java.util.*
 
 
 class ManageClientFragment : Fragment(), View.OnClickListener {
-    private lateinit var root: View
-    private lateinit var ivPhotoClient: CircleImageView
-    private lateinit var fabClientTakePicture: FloatingActionButton
-    private lateinit var tilNameClient: TextInputLayout
-    private lateinit var tilPhoneNumberClient: TextInputLayout
-    private lateinit var tilCellClient: TextInputLayout
-    private lateinit var tilDescriptionClient: TextInputLayout
+
+    private var _binding: FragmentManageClientBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var clientViewModel: ClientViewModel
     var client: Client? = null
     private lateinit var menu: Menu
@@ -81,17 +75,15 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        root = inflater.inflate(R.layout.fragment_manage_client, container, false)
+
+        _binding = FragmentManageClientBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+
         clientViewModel = ViewModelProvider(this).get(ClientViewModel::class.java)
-        ivPhotoClient = root.findViewById(R.id.ivPhotoClient)
-        fabClientTakePicture = root.findViewById(R.id.fabClientTakePicture)
-        fabClientTakePicture.setOnClickListener(this)
-        tilNameClient = root.findViewById(R.id.tilNameClient)
-        tilPhoneNumberClient = root.findViewById(R.id.tilPhoneNumberClient)
-        tilPhoneNumberClient.editText!!.filters = arrayOf(LengthFilter(8))
-        tilCellClient = root.findViewById(R.id.tilCellClient)
-        tilCellClient.editText!!.filters = arrayOf(LengthFilter(8))
-        tilDescriptionClient = root.findViewById(R.id.tilDescriptionClient)
+
+        binding.fabClientTakePicture.setOnClickListener(this)
+        binding.tilPhoneNumberClient.editText!!.filters = arrayOf(LengthFilter(8))
+        binding.tilCellClient.editText!!.filters = arrayOf(LengthFilter(8))
 
         if (arguments?.getSerializable("client") != null) {
             client = arguments?.getSerializable("client") as Client
@@ -101,13 +93,13 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
 
             if (client!!.picture != null) {
                 photo = client!!.picture
-                var bitmap: Bitmap = ImageUtils.getImage(client!!.picture!!)
-                ivPhotoClient.setImageBitmap(bitmap)
+                val bitmap: Bitmap = ImageUtils.getImage(client!!.picture!!)
+                binding.ivPhotoClient.setImageBitmap(bitmap)
             }
-            tilNameClient.editText!!.setText(client!!.name)
-            if (client!!.phoneNumber != "") tilPhoneNumberClient.editText!!.setText(client!!.phoneNumber)
-            if (client!!.cellPhone != "") tilCellClient.editText!!.setText(client!!.cellPhone)
-            if (client!!.observation != null) tilDescriptionClient.editText!!.setText(client!!.observation)
+            binding.tilNameClient.editText!!.setText(client!!.name)
+            if (client!!.phoneNumber != "") binding.tilPhoneNumberClient.editText!!.setText(client!!.phoneNumber)
+            if (client!!.cellPhone != "") binding.tilCellClient.editText!!.setText(client!!.cellPhone)
+            if (client!!.observation != null) binding.tilDescriptionClient.editText!!.setText(client!!.observation)
         }
 
         if (!checkPermissionCameraAndReadExternalStorage()) requestPermissionCameraAndReadExternalStorage()
@@ -131,38 +123,37 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
 
     private fun manageClient() {
         val validName = RequiredFieldValidator(
-            tilNameClient,
+            binding.tilNameClient,
             requireActivity()
-        ).validate(tilNameClient.editText!!.text.toString())
+        ).validate(binding.tilNameClient.editText!!.text.toString())
 
         val validCell = CellFieldValidator(
-            tilCellClient,
+            binding.tilCellClient,
             requireActivity()
-        ).validate(tilCellClient.editText!!.text.toString())
+        ).validate(binding.tilCellClient.editText!!.text.toString())
 
         val validPhone = PhoneFieldValidator(
-            tilPhoneNumberClient,
+            binding.tilPhoneNumberClient,
             requireActivity()
-        ).validateIgnoreNull(tilPhoneNumberClient.editText!!.text.toString())
+        ).validateIgnoreNull(binding.tilPhoneNumberClient.editText!!.text.toString())
 
         if (validName && validCell && validPhone) {
             if (client == null) { //Add
                 clientViewModel.insert(
                     Client(
-                        name = tilNameClient.editText!!.text.toString(),
-                        phoneNumber = if (tilPhoneNumberClient.editText!!.text.toString() != "") tilPhoneNumberClient.editText!!.text.toString() else null,
-                        cellPhone = tilCellClient.editText!!.text.toString(),
-                        observation = if (tilDescriptionClient.editText!!.text.toString() != "") tilDescriptionClient.editText!!.text.toString() else null,
+                        name = binding.tilNameClient.editText!!.text.toString(),
+                        phoneNumber = if (binding.tilPhoneNumberClient.editText!!.text.toString() != "") binding.tilPhoneNumberClient.editText!!.text.toString() else null,
+                        cellPhone = binding.tilCellClient.editText!!.text.toString(),
+                        observation = if (binding.tilDescriptionClient.editText!!.text.toString() != "") binding.tilDescriptionClient.editText!!.text.toString() else null,
                         picture = photo
                     )
                 )
 
                 val customSnackBar: Snackbar = Snackbar.make(
-                    requireActivity().findViewById(R.id.manageClientFragment),
+                    binding.root,
                     "",
                     Snackbar.LENGTH_LONG
                 )
-
                 SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
                     customSnackBar,
                     requireActivity(),
@@ -170,19 +161,15 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
                     R.color.primaryTextColor,
                     R.color.primaryTextColor
                 )
-
                 val layout: Snackbar.SnackbarLayout =
                     customSnackBar.view as Snackbar.SnackbarLayout
-                val customSnackView: View =
-                    layoutInflater.inflate(R.layout.snackbar_message_simple, null)
-                val smpMessageSimple =
-                    customSnackView.findViewById<View>(R.id.smpSimpleMessage) as TextView
-                smpMessageSimple.text = resources.getString(R.string.message_success_add)
-                val smpCancelSimple =
-                    customSnackView.findViewById<View>(R.id.smpCancel) as ImageView
-                smpCancelSimple.setOnClickListener { customSnackBar.dismiss() }
+                val snackBinding =
+                    SnackbarMessageSimpleBinding.inflate(layoutInflater, null, false)
+                snackBinding.smpSimpleMessage.text =
+                    resources.getString(R.string.message_success_add)
+                snackBinding.smpCancel.setOnClickListener { customSnackBar.dismiss() }
                 layout.setPadding(0, 0, 0, 0)
-                layout.addView(customSnackView, 0)
+                layout.addView(snackBinding.root, 0)
                 customSnackBar.show()
                 findNavController().navigate(R.id.nav_client)
             } else //Editar
@@ -190,20 +177,19 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
                 clientViewModel.update(
                     Client(
                         id = client!!.id,
-                        name = tilNameClient.editText!!.text.toString(),
-                        phoneNumber = if (tilPhoneNumberClient.editText!!.text.toString() != "") tilPhoneNumberClient.editText!!.text.toString() else null,
-                        cellPhone = tilCellClient.editText!!.text.toString(),
-                        observation = if (tilDescriptionClient.editText!!.text.toString() != "") tilDescriptionClient.editText!!.text.toString() else null,
+                        name = binding.tilNameClient.editText!!.text.toString(),
+                        phoneNumber = if (binding.tilPhoneNumberClient.editText!!.text.toString() != "") binding.tilPhoneNumberClient.editText!!.text.toString() else null,
+                        cellPhone = binding.tilCellClient.editText!!.text.toString(),
+                        observation = if (binding.tilDescriptionClient.editText!!.text.toString() != "") binding.tilDescriptionClient.editText!!.text.toString() else null,
                         picture = photo
                     )
                 )
 
                 val customSnackBar: Snackbar = Snackbar.make(
-                    requireActivity().findViewById(R.id.manageClientFragment),
+                    binding.root,
                     "",
                     Snackbar.LENGTH_LONG
                 )
-
                 SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
                     customSnackBar,
                     requireActivity(),
@@ -211,20 +197,24 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
                     R.color.primaryTextColor,
                     R.color.primaryTextColor
                 )
-
+                SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
+                    customSnackBar,
+                    requireActivity(),
+                    R.drawable.snackbar_background_roud_shape,
+                    R.color.primaryTextColor,
+                    R.color.primaryTextColor
+                )
                 val layout: Snackbar.SnackbarLayout =
                     customSnackBar.view as Snackbar.SnackbarLayout
-                val customSnackView: View =
-                    layoutInflater.inflate(R.layout.snackbar_message_simple, null)
-                val smpMessageSimple =
-                    customSnackView.findViewById<View>(R.id.smpSimpleMessage) as TextView
-                smpMessageSimple.text = resources.getString(R.string.message_success_edit)
-                val smpCancelSimple =
-                    customSnackView.findViewById<View>(R.id.smpCancel) as ImageView
-                smpCancelSimple.setOnClickListener { customSnackBar.dismiss() }
+                val snackBinding =
+                    SnackbarMessageSimpleBinding.inflate(layoutInflater, null, false)
+                snackBinding.smpSimpleMessage.text =
+                    resources.getString(R.string.message_success_edit)
+                snackBinding.smpCancel.setOnClickListener { customSnackBar.dismiss() }
                 layout.setPadding(0, 0, 0, 0)
-                layout.addView(customSnackView, 0)
+                layout.addView(snackBinding.root, 0)
                 customSnackBar.show()
+                client = null
                 findNavController().navigate(R.id.nav_client)
             }
         }
@@ -400,10 +390,10 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
             val resultUri = UCrop.getOutput(data)
             val bitmap = BitmapFactory.decodeFile(resultUri?.path)
             photo = ImageUtils.getImageBytes(bitmap)
-            ivPhotoClient.setImageBitmap(bitmap)
+            binding.ivPhotoClient.setImageBitmap(bitmap)
             hasImage = true
-            if (hasImage) fabClientTakePicture.setImageResource(R.drawable.ic_more_vert)
-            else fabClientTakePicture.setImageResource(R.drawable.ic_photo_camera)
+            if (hasImage) binding.fabClientTakePicture.setImageResource(R.drawable.ic_more_vert)
+            else binding.fabClientTakePicture.setImageResource(R.drawable.ic_photo_camera)
         }
         try {
             File(mCapturedPhotoPath).delete()
@@ -463,12 +453,12 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
                 croppedImage.delete()
         }
         hasImage = false
-        ivPhotoClient.setImageResource(R.drawable.ic_account_circle)
+        binding.ivPhotoClient.setImageResource(R.drawable.ic_account_circle)
     }
 
     private fun takePhotoMenu() {
         val wrapper = ContextThemeWrapper(requireActivity(), R.style.AppTheme_PopupMenu)
-        val popup = PopupMenu(wrapper, fabClientTakePicture)
+        val popup = PopupMenu(wrapper, binding.fabClientTakePicture)
         try {
             val fields: Array<Field> = popup.javaClass.declaredFields
             for (field in fields) {
