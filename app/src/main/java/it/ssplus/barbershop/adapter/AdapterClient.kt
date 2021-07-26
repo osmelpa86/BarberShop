@@ -8,7 +8,7 @@ import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Filter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
@@ -17,8 +17,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import de.hdodenhof.circleimageview.CircleImageView
 import it.ssplus.barbershop.R
+import it.ssplus.barbershop.databinding.BottomSheetClientDetailsBinding
+import it.ssplus.barbershop.databinding.ItemClientBinding
 import it.ssplus.barbershop.model.entity.Client
 import it.ssplus.barbershop.ui.client.ClientFragment
 import it.ssplus.barbershop.utils.Constants
@@ -43,13 +44,13 @@ class AdapterClient(
         notifyDataSetChanged()
     }
 
+    inner class ClientViewHolder(val binding: ItemClientBinding) :
+        RecyclerView.ViewHolder(binding.root)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClientViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_client,
-            parent,
-            false
-        )
-        return ClientViewHolder(v)
+        val binding =
+            ItemClientBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ClientViewHolder(binding)
     }
 
     @SuppressLint("ResourceAsColor")
@@ -57,12 +58,12 @@ class AdapterClient(
         val client = clients[position]
 
         if (selectedItems.contains(client)) {
-            holder.itemView.setBackgroundColor(R.color.boxBackgroundDefault)
+            holder.binding.root.setBackgroundColor(R.color.boxBackgroundDefault)
         } else {
-            holder.itemView.setBackgroundColor(android.R.color.transparent)
+            holder.binding.root.setBackgroundColor(android.R.color.transparent)
         }
 
-        holder.itemView.setOnLongClickListener {
+        holder.binding.root.setOnLongClickListener {
             if (!multiSelect) {
                 multiSelect = true
                 LocalBroadcastManager.getInstance(activity)
@@ -73,78 +74,84 @@ class AdapterClient(
                 false
         }
 
-        holder.itemView.setOnClickListener {
+        holder.binding.root.setOnClickListener {
             if (multiSelect) {
                 selectItem(holder, client)
                 val toolbar = activity.findViewById<Toolbar>(R.id.toolbar)
                 toolbar.title =
                     activity.resources.getString(R.string.title_selected) + " " + this.selectedItems.size.toString()
-                holder.ibItemClientCall.visibility = View.GONE
             } else {
-                val view = LayoutInflater.from(activity)
-                    .inflate(R.layout.bottom_sheet_client_details, null, false)
+//                val view = LayoutInflater.from(activity)
+//                    .inflate(R.layout.bottom_sheet_client_details, null, false)
 
-                val toolbar: Toolbar = view.findViewById(R.id.toolbar)
+                val sheetBinding = BottomSheetClientDetailsBinding.inflate(
+                    LayoutInflater.from(activity),
+                    null,
+                    false
+                )
 
-                val ivPhotoClient: CircleImageView = view.findViewById(R.id.ivPhotoClient)
-                val ivPhotoClientEmpty: CircleImageView = view.findViewById(R.id.ivPhotoClientEmpty)
-                val tvNameClient: TextView = view.findViewById(R.id.tvNameClient)
-                val llButtonCallPhone: LinearLayout = view.findViewById(R.id.llButtonCallPhone)
-                val tvCellPhoneNumber: TextView = view.findViewById(R.id.tvCellPhoneNumber)
-                val ivSMS: ImageButton = view.findViewById(R.id.ivSMS)
-                val llButtonPhone: LinearLayout = view.findViewById(R.id.llButtonPhone)
-                val tvPhoneNumber: TextView = view.findViewById(R.id.tvPhoneNumber)
-                val tvDescription: TextView = view.findViewById(R.id.tvDescription)
+//                val toolbar: Toolbar = view.findViewById(R.id.toolbar)
+//
+//                val ivPhotoClient: CircleImageView = view.findViewById(R.id.ivPhotoClient)
+//                val ivPhotoClientEmpty: CircleImageView = view.findViewById(R.id.ivPhotoClientEmpty)
+//                val tvNameClient: TextView = view.findViewById(R.id.tvNameClient)
+//                val llButtonCallPhone: LinearLayout = view.findViewById(R.id.llButtonCallPhone)
+//                val tvCellPhoneNumber: TextView = view.findViewById(R.id.tvCellPhoneNumber)
+//                val ivSMS: ImageButton = view.findViewById(R.id.ivSMS)
+//                val llButtonPhone: LinearLayout = view.findViewById(R.id.llButtonPhone)
+//                val tvPhoneNumber: TextView = view.findViewById(R.id.tvPhoneNumber)
+//                val tvDescription: TextView = view.findViewById(R.id.tvDescription)
 
                 if (client.picture != null) {
-                    ivPhotoClientEmpty.visibility = View.GONE
-                    ivPhotoClient.visibility = View.VISIBLE
+                    sheetBinding.ivPhotoClientEmpty.visibility = View.GONE
+                    sheetBinding.ivPhotoClient.visibility = View.VISIBLE
                     val bitmap = BitmapFactory.decodeByteArray(
                         client.picture,
                         0,
                         client.picture.size
                     )
-                    ivPhotoClient.setImageBitmap(bitmap)
+                    sheetBinding.ivPhotoClient.setImageBitmap(bitmap)
                 } else {
-                    ivPhotoClient.visibility = View.GONE
-                    ivPhotoClientEmpty.visibility = View.VISIBLE
+                    sheetBinding.ivPhotoClient.visibility = View.GONE
+                    sheetBinding.ivPhotoClientEmpty.visibility = View.VISIBLE
                 }
-                tvNameClient.text = client.name
-                tvCellPhoneNumber.text = client.cellPhone
-                tvPhoneNumber.text = client.phoneNumber
-                tvDescription.text = client.observation
+                sheetBinding.tvNameClient.text = client.name
+                sheetBinding.tvCellPhoneNumber.text = client.cellPhone
+                sheetBinding.tvPhoneNumber.text = client.phoneNumber
+                sheetBinding.tvDescription.text = client.observation
 
-                ivSMS.setOnClickListener {
+                sheetBinding.ivSMS.setOnClickListener {
                     val sms = Intent(Intent.ACTION_SENDTO)
                     sms.data = Uri.parse("sms:${client.cellPhone}")
                     activity.startActivity(sms)
                 }
 
-                llButtonCallPhone.setOnClickListener {
+                sheetBinding.llButtonCallPhone.setOnClickListener {
                     val call = Intent(Constants.Actions.call_phone)
                     call.putExtra("phone", client.cellPhone)
                     LocalBroadcastManager.getInstance(activity).sendBroadcast(call)
                 }
 
-                llButtonPhone.visibility =
+                sheetBinding.llButtonPhone.visibility =
                     if (client.phoneNumber != null) View.VISIBLE else View.GONE
-                llButtonPhone.setOnClickListener {
+                sheetBinding.llButtonPhone.setOnClickListener {
                     val call = Intent(Constants.Actions.call_phone)
                     call.putExtra("phone", client.phoneNumber)
                     LocalBroadcastManager.getInstance(activity).sendBroadcast(call)
                 }
 
-                toolbar.inflateMenu(R.menu.client_details)
+                sheetBinding.toolbar.inflateMenu(R.menu.client_details)
 
                 val dialog = BottomSheetDialog(activity, R.style.BottomSheetDialogTheme)
-                dialog.setContentView(view)
+                dialog.setContentView(sheetBinding.root)
 
-                toolbar.setNavigationOnClickListener { dialog.dismiss() }
-                toolbar.setOnMenuItemClickListener {
+                sheetBinding.toolbar.setNavigationOnClickListener { dialog.dismiss() }
+                sheetBinding.toolbar.setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.client_edit -> {
                             val bundle = bundleOf("client" to client)
-                            holder.itemView.findNavController().navigate(R.id.manage_client, bundle)
+                            holder.binding.root.findNavController()
+                                .navigate(R.id.manage_client, bundle)
                             dialog.dismiss()
                             true
                         }
@@ -157,28 +164,27 @@ class AdapterClient(
         }
 
         if (client.picture != null) {
-            holder.ivIconClient.visibility = View.GONE
-            holder.ivClientPhoto.visibility = View.VISIBLE
+            holder.binding.ivIconClient.visibility = View.GONE
+            holder.binding.ivClientPhoto.visibility = View.VISIBLE
             val bitmap = BitmapFactory.decodeByteArray(
                 client.picture,
                 0,
                 client.picture.size
             )
-            holder.ivClientPhoto.setImageBitmap(bitmap)
+            holder.binding.ivClientPhoto.setImageBitmap(bitmap)
         } else {
-            holder.ivIconClient.visibility = View.VISIBLE
-            holder.ivClientPhoto.visibility = View.GONE
+            holder.binding.ivIconClient.visibility = View.VISIBLE
+            holder.binding.ivClientPhoto.visibility = View.GONE
         }
 
-        holder.tvItemClientName.text = client.name
-        holder.ibItemClientCall.visibility = View.VISIBLE
-        holder.ibItemClientCall.setOnClickListener {
+        holder.binding.tvItemClientName.text = client.name
+        holder.binding.ibItemClientCall.setOnClickListener {
             if (client.phoneNumber == null) {
                 val call = Intent(Constants.Actions.call_phone)
                 call.putExtra("phone", client.cellPhone)
                 LocalBroadcastManager.getInstance(activity).sendBroadcast(call)
             } else {
-                photoMenu(holder.ibItemClientCall, client.cellPhone!!, client.phoneNumber)
+                photoMenu(holder.binding.ibItemClientCall, client.cellPhone!!, client.phoneNumber)
             }
         }
     }
@@ -236,28 +242,10 @@ class AdapterClient(
     private fun selectItem(holder: ClientViewHolder, image: Client) {
         if (selectedItems.contains(image)) {
             selectedItems.remove(image)
-            holder.itemView.setBackgroundColor(android.R.color.transparent)
+            holder.binding.root.setBackgroundColor(android.R.color.transparent)
         } else {
             selectedItems.add(image)
-            holder.itemView.setBackgroundColor(R.color.boxBackgroundDefault)
-        }
-    }
-
-    inner class ClientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        internal val ivClientPhoto: CircleImageView
-        internal val ivIconClient: ImageView
-        internal val tvItemClientName: TextView
-        internal val ibItemClientCall: ImageButton
-
-        init {
-            ivClientPhoto =
-                itemView.findViewById<View>(R.id.ivClientPhoto) as CircleImageView
-            ivIconClient =
-                itemView.findViewById<View>(R.id.ivIconClient) as ImageView
-            tvItemClientName =
-                itemView.findViewById<View>(R.id.tvItemClientName) as TextView
-            ibItemClientCall =
-                itemView.findViewById<View>(R.id.ibItemClientCall) as ImageButton
+            holder.binding.root.setBackgroundColor(R.color.boxBackgroundDefault)
         }
     }
 
@@ -299,7 +287,6 @@ class AdapterClient(
         }
     }
 
-    @SuppressLint("ResourceAsColor")
     fun handleCancel() {
         multiSelect = false
         selectedItems.clear()

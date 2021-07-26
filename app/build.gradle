@@ -34,6 +34,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -50,11 +53,16 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
 
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.5"
+    // Jetpack Compose Integration
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha04"
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
 
     // Room components
     implementation "androidx.room:room-ktx:2.3.0"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.annotation:annotation:1.2.0'
     kapt "androidx.room:room-compiler:2.3.0"
     implementation 'androidx.room:room-runtime:2.3.0'
     androidTestImplementation "androidx.room:room-testing:2.3.0"
@@ -62,32 +70,32 @@ dependencies {
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.3.0"
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-//    kapt "androidx.lifecycle:lifecycle-compiler:2.3.1"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.3.1"
 
     //Commons Collections4
     implementation "org.apache.commons:commons-collections4:4.4"
     //Commons IO
-    implementation 'commons-io:commons-io:2.8.0'
+    implementation 'commons-io:commons-io:2.11.0'
 
     //CircleImageView
     implementation "de.hdodenhof:circleimageview:3.1.0"
 
     //Charts
-//    implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
+    implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
 //    implementation "com.androidplot:androidplot-core:1.5.7"
-//    implementation "com.jjoe64:graphview:4.2.2"
+    implementation "com.jjoe64:graphview:4.2.2"
 
     //CropImage
-    implementation "com.github.yalantis:ucrop:2.2.4-native"
+    implementation "com.github.yalantis:ucrop:2.2.6-native"
 //    implementation "com.yalantis:ucrop:2.2.0"
 
-    implementation "com.squareup.picasso:picasso:2.8"
+    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation "com.itextpdf:itextpdf:5.5.13.1"
 
     // Coroutines
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0"
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1-native-mt'
 
     implementation project(':iconPickert')
 

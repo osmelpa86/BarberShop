@@ -2,6 +2,7 @@ package it.ssplus.barbershop.adapter
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +12,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import it.ssplus.barbershop.R
+import it.ssplus.barbershop.databinding.ItemExpenseCategorySelectBinding
 import it.ssplus.barbershop.model.entity.ExpenseCategory
 import it.ssplus.barbershop.utils.Constants
 
@@ -28,68 +31,60 @@ class AdapterExpenseCategorySelect(val activity: Activity, selected: Int) :
         notifyDataSetChanged()
     }
 
+    inner class ExpenseCategoryViewHolder(val binding: ItemExpenseCategorySelectBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(expenseCategory: ExpenseCategory) {
+            if (checkedPosition == -1) {
+                binding.root.background =
+                    ContextCompat.getDrawable(activity, R.drawable.item_color_bg_transparent)
+            } else {
+                if (checkedPosition == adapterPosition) {
+                    binding.root.background = ContextCompat.getDrawable(
+                        activity,
+                        R.drawable.item_color_bg_roud_shape_linear
+                    )
+                } else {
+                    binding.root.background =
+                        ContextCompat.getDrawable(activity, R.drawable.item_color_bg_transparent)
+                }
+            }
+
+            binding.root.setOnClickListener {
+                binding.root.background =
+                    ContextCompat.getDrawable(activity, R.drawable.item_color_bg_roud_shape_linear)
+                if (checkedPosition != adapterPosition) {
+                    notifyItemChanged(checkedPosition)
+                    checkedPosition = adapterPosition
+                }
+                LocalBroadcastManager.getInstance(activity)
+                    .sendBroadcast(Intent(Constants.Actions.expense_category_expense_item_selected))
+            }
+
+            binding.tvNameExpenseCategory.text = expenseCategory.name
+            val bitmap = BitmapFactory.decodeByteArray(
+                expenseCategory.image,
+                0,
+                expenseCategory.image!!.size
+            )
+            binding.ivIconExpenseCategory.setImageBitmap(bitmap)
+            binding.clIconExpenseCategory.background =
+                ContextCompat.getDrawable(activity, Constants.roundIcons[expenseCategory.color])
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseCategoryViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_expense_category_select,
+        val binding = ItemExpenseCategorySelectBinding.inflate(
+            LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return ExpenseCategoryViewHolder(v)
+        return ExpenseCategoryViewHolder(binding)
     }
 
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: ExpenseCategoryViewHolder, position: Int) {
         val expenseCategory = expenseCategories[position]
         holder.bind(expenseCategory)
-    }
-
-    inner class ExpenseCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvNameExpenseCategory: TextView
-        private val ivItemIconExpenseCategory: ImageView
-        private val clIconExpenseCategory: ConstraintLayout
-        internal val clExpenseCategoryContainer: ConstraintLayout
-
-        init {
-            tvNameExpenseCategory =
-                itemView.findViewById<View>(R.id.tvNameExpenseCategory) as TextView
-            ivItemIconExpenseCategory =
-                itemView.findViewById<View>(R.id.ivIconExpenseCategory) as ImageView
-            clIconExpenseCategory =
-                itemView.findViewById<View>(R.id.clIconExpenseCategory) as ConstraintLayout
-            clExpenseCategoryContainer =
-                itemView.findViewById<View>(R.id.clExpenseCategoryContainer) as ConstraintLayout
-        }
-
-        fun bind(expenseCategory: ExpenseCategory) {
-            if (checkedPosition == -1) {
-                clExpenseCategoryContainer.background =
-                    ContextCompat.getDrawable(activity,R.drawable.item_color_bg_transparent)
-            } else {
-                if (checkedPosition == adapterPosition) {
-                    clExpenseCategoryContainer.background = ContextCompat.getDrawable(activity,R.drawable.item_color_bg_roud_shape)
-                } else {
-                    clExpenseCategoryContainer.background = ContextCompat.getDrawable(activity,R.drawable.item_color_bg_transparent)
-                }
-            }
-
-            itemView.setOnClickListener {
-                clExpenseCategoryContainer.background =
-                    ContextCompat.getDrawable(activity,R.drawable.item_color_bg_roud_shape)
-                if (checkedPosition != adapterPosition) {
-                    notifyItemChanged(checkedPosition)
-                    checkedPosition = adapterPosition
-                }
-            }
-
-            tvNameExpenseCategory.text = expenseCategory.name
-            val bitmap = BitmapFactory.decodeByteArray(
-                expenseCategory.image,
-                0,
-                expenseCategory.image!!.size
-            )
-            ivItemIconExpenseCategory.setImageBitmap(bitmap)
-            clIconExpenseCategory.background = ContextCompat.getDrawable(activity,Constants.roundIcons[expenseCategory.color])
-        }
     }
 
     override fun getItemCount(): Int {

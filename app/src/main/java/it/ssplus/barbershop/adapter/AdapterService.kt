@@ -11,42 +11,43 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import it.ssplus.barbershop.R
-import it.ssplus.barbershop.databinding.BottomSheetTurnDetailsBinding
-import it.ssplus.barbershop.databinding.ItemTurnBinding
-import it.ssplus.barbershop.model.entity.Turn
-import it.ssplus.barbershop.ui.turn.TurnFragment
+import it.ssplus.barbershop.databinding.BottomSheetServiceDetailsBinding
+import it.ssplus.barbershop.databinding.ItemServiceBinding
+import it.ssplus.barbershop.model.entity.Service
+import it.ssplus.barbershop.ui.service.ServiceFragment
 import it.ssplus.barbershop.utils.Constants
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AdapterTurn(
-    internal var turnFragment: TurnFragment,
+class AdapterService(
+    internal var serviceFragment: ServiceFragment,
     val activity: AppCompatActivity
 ) :
-    RecyclerView.Adapter<AdapterTurn.TurnViewHolder>() {
+    RecyclerView.Adapter<AdapterService.ServiceViewHolder>() {
 
-    internal var turns = arrayListOf<Turn>()
+    internal var services = arrayListOf<Service>()
     var multiSelect = false
-    val selectedItems = arrayListOf<Turn>()
+    val selectedItems = arrayListOf<Service>()
 
-    fun setData(turns: ArrayList<Turn>) {
-        this.turns.clear()
-        this.turns.addAll(turns)
+    fun setData(services: ArrayList<Service>) {
+        this.services.clear()
+        this.services.addAll(services)
         notifyDataSetChanged()
     }
 
-    inner class TurnViewHolder(val binding: ItemTurnBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ServiceViewHolder(val binding: ItemServiceBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TurnViewHolder {
-        val binding = ItemTurnBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return TurnViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceViewHolder {
+        val binding = ItemServiceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ServiceViewHolder(binding)
     }
 
     @SuppressLint("ResourceAsColor")
-    override fun onBindViewHolder(holder: TurnViewHolder, position: Int) {
-        val turn = turns[position]
+    override fun onBindViewHolder(holder: ServiceViewHolder, position: Int) {
+        val service = services[position]
 
-        if (selectedItems.contains(turn)) {
+        if (selectedItems.contains(service)) {
             holder.binding.root.setBackgroundColor(R.color.boxBackgroundDefault)
         } else {
             holder.binding.root.setBackgroundColor(android.R.color.transparent)
@@ -56,8 +57,8 @@ class AdapterTurn(
             if (!multiSelect) {
                 multiSelect = true
                 LocalBroadcastManager.getInstance(activity)
-                    .sendBroadcast(Intent(Constants.Actions.turn_item_selected))
-                selectItem(holder, turn)
+                    .sendBroadcast(Intent(Constants.Actions.service_item_selected))
+                selectItem(holder, service)
                 true
             } else
                 false
@@ -65,21 +66,21 @@ class AdapterTurn(
 
         holder.binding.root.setOnClickListener {
             if (multiSelect) {
-                selectItem(holder, turn)
+                selectItem(holder, service)
                 val toolbar = activity.findViewById<Toolbar>(R.id.toolbar)
                 toolbar.title =
                     activity.resources.getString(R.string.title_selected) + " " + this.selectedItems.size.toString()
             } else {
-                val sheetBinding = BottomSheetTurnDetailsBinding.inflate(
+                val sheetBinding = BottomSheetServiceDetailsBinding.inflate(
                     LayoutInflater.from(activity),
                     null,
                     false
                 )
 
-                sheetBinding.tvNameTurn.text = turns[position].name
-                sheetBinding.tvHourTurn.text = turns[position].hour
-
-                sheetBinding.toolbar.inflateMenu(R.menu.turn_details)
+                sheetBinding.tvNameService.text = services[position].name
+                sheetBinding.tvDescriptionService.text = services[position].description
+                sheetBinding.tvCostService.text = "$" + services[position].cost.toString()
+                sheetBinding.toolbar.inflateMenu(R.menu.service_details)
 
                 val dialog = BottomSheetDialog(activity, R.style.BottomSheetDialogTheme)
                 dialog.setContentView(sheetBinding.root)
@@ -87,9 +88,9 @@ class AdapterTurn(
                 sheetBinding.toolbar.setNavigationOnClickListener { dialog.dismiss() }
                 sheetBinding.toolbar.setOnMenuItemClickListener {
                     when (it.itemId) {
-                        R.id.turn_edit -> {
-                            turnFragment.turn = turns[position]
-                            turnFragment.add()
+                        R.id.service_edit -> {
+                            serviceFragment.service = services[position]
+                            serviceFragment.add()
                             dialog.dismiss()
                             true
                         }
@@ -101,12 +102,13 @@ class AdapterTurn(
             }
         }
 
-        holder.binding.tvNameTurn.text = turn.name
-        holder.binding.tvHourTurn.text = turn.hour
+        holder.binding.tvNameService.text = service.name
+        holder.binding.tvDescriptionService.text = service.description
+        holder.binding.tvServiceCost.text = "$" + service.cost.toString()
     }
 
     @SuppressLint("ResourceAsColor")
-    private fun selectItem(holder: TurnViewHolder, image: Turn) {
+    private fun selectItem(holder: ServiceViewHolder, image: Service) {
         if (selectedItems.contains(image)) {
             selectedItems.remove(image)
             holder.binding.root.setBackgroundColor(android.R.color.transparent)
@@ -117,26 +119,27 @@ class AdapterTurn(
     }
 
     override fun getItemCount(): Int {
-        return turns.size
+        return services.size
     }
 
-    fun changeDataItem(position: Int, model: Turn) {
-        turns[position] = model
+    fun changeDataItem(position: Int, model: Service) {
+        services[position] = model
         notifyDataSetChanged()
     }
 
     var filter: Filter = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
-            val filteredList = ArrayList<Turn>()
+            val filteredList = ArrayList<Service>()
             val filterPattern: String = constraint.toString().lowercase(Locale.ROOT).trim()
             if (filterPattern.isEmpty()) {
-                filteredList.addAll(turnFragment.listTurn)
+                filteredList.addAll(serviceFragment.listService)
             } else {
-                for (turn in turnFragment.listTurn) {
-                    if (turn.name.lowercase(Locale.ROOT)
-                            .contains(filterPattern) || turn.name.contains(filterPattern)
+                for (service in serviceFragment.listService) {
+                    if (service.name.lowercase(Locale.ROOT).contains(filterPattern) ||
+                        service.description!!.lowercase(Locale.ROOT).contains(filterPattern) ||
+                        service.cost.toString().contains(filterPattern)
                     ) {
-                        filteredList.add(turn)
+                        filteredList.add(service)
                     }
                 }
             }
@@ -148,8 +151,8 @@ class AdapterTurn(
         }
 
         override fun publishResults(constraint: CharSequence, results: FilterResults) {
-            turns.clear()
-            turns.addAll(results.values as Collection<Turn>)
+            services.clear()
+            services.addAll(results.values as Collection<Service>)
             notifyDataSetChanged()
         }
     }
@@ -164,11 +167,11 @@ class AdapterTurn(
     fun handleSelectAll() {
         when {
             this.selectedItems.size == 0 -> {
-                this.selectedItems.addAll(this.turns)
+                this.selectedItems.addAll(this.services)
             }
             this.selectedItems.size != itemCount -> {
                 this.selectedItems.clear()
-                this.selectedItems.addAll(this.turns)
+                this.selectedItems.addAll(this.services)
             }
             this.selectedItems.size == itemCount -> {
                 this.selectedItems.clear()

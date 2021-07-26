@@ -3,19 +3,21 @@ package it.ssplus.barbershop.adapter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.view.*
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.Filter
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import it.ssplus.barbershop.R
+import it.ssplus.barbershop.databinding.BottomSheetExpenseCategoryDetailsBinding
+import it.ssplus.barbershop.databinding.ItemExpenseCategoryBinding
 import it.ssplus.barbershop.model.entity.ExpenseCategory
+import it.ssplus.barbershop.model.pojo.ExpensePojo
 import it.ssplus.barbershop.ui.expense_category.ExpenseCategoryFragment
 import it.ssplus.barbershop.utils.Constants
 import it.ssplus.barbershop.utils.ImageUtils
@@ -38,13 +40,13 @@ class AdapterExpenseCategory(
         notifyDataSetChanged()
     }
 
+    inner class ExpenseCategoryViewHolder(val binding: ItemExpenseCategoryBinding) :
+        RecyclerView.ViewHolder(binding.root)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseCategoryViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_expense_category,
-            parent,
-            false
-        )
-        return ExpenseCategoryViewHolder(v)
+        val binding =
+            ItemExpenseCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ExpenseCategoryViewHolder(binding)
     }
 
     @SuppressLint("ResourceAsColor")
@@ -52,12 +54,12 @@ class AdapterExpenseCategory(
         val expenseCategory = expenseCategories[position]
 
         if (selectedItems.contains(expenseCategory)) {
-            holder.itemView.setBackgroundColor(R.color.boxBackgroundDefault)
+            holder.binding.root.setBackgroundColor(R.color.boxBackgroundDefault)
         } else {
-            holder.itemView.setBackgroundColor(android.R.color.transparent)
+            holder.binding.root.setBackgroundColor(android.R.color.transparent)
         }
 
-        holder.itemView.setOnLongClickListener {
+        holder.binding.root.setOnLongClickListener {
             if (!multiSelect) {
                 multiSelect = true
                 LocalBroadcastManager.getInstance(activity)
@@ -68,40 +70,50 @@ class AdapterExpenseCategory(
                 false
         }
 
-        holder.itemView.setOnClickListener {
+        holder.binding.root.setOnClickListener {
             if (multiSelect) {
                 selectItem(holder, expenseCategory)
                 val toolbar = activity.findViewById<Toolbar>(R.id.toolbar)
                 toolbar.title =
                     activity.resources.getString(R.string.title_selected) + " " + this.selectedItems.size.toString()
             } else {
-                val view = LayoutInflater.from(activity)
-                    .inflate(R.layout.bottom_sheet_expense_category_details, null, false)
 
-                val toolbar: Toolbar = view.findViewById(R.id.toolbar)
-                val imageViewIcon: ImageView = view.findViewById(R.id.imageViewIcon)
-                val textViewName: TextView = view.findViewById(R.id.textViewName)
-                val textViewDescription: TextView = view.findViewById(R.id.textViewDescription)
+                val sheetBinding = BottomSheetExpenseCategoryDetailsBinding.inflate(
+                    LayoutInflater.from(activity),
+                    null,
+                    false
+                )
 
-                textViewName.text = expenseCategories[position].name
-                textViewDescription.text = expenseCategories[position].description
-                toolbar.inflateMenu(R.menu.expense_category_details)
+                sheetBinding.textViewName.text = expenseCategories[position].name
+                sheetBinding.textViewDescription.text = expenseCategories[position].description
+                sheetBinding.toolbar.inflateMenu(R.menu.expense_category_details)
 
-                imageViewIcon.setBackgroundResource(
+                val adapterDetailsExpenseExpenseCategory =
+                    AdapterDetailsExpenseExpenseCategory(activity = activity)
+
+                expenseCategoryFragment.expensesByCategory(expenseCategories[position].id)
+                    .observe(activity, { items ->
+                        adapterDetailsExpenseExpenseCategory.setData(items as ArrayList<ExpensePojo>)
+                    })
+
+                sheetBinding.rvExpensesExpenseCategory.adapter = adapterDetailsExpenseExpenseCategory
+                sheetBinding.rvExpensesExpenseCategory.layoutManager = LinearLayoutManager(activity)
+
+                sheetBinding.imageViewIcon.setBackgroundResource(
                     Constants.roundIcons[expenseCategories[position].color]
                 )
 
-                imageViewIcon.setImageBitmap(expenseCategories[position].image?.let { it1 ->
+                sheetBinding.imageViewIcon.setImageBitmap(expenseCategories[position].image?.let { it1 ->
                     ImageUtils.getImage(
                         it1
                     )
                 })
 
                 val dialog = BottomSheetDialog(activity, R.style.BottomSheetDialogTheme)
-                dialog.setContentView(view)
+                dialog.setContentView(sheetBinding.root)
 
-                toolbar.setNavigationOnClickListener { dialog.dismiss() }
-                toolbar.setOnMenuItemClickListener {
+                sheetBinding.toolbar.setNavigationOnClickListener { dialog.dismiss() }
+                sheetBinding.toolbar.setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.expense_category_edit -> {
                             expenseCategoryFragment.expenseCategory =
@@ -118,15 +130,16 @@ class AdapterExpenseCategory(
             }
         }
 
-        holder.tvNameExpenseCategory.text = expenseCategory.name
-        holder.tvDescriptionExpenseCategory.text = expenseCategory.description
+        holder.binding.tvNameExpenseCategory.text = expenseCategory.name
+        holder.binding.tvDescriptionExpenseCategory.text = expenseCategory.description
         val bitmap = BitmapFactory.decodeByteArray(
             expenseCategory.image,
             0,
             expenseCategory.image!!.size
         )
-        holder.ivItemIconExpenseCategory.setImageBitmap(bitmap)
-        holder.clIconExpenseCategory.background = ResourcesCompat.getDrawable(activity.resources,
+        holder.binding.ivIconExpenseCategory.setImageBitmap(bitmap)
+        holder.binding.clIconExpenseCategory.background = ResourcesCompat.getDrawable(
+            activity.resources,
             Constants.roundIcons[expenseCategory.color],
             null
         )
@@ -136,28 +149,10 @@ class AdapterExpenseCategory(
     private fun selectItem(holder: ExpenseCategoryViewHolder, image: ExpenseCategory) {
         if (selectedItems.contains(image)) {
             selectedItems.remove(image)
-            holder.itemView.setBackgroundColor(android.R.color.transparent)
+            holder.binding.root.setBackgroundColor(android.R.color.transparent)
         } else {
             selectedItems.add(image)
-            holder.itemView.setBackgroundColor(R.color.boxBackgroundDefault)
-        }
-    }
-
-    inner class ExpenseCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        internal val tvNameExpenseCategory: TextView
-        internal val ivItemIconExpenseCategory: ImageView
-        internal val tvDescriptionExpenseCategory: TextView
-        internal val clIconExpenseCategory: ConstraintLayout
-
-        init {
-            tvNameExpenseCategory =
-                itemView.findViewById<View>(R.id.tvNameExpenseCategory) as TextView
-            ivItemIconExpenseCategory =
-                itemView.findViewById<View>(R.id.ivIconExpenseCategory) as ImageView
-            tvDescriptionExpenseCategory =
-                itemView.findViewById<View>(R.id.tvDescriptionExpenseCategory) as TextView
-            clIconExpenseCategory =
-                itemView.findViewById<View>(R.id.clIconExpenseCategory) as ConstraintLayout
+            holder.binding.root.setBackgroundColor(R.color.boxBackgroundDefault)
         }
     }
 
