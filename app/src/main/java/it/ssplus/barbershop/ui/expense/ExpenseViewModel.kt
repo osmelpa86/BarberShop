@@ -8,7 +8,7 @@ import it.ssplus.barbershop.model.pojo.ExpensePojo
 import it.ssplus.barbershop.model.repository.ExpenseRepository
 import kotlinx.coroutines.launch
 
-class ExpenseViewModel (application: Application) : AndroidViewModel(application) {
+class ExpenseViewModel(application: Application) : AndroidViewModel(application) {
     private val expenseRepository: ExpenseRepository
     val all: LiveData<List<ExpensePojo>>
 
@@ -36,6 +36,9 @@ class ExpenseViewModel (application: Application) : AndroidViewModel(application
 
     fun search(query: String): LiveData<List<ExpensePojo>> =
         expenseRepository.search(query)
+
+    fun getExpenseCategoryByExpense(id_expene_category: Long): LiveData<List<ExpensePojo>> =
+        expenseRepository.getExpenseCategoryByExpense(id_expene_category)
 
     fun getItem(position: Int): ExpensePojo? {
         return all.value?.get(position)
