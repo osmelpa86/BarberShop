@@ -4,17 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.google.android.material.textfield.TextInputLayout
-import it.ssplus.barbershop.R
-import it.ssplus.iconpickert.IconPicker
+import it.ssplus.barbershop.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
-    private lateinit var iconPicker: IconPicker
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,17 +18,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
-
-//        iconPicker = root!!.findViewById(R.id.iconPickert)
-//
-//        val spinner: TextInputLayout = root.findViewById(R.id.spinner)
-//        val items = listOf("Material", "Design", "Components", "Android")
-//        val adapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
-//        (spinner.editText as? AutoCompleteTextView)?.setAdapter(adapter)
-//        (spinner.editText as? AutoCompleteTextView)?.setDropDownBackgroundDrawable(
-//            (ContextCompat.getDrawable(requireContext(), R.drawable.dialog_background_roud_shape))
-//        )
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val root: View = binding.root
 
         return root
     }
