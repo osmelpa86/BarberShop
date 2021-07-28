@@ -19,12 +19,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputLayout
 import it.ssplus.barbershop.R
 import it.ssplus.barbershop.adapter.AdapterTurn
+import it.ssplus.barbershop.databinding.*
 import it.ssplus.barbershop.model.entity.Turn
 import it.ssplus.barbershop.utils.Constants
 import it.ssplus.barbershop.utils.SnackBarUtil
@@ -34,20 +32,15 @@ import java.util.*
 
 class TurnFragment : Fragment(), View.OnClickListener {
 
-    private lateinit var root: View
+    private var _binding: FragmentTurnBinding? = null
+    private val binding get() = _binding!!
     private lateinit var turnViewModel: TurnViewModel
 
     private lateinit var adapterTurn: AdapterTurn
-    private lateinit var rvListTurn: RecyclerView
     lateinit var listTurn: ArrayList<Turn>
     private lateinit var noDataContainerTurn: LinearLayout
-    private lateinit var svTurn: SearchView
     var turn: Turn? = null
-    private lateinit var fabAddTurn: FloatingActionButton
     private lateinit var menu: Menu
-    private lateinit var tilNameTurn: TextInputLayout
-    private lateinit var ivSelectHourTurn: ImageView
-    private lateinit var tilHourTurn: TextInputLayout
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -66,14 +59,14 @@ class TurnFragment : Fragment(), View.OnClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        root = inflater.inflate(R.layout.fragment_turn, container, false)
+        _binding = FragmentTurnBinding.inflate(inflater, container, false)
+        val root: View = binding.root
 
         turnViewModel = ViewModelProvider(this).get(TurnViewModel::class.java)
 
-        fabAddTurn = root.findViewById(R.id.fabAddTurn)
-        fabAddTurn.setOnClickListener(this)
+        binding.fabAddTurn.setOnClickListener(this)
 
-        noDataContainerTurn = root.findViewById(R.id.noDataContainerTurn)
+        noDataContainerTurn = binding.noDataContainerTurn
 
         listTurn = arrayListOf()
         adapterTurn =
@@ -86,27 +79,25 @@ class TurnFragment : Fragment(), View.OnClickListener {
                 if (items.isEmpty()) View.VISIBLE else View.GONE
         })
 
-        rvListTurn = root.findViewById(R.id.rvListTurn)
-        rvListTurn.adapter = adapterTurn
-        rvListTurn.layoutManager = LinearLayoutManager(context)
+        binding.rvListTurn.adapter = adapterTurn
+        binding.rvListTurn.layoutManager = LinearLayoutManager(context)
 
-        svTurn = root.findViewById(R.id.svTurn)
-        svTurn.setOnClickListener {
-            svTurn.setIconifiedByDefault(true)
-            svTurn.isFocusable = true
-            svTurn.isIconified = false
-            svTurn.requestFocusFromTouch()
+        binding.svTurn.setOnClickListener {
+            binding.svTurn.setIconifiedByDefault(true)
+            binding.svTurn.isFocusable = true
+            binding.svTurn.isIconified = false
+            binding.svTurn.requestFocusFromTouch()
         }
 
-        svTurn.setOnSearchClickListener {
+        binding.svTurn.setOnSearchClickListener {
         }
 
-        svTurn.setOnCloseListener {
+        binding.svTurn.setOnCloseListener {
             false
         }
 
         val searchEditText =
-            svTurn.findViewById<View>(androidx.appcompat.R.id.search_src_text) as EditText
+            binding.svTurn.findViewById<View>(androidx.appcompat.R.id.search_src_text) as EditText
         searchEditText.setTextColor(
             AppCompatResources.getColorStateList(
                 requireActivity(),
@@ -116,7 +107,7 @@ class TurnFragment : Fragment(), View.OnClickListener {
         searchEditText.textSize = 16f
         searchEditText.hint = requireActivity().resources.getString(R.string.message_hint_search)
         val searchIcon =
-            svTurn.findViewById<View>(androidx.appcompat.R.id.search_button) as ImageView
+            binding.svTurn.findViewById<View>(androidx.appcompat.R.id.search_button) as ImageView
         searchIcon.drawable.setTint(
             AppCompatResources.getColorStateList(
                 requireActivity(),
@@ -124,15 +115,15 @@ class TurnFragment : Fragment(), View.OnClickListener {
             ).defaultColor
         )
         val searchMagIcon =
-            svTurn.findViewById<View>(androidx.appcompat.R.id.search_close_btn) as ImageView
+            binding.svTurn.findViewById<View>(androidx.appcompat.R.id.search_close_btn) as ImageView
         searchMagIcon.drawable.setTint(
             AppCompatResources.getColorStateList(
                 requireActivity(),
                 R.color.primaryTextColor
             ).defaultColor
         )
-        svTurn.queryHint = this.resources.getString(R.string.message_hint_search)
-        svTurn.setOnQueryTextListener(object :
+        binding.svTurn.queryHint = this.resources.getString(R.string.message_hint_search)
+        binding.svTurn.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 adapterTurn.filter.filter(query)
@@ -177,7 +168,7 @@ class TurnFragment : Fragment(), View.OnClickListener {
         requireActivity().findViewById<Toolbar>(R.id.toolbar).title =
             requireActivity().resources.getString(R.string.title_selected) + " 1"
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        fabAddTurn.visibility = View.GONE
+        binding.fabAddTurn.visibility = View.GONE
     }
 
     private fun handleCancel() {
@@ -186,33 +177,26 @@ class TurnFragment : Fragment(), View.OnClickListener {
         requireActivity().findViewById<Toolbar>(R.id.toolbar).title =
             requireActivity().resources.getString(R.string.menu_turn)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        fabAddTurn.visibility = View.VISIBLE
+        binding.fabAddTurn.visibility = View.VISIBLE
         adapterTurn.handleCancel()
     }
 
     private fun confirmDeletion() {
         val builder = AlertDialog.Builder(activity, R.style.AppCompatAlertDialogStyle)
-        val view: View =
-            LayoutInflater.from(activity).inflate(R.layout.dialog_confirm_danger, null, false)
-        builder.setView(view)
+        val dBinding =
+            DialogConfirmDangerBinding.inflate(LayoutInflater.from(requireActivity()), null, false)
+        builder.setView(dBinding.root)
         val dialog = builder.create()
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setCanceledOnTouchOutside(false)
-        val textViewTitle: TextView = view.findViewById(R.id.textViewTitle)
-        val textViewMessage: TextView = view.findViewById(R.id.textViewMessage)
-        val buttonCancel: Button = view.findViewById(R.id.buttonCancel)
-        val buttonOk: Button = view.findViewById(R.id.buttonOk)
 
-        textViewTitle.text = getString(R.string.message_delete_turns)
-        textViewMessage.text =
+        dBinding.textViewTitle.text = getString(R.string.message_delete_turns)
+        dBinding.textViewMessage.text =
             getString(R.string.message_confirm_delete_selected_turn)
-        buttonCancel.text = getString(android.R.string.cancel)
-        buttonOk.text = getString(R.string.menu_delete)
-
-        buttonCancel.setOnClickListener {
+        dBinding.buttonCancel.setOnClickListener {
             dialog.dismiss()
         }
-        buttonOk.setOnClickListener {
+        dBinding.buttonOk.setOnClickListener {
             deleteSelection()
             dialog.dismiss()
         }
@@ -242,68 +226,58 @@ class TurnFragment : Fragment(), View.OnClickListener {
     fun add() {
         val builderAdd =
             AlertDialog.Builder(activity, R.style.AppCompatAlertDialogStyle)
-        val inflater = activity?.layoutInflater
-        val convertView =
-            inflater?.inflate(R.layout.dialog_manage_turn, null) as View
-        val titleCustomView =
-            inflater.inflate(R.layout.dialog_custom_title, null) as View
-        val titleIcon: ImageView =
-            titleCustomView.findViewById(R.id.customDialogTitleIcon)
-        val titleName: TextView =
-            titleCustomView.findViewById(R.id.customDialogTitleName)
-        titleName.setText(if (turn == null) R.string.menu_add else R.string.menu_edit)
-        titleIcon.setImageResource(R.drawable.ic_arrow_back)
-        builderAdd.setCustomTitle(titleCustomView)
-        builderAdd.setView(convertView)
+        val convertView = DialogManageTurnBinding.inflate(layoutInflater, null, false)
 
-        tilNameTurn = convertView.findViewById(R.id.tilNameTurn)
-        tilHourTurn = convertView.findViewById(R.id.tilHourTurn)
-        ivSelectHourTurn = convertView.findViewById(R.id.ivSelectHourTurn)
-        ivSelectHourTurn.setOnClickListener { showTimePicker(tilHourTurn.editText!!) }
+        val titleCustomView = DialogCustomTitleBinding.inflate(layoutInflater, null, false)
+
+        titleCustomView.customDialogTitleName.setText(if (turn == null) R.string.menu_add else R.string.menu_edit)
+        titleCustomView.customDialogTitleIcon.setImageResource(R.drawable.ic_arrow_back)
+
+        builderAdd.setCustomTitle(titleCustomView.root)
+        builderAdd.setView(convertView.root)
+
+        convertView.ivSelectHourTurn.setOnClickListener { showTimePicker(convertView.tilHourTurn.editText!!) }
 
         if (turn != null) {
-            tilNameTurn.editText!!.setText(turn!!.name)
-            tilHourTurn.editText!!.setText(turn!!.hour)
+            convertView.tilNameTurn.editText!!.setText(turn!!.name)
+            convertView.tilHourTurn.editText!!.setText(turn!!.hour)
         }
 
         val dialogAdd: AlertDialog = builderAdd.create()
         dialogAdd.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialogAdd.setCanceledOnTouchOutside(false)
 
-        val accept: ImageButton =
-            titleCustomView.findViewById(R.id.imageButton)
-        accept.setOnClickListener {
+        titleCustomView.imageButton.setOnClickListener {
             if (turn == null) {
                 val validName = TurnNameFieldValidator(
-                    tilNameTurn,
+                    convertView.tilNameTurn,
                     requireActivity(),
-                    tilNameTurn.editText!!.text.toString(),
+                    convertView.tilNameTurn.editText!!.text.toString(),
                     false,
                     allTurnNames = listTurn.map(Turn::name) as ArrayList<String>
-                ).validate(tilNameTurn.editText!!.text.toString())
+                ).validate(convertView.tilNameTurn.editText!!.text.toString())
 
                 val validHour = TurnHourFieldValidator(
-                    tilHourTurn,
+                    convertView.tilHourTurn,
                     requireActivity(),
-                    tilHourTurn.editText!!.text.toString(),
+                    convertView.tilHourTurn.editText!!.text.toString(),
                     false,
                     allTurnHours = listTurn.map(Turn::hour) as ArrayList<String>
-                ).validate(tilHourTurn.editText!!.text.toString())
+                ).validate(convertView.tilHourTurn.editText!!.text.toString())
 
                 if (validName && validHour) {
                     turnViewModel.insert(
                         Turn(
-                            name = tilNameTurn.editText!!.text.toString(),
-                            hour = tilHourTurn.editText!!.text.toString()
+                            name = convertView.tilNameTurn.editText!!.text.toString(),
+                            hour = convertView.tilHourTurn.editText!!.text.toString()
                         )
                     )
                     dialogAdd.dismiss()
                     val customSnackBar: Snackbar = Snackbar.make(
-                        requireActivity().findViewById(R.id.turnFragment),
+                        binding.root,
                         "",
                         Snackbar.LENGTH_LONG
                     )
-
                     SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
                         customSnackBar,
                         requireActivity(),
@@ -311,54 +285,49 @@ class TurnFragment : Fragment(), View.OnClickListener {
                         R.color.primaryTextColor,
                         R.color.primaryTextColor
                     )
-
                     val layout: Snackbar.SnackbarLayout =
                         customSnackBar.view as Snackbar.SnackbarLayout
-                    val customSnackView: View =
-                        layoutInflater.inflate(R.layout.snackbar_message_simple, null)
-                    val smpMessageSimple =
-                        customSnackView.findViewById<View>(R.id.smpSimpleMessage) as TextView
-                    smpMessageSimple.text = resources.getString(R.string.message_success_add)
-                    val smpCancelSimple =
-                        customSnackView.findViewById<View>(R.id.smpCancel) as ImageView
-                    smpCancelSimple.setOnClickListener { customSnackBar.dismiss() }
+                    val snackBinding =
+                        SnackbarMessageSimpleBinding.inflate(layoutInflater, null, false)
+                    snackBinding.smpSimpleMessage.text =
+                        resources.getString(R.string.message_success_add)
+                    snackBinding.smpCancel.setOnClickListener { customSnackBar.dismiss() }
                     layout.setPadding(0, 0, 0, 0)
-                    layout.addView(customSnackView, 0)
+                    layout.addView(snackBinding.root, 0)
                     customSnackBar.show()
                 }
             } else {
                 val validName = TurnNameFieldValidator(
-                    tilNameTurn,
+                    convertView.tilNameTurn,
                     requireActivity(),
                     turn!!.name,
                     true,
                     allTurnNames = listTurn.map(Turn::name) as ArrayList<String>
-                ).validate(tilNameTurn.editText!!.text.toString())
+                ).validate(convertView.tilNameTurn.editText!!.text.toString())
 
                 val validHour = TurnHourFieldValidator(
-                    tilHourTurn,
+                    convertView.tilHourTurn,
                     requireActivity(),
                     turn!!.hour,
                     true,
                     allTurnHours = listTurn.map(Turn::hour) as ArrayList<String>
-                ).validate(tilHourTurn.editText!!.text.toString())
+                ).validate(convertView.tilHourTurn.editText!!.text.toString())
 
                 if (validName && validHour) {
                     turnViewModel.update(
                         Turn(
                             id = turn!!.id,
-                            name = tilNameTurn.editText!!.text.toString(),
-                            hour = tilHourTurn.editText!!.text.toString()
+                            name = convertView.tilNameTurn.editText!!.text.toString(),
+                            hour = convertView.tilHourTurn.editText!!.text.toString()
                         )
                     )
                     dialogAdd.dismiss()
 
                     val customSnackBar: Snackbar = Snackbar.make(
-                        requireActivity().findViewById(R.id.turnFragment),
+                        binding.root,
                         "",
                         Snackbar.LENGTH_LONG
                     )
-
                     SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
                         customSnackBar,
                         requireActivity(),
@@ -366,26 +335,22 @@ class TurnFragment : Fragment(), View.OnClickListener {
                         R.color.primaryTextColor,
                         R.color.primaryTextColor
                     )
-
                     val layout: Snackbar.SnackbarLayout =
                         customSnackBar.view as Snackbar.SnackbarLayout
-                    val customSnackView: View =
-                        layoutInflater.inflate(R.layout.snackbar_message_simple, null)
-                    val smpMessageSimple =
-                        customSnackView.findViewById<View>(R.id.smpSimpleMessage) as TextView
-                    smpMessageSimple.text = resources.getString(R.string.message_success_edit)
-                    val smpCancelSimple =
-                        customSnackView.findViewById<View>(R.id.smpCancel) as ImageView
-                    smpCancelSimple.setOnClickListener { customSnackBar.dismiss() }
+                    val snackBinding =
+                        SnackbarMessageSimpleBinding.inflate(layoutInflater, null, false)
+                    snackBinding.smpSimpleMessage.text =
+                        resources.getString(R.string.message_success_edit)
+                    snackBinding.smpCancel.setOnClickListener { customSnackBar.dismiss() }
                     layout.setPadding(0, 0, 0, 0)
-                    layout.addView(customSnackView, 0)
+                    layout.addView(snackBinding.root, 0)
                     customSnackBar.show()
                     turn = null
                 }
             }
         }
 
-        titleIcon.setOnClickListener {
+        titleCustomView.customDialogTitleIcon.setOnClickListener {
             dialogAdd.dismiss()
             if (turn != null)
                 turn = null
@@ -420,7 +385,7 @@ class TurnFragment : Fragment(), View.OnClickListener {
             editText!!.setText(
                 String.format(
                     "%2d:%02d %s",
-                    if (timePicker.hour === 12 || timePicker.hour === 0) 12 else timePicker.hour % 12,
+                    if (!(timePicker.hour !== 12 && timePicker.hour !== 0)) 12 else timePicker.hour % 12,
                     timePicker.minute,
                     if (isPM) "PM" else "AM"
                 )
