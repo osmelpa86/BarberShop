@@ -2,11 +2,11 @@ package it.ssplus.barbershop.adapter
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -38,14 +38,21 @@ class AdapterSelectTurn(
     inner class TurnViewHolder(val binding: ItemTurnBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(turn: Turn) {
-            if (checkedPosition == turns[adapterPosition]) {
+            if (checkedPosition == null) {
                 binding.root.background = ContextCompat.getDrawable(
                     activity,
-                    R.drawable.item_color_bg_roud_shape_linear
+                    R.drawable.item_color_bg_transparent
                 )
             } else {
-                binding.root.background =
-                    ContextCompat.getDrawable(activity, R.drawable.item_color_bg_transparent)
+                if (checkedPosition == turns[adapterPosition]) {
+                    binding.root.background = ContextCompat.getDrawable(
+                        activity,
+                        R.drawable.item_color_bg_roud_shape_linear
+                    )
+                } else {
+                    binding.root.background =
+                        ContextCompat.getDrawable(activity, R.drawable.item_color_bg_transparent)
+                }
             }
 
             binding.root.setOnClickListener {
@@ -55,19 +62,19 @@ class AdapterSelectTurn(
                     notifyItemChanged(turns.indexOf(checkedPosition))
                     checkedPosition = turns[adapterPosition]
                 }
-
                 LocalBroadcastManager.getInstance(activity)
                     .sendBroadcast(Intent(Constants.Actions.turn_dialog_item_selected))
             }
 
+
             binding.tvNameTurn.text = turn.name
             binding.tvHourTurn.text = turn.hour
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TurnViewHolder {
-        val binding= ItemTurnBinding.inflate(LayoutInflater.from(parent.context),null,false)
+        val binding =
+            ItemTurnBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TurnViewHolder(binding)
     }
 
@@ -95,7 +102,7 @@ class AdapterSelectTurn(
             } else {
                 for (turn in manageReservationFragment.listTurns) {
                     if (turn.name.lowercase(Locale.ROOT)
-                            .contains(filterPattern) || turn.name.contains(filterPattern)
+                            .contains(filterPattern)
                     ) {
                         filteredList.add(turn)
                     }
