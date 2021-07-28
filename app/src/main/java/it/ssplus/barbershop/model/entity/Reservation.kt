@@ -7,7 +7,7 @@ import java.io.Serializable
     tableName = "reservation",
     indices = [Index(value = ["id_reservation"], unique = true),
         Index(value = ["id_turn"]),
-        Index(value = ["id_service"])],
+        Index(value = ["id_client"])],
     foreignKeys = [
         ForeignKey(
             entity = Turn::class,
@@ -17,9 +17,9 @@ import java.io.Serializable
             onUpdate = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = Service::class,
-            parentColumns = ["id_service"],
-            childColumns = ["id_service"],
+            entity = Client::class,
+            parentColumns = ["id_client"],
+            childColumns = ["id_client"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
         )
@@ -31,9 +31,11 @@ data class Reservation(
     val id: Long = 0,
     @ColumnInfo(name = "id_turn")
     val idTurn: Long,
-    @ColumnInfo(name = "id_service")
-    val idService: Long,
-    val status: Int
+    @ColumnInfo(name = "id_client")
+    val idClient: Long,
+    val status: Boolean,
+    @ColumnInfo(name = "additional_cost")
+    val additionalCost: Double = 0.0,
 ) : Serializable {
 
     override fun equals(other: Any?): Boolean {
@@ -52,7 +54,7 @@ data class Reservation(
     }
 
     override fun toString(): String {
-        return "Reservación(id=$id, servicio='$idService', turno=$idTurn, estado=$status)"
+        return "Reservación(id=$id, cliente='$idClient', turno=$idTurn, estado=$status)"
     }
 }
 

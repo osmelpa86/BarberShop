@@ -6,28 +6,15 @@ import java.util.*
 
 @Entity(
     tableName = "service",
-    indices = [Index(value = ["id_service"], unique = true),
-        Index(value = ["id_client"])],
-
-    foreignKeys = [
-        ForeignKey(
-            entity = Client::class,
-            parentColumns = ["id_client"],
-            childColumns = ["id_client"],
-            onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
-        )
-    ]
+    indices = [Index(value = ["id_service"], unique = true)]
 )
 data class Service(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_service")
     val id: Long = 0,
-    @ColumnInfo(name = "id_client")
-    val idClient: Long = 0,
-    @ColumnInfo(name = "additional_cost")
-    val additionalCost: Double = 0.0,
-    val date: Date
+    val name: String,
+    val cost: Double = 0.0,
+    val description: String?
 ) : Serializable {
 
     override fun equals(other: Any?): Boolean {
@@ -46,6 +33,6 @@ data class Service(
     }
 
     override fun toString(): String {
-        return "Servicio(id=$id, cliente='$idClient', costo=$additionalCost,date=$date)"
+        return "Servicio(id=$id, nombre='$name', costo=$cost,descripción=$description)"
     }
 }

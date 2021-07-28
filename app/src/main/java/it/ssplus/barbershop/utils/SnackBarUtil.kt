@@ -110,9 +110,7 @@ object SnackBarUtil {
             )
 
             // Changing snackbar text color
-//android.support.design.R.id.snackbar_text
-
-
+            //android.support.design.R.id.snackbar_text
             val snackView = snackbar.view
             val textView =
                 snackView.findViewById<View>(id.snackbar_text) as TextView
@@ -123,8 +121,6 @@ object SnackBarUtil {
             )
 
             // Changing Action button text color
-
-
             val snackViewButton =
                 snackView.findViewById<View>(id.snackbar_action) as Button
             if (!TextUtils.isEmpty(actionColor)) snackViewButton.setTextColor(

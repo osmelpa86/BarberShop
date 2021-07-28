@@ -17,9 +17,8 @@ import it.ssplus.barbershop.utils.Converters
         ExpenseCategory::class,
         Reservation::class,
         Service::class,
-        ServiceTypeService::class,
-        Turn::class,
-        TypeService::class
+        ReservationService::class,
+        Turn::class
     ],
     version = 1, exportSchema = false
 )
@@ -32,9 +31,8 @@ abstract class DatabaseConfig : RoomDatabase() {
     abstract fun expenseCategoryDao(): ExpenseCategoryDao
     abstract fun reservationDao(): ReservationDao
     abstract fun serviceDao(): ServiceDao
-    abstract fun serviceTypeServiceDao(): ServiceTypeServiceDao
+    abstract fun reservationServiceDao(): ReservationServiceDao
     abstract fun turnDao(): TurnDao
-    abstract fun typeServiceDao(): TypeServiceDao
 
     companion object {
         @Volatile

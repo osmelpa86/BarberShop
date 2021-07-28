@@ -4,22 +4,23 @@
     android:id="@+id/cvItemExpenseCategoryContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
     android:clickable="true"
     android:clipToPadding="true"
+    android:focusable="true"
     android:foreground="?selectableItemBackgroundBorderless"
     app:cardBackgroundColor="@android:color/transparent"
     app:cardCornerRadius="0dp"
     app:cardElevation="0dp"
     app:cardMaxElevation="0dp"
-    app:cardPreventCornerOverlap="false"
-    android:layout_margin="8dp"
-    android:focusable="true">
+    app:cardPreventCornerOverlap="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clExpenseCategoryContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="0dp">
+        android:padding="2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clIconExpenseCategory"

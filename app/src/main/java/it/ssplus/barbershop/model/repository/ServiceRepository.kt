@@ -2,13 +2,10 @@ package it.ssplus.barbershop.model.repository
 
 import androidx.lifecycle.LiveData
 import it.ssplus.barbershop.model.dao.ServiceDao
-import it.ssplus.barbershop.model.dao.ServiceTypeServiceDao
 import it.ssplus.barbershop.model.entity.Service
-import it.ssplus.barbershop.model.entity.TypeService
 
 class ServiceRepository(
-    private val serviceDao: ServiceDao,
-    private val serviceTypeServiceDao: ServiceTypeServiceDao
+    private val serviceDao: ServiceDao
 ) {
     val all: LiveData<List<Service>> = serviceDao.getAll()
 
@@ -20,19 +17,8 @@ class ServiceRepository(
         serviceDao.insert(obj)
     }
 
-    suspend fun insert(obj: Service, listTypesService: MutableList<TypeService>) {
-        serviceDao.insert(obj, listTypesService, serviceTypeServiceDao)
-    }
-
     suspend fun update(obj: Service) {
         serviceDao.update(obj)
-    }
-
-    suspend fun update(
-        obj: Service, listTypesService: MutableList<TypeService>,
-        listTypesServiceDelete: MutableList<TypeService>,
-    ) {
-        serviceDao.update(obj, listTypesService, listTypesServiceDelete, serviceTypeServiceDao)
     }
 
     suspend fun delete(obj: Service) {

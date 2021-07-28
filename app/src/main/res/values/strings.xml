@@ -14,6 +14,7 @@
     <string name="menu_turn">Turno</string>
     <string name="menu_type_service">Tipo de servicio</string>
     <string name="menu_service">Servicio</string>
+    <string name="menu_reservation">Reservación</string>
     <string name="menu_add">Adicionar</string>
     <string name="menu_edit">Editar</string>
     <string name="menu_delete">Eliminar</string>
@@ -40,6 +41,12 @@
     <string name="message_confirm_delete_selected_client">¿Seguro que desea eliminar los clientes seleccionados?</string>
     <string name="message_delete_clients">Eliminar clientes</string>
 
+    <string name="message_confirm_delete_selected_service">¿Seguro que desea eliminar los servicios seleccionados?</string>
+    <string name="message_delete_services">Eliminar servicios</string>
+
+    <string name="message_confirm_delete_selected_reservation">¿Seguro que desea eliminar las reservaciones seleccionadas?</string>
+    <string name="message_delete_reservations">Eliminar reservación</string>
+
     <!--    Hint-->
     <string name="message_hint_name">Nombre</string>
     <string name="message_hint_description">Descripción</string>
@@ -50,6 +57,13 @@
     <string name="message_hint_hour">Hora</string>
     <string name="message_hint_phone_number">Télefono</string>
     <string name="message_hint_cell">Celular</string>
+    <string name="message_hint_price">Precio</string>
+    <string name="message_hint_client">Cliente</string>
+    <string name="message_hint_turn">Turno</string>
+    <string name="message_hint_cost">Costo adicional</string>
+    <string name="message_hint_total_cost">Costo total</string>
+    <string name="message_hint_status">Estado</string>
+    <string name="message_hint_services">Servicios</string>
 
     <!--    Validaciones-->
     <string name="message_validation_entry_field">El campo no puede estar vacío</string>
@@ -59,10 +73,18 @@
     <string name="message_validation_exits_turn_hour">Ya existe un turno con esa hora</string>
     <string name="message_validation_incorrect_start_cell">El número debe empezar con 5</string>
     <string name="message_validation_lenght_phone">El número debe contener 11 digitos</string>
+    <string name="message_validation_select_expense_category">No se ha seleccionado una categoría de gastos</string>
+    <string name="message_validation_select_color_expense_category">No se ha seleccionado un color</string>
+    <string name="message_validation_select_turn">No se ha seleccionado un turno</string>
+    <string name="message_validation_select_client">No se ha seleccionado un cliente</string>
+    <string name="message_validation_select_service">No se ha seleccionado un servicio</string>
+
 
     <string name="title_list_color_select">Seleccionar color</string>
     <string name="title_list_expense_category_select">Seleccionar categoría de gastos</string>
     <string name="title_selected">Selecciondos:</string>
+    <string name="title_list_client_select">Seleccionar cliente</string>
+    <string name="title_list_turn_select">Seleccionar turno</string>
 
     <string name="grey">Gris</string>
     <string name="teal">Verde oscuro</string>
@@ -81,4 +103,9 @@
     <string name="you_must_grant_write_external_storage_permission">Debes conceder el permiso de escribir en el almacenamiento externo</string>
     <string name="you_must_grant_call_permission">Debes conceder el permiso de llamadas</string>
     <string name="crop_image">Recortar imágen</string>
+
+    <!--    Reservacion-->
+    <string name="active">Activa</string>
+    <string name="inactive">Inactiva</string>
+
 </resources>

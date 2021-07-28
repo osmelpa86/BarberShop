@@ -8,6 +8,11 @@ import it.ssplus.barbershop.model.pojo.ExpensePojo
 class ExpenseRepository(private val expenseDao: ExpenseDao) {
     val all: LiveData<List<ExpensePojo>> = expenseDao.getAll()
 
+
+    fun getExpenseCategoryByExpense(id_expene_category: Long): LiveData<List<ExpensePojo>>{
+       return expenseDao.getExpenseCategoryByExpense(id_expene_category)
+    }
+
     fun get(id: Long): LiveData<ExpensePojo> {
         return expenseDao.get(id)
     }

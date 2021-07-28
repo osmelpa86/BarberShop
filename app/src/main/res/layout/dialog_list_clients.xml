@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/clDialogListExpenseCategories">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clNoSelectItemExpenseCategory"
+        android:id="@+id/clNoSelectItemClient"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -34,7 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@string/message_validation_select_expense_category"
+            android:text="@string/message_validation_select_client"
             android:textColor="@color/errorColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,20 +43,20 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvListExpenseCategories"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/rvListSelectClients"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clNoSelectItemExpenseCategory"
-        tools:listitem="@layout/item_expense_category_select" />
+        app:layout_constraintTop_toBottomOf="@+id/clNoSelectItemClient"
+        tools:listitem="@layout/item_select_client" />
 
     <LinearLayout
-        android:id="@+id/noDataContainerExpenseCategories"
+        android:id="@+id/noDataContainerClients"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

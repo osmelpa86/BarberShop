@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/clDialogListExpenseCategories">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clNoSelectItemExpenseCategory"
+        android:id="@+id/clNoSelectItemTurn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -34,7 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@string/message_validation_select_expense_category"
+            android:text="@string/message_validation_select_turn"
             android:textColor="@color/errorColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,25 +42,23 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvListExpenseCategories"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/rvListSelectTurns"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clNoSelectItemExpenseCategory"
-        tools:listitem="@layout/item_expense_category_select" />
+        app:layout_constraintTop_toBottomOf="@+id/clNoSelectItemTurn"
+        tools:listitem="@layout/item_select_client" />
 
     <LinearLayout
-        android:id="@+id/noDataContainerExpenseCategories"
+        android:id="@+id/noDataContainerTurns"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:gravity="center|center_horizontal|center_vertical"
         android:orientation="vertical"

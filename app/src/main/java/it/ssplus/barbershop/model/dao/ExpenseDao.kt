@@ -24,6 +24,10 @@ interface ExpenseDao {
     fun getAll(): LiveData<List<ExpensePojo>>
 
     @Transaction
+    @Query("SELECT * FROM expense WHERE id_expense_category = :id_expene_category ORDER BY id_expense ASC")
+    fun getExpenseCategoryByExpense(id_expene_category: Long): LiveData<List<ExpensePojo>>
+
+    @Transaction
     @Query(
         """ SELECT * FROM expense WHERE 
         id_expense_category LIKE :query 

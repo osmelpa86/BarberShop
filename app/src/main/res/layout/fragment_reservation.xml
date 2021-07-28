@@ -2,67 +2,61 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/reservationFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/clDialogListExpenseCategories">
+    tools:context=".ui.reservation.ReservationFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clNoSelectItemExpenseCategory"
+        android:id="@+id/clSearchContainerReservation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:visibility="gone"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/search_background_roud_shape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/ivErrorIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:tint="@color/errorColor"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_error_24" />
-
-        <TextView
-            android:id="@+id/tvErrorText"
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/svReservation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/message_validation_select_expense_category"
-            android:textColor="@color/errorColor"
+            app:defaultQueryHint="@string/message_hint_search"
+            app:iconifiedByDefault="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ivErrorIcon"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:queryBackground="@android:color/transparent"
+            app:queryHint="@string/message_hint_search">
+
+        </androidx.appcompat.widget.SearchView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvListExpenseCategories"
+        android:id="@+id/rvListReservation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@android:color/transparent"
+        android:clipToPadding="false"
+        android:paddingBottom="75dp"
+        android:scrollbarStyle="outsideOverlay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clNoSelectItemExpenseCategory"
-        tools:listitem="@layout/item_expense_category_select" />
+        app:layout_constraintTop_toBottomOf="@+id/clSearchContainerReservation"
+        app:layout_constraintVertical_bias="1.0"
+        tools:listitem="@layout/item_reservation" />
 
     <LinearLayout
-        android:id="@+id/noDataContainerExpenseCategories"
+        android:id="@+id/noDataContainerReservation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
         android:gravity="center|center_horizontal|center_vertical"
         android:orientation="vertical"
         android:visibility="gone"
@@ -91,4 +85,16 @@
             android:textSize="24sp"
             android:textStyle="bold|italic" />
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddReservation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_add_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
