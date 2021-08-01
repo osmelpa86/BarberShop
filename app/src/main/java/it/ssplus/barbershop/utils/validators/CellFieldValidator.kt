@@ -9,20 +9,11 @@ class CellFieldValidator(
     mainActivity: Activity,
 ) : BaseValidator(errorContainer, mainActivity) {
 
-    init {
-        mEmptyMessage = mainActivity.resources.getString(R.string.message_validation_entry_field)
-        mErrorMessage = mainActivity.resources.getString(R.string.message_validation_only_spaces)
-    }
 
     override fun isValid(charSequence: String): Boolean {
-        val flag: Boolean
+        var flag = true
 
-        if (charSequence.isEmpty() || ValidationUtils.onlySpaces(
-                charSequence
-            )
-        ) {
-            flag = false
-        } else {
+        if (charSequence.isNotBlank()) {
             when {
                 charSequence.startsWith('5').not() -> {
                     flag = false

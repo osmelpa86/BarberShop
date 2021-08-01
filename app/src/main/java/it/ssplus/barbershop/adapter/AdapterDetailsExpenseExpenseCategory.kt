@@ -5,12 +5,12 @@ import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import it.ssplus.barbershop.databinding.ItemExpenseBinding
 import it.ssplus.barbershop.model.pojo.ExpensePojo
 import it.ssplus.barbershop.utils.Constants
-import java.text.SimpleDateFormat
+import it.ssplus.barbershop.utils.drawable
+import it.ssplus.barbershop.utils.formatDate
 
 class AdapterDetailsExpenseExpenseCategory(
     val activity: AppCompatActivity
@@ -20,8 +20,6 @@ class AdapterDetailsExpenseExpenseCategory(
     private var expenses = arrayListOf<ExpensePojo>()
     var multiSelect = false
     val selectedItems = arrayListOf<ExpensePojo>()
-    @SuppressLint("SimpleDateFormat")
-    private val df = SimpleDateFormat("d/M/yyyy")
 
     fun setData(expenses: ArrayList<ExpensePojo>) {
         this.expenses.clear()
@@ -29,10 +27,11 @@ class AdapterDetailsExpenseExpenseCategory(
         notifyDataSetChanged()
     }
 
-    inner class ExpenseViewHolder(val binding: ItemExpenseBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ExpenseViewHolder(val binding: ItemExpenseBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseViewHolder {
-        val binding= ItemExpenseBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = ItemExpenseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ExpenseViewHolder(binding)
     }
 
@@ -43,19 +42,16 @@ class AdapterDetailsExpenseExpenseCategory(
         holder.binding.tvNameExpense.text = expense.expenseCategory.name
         holder.binding.tvDescriptionExpense.text = expense.expense.description
         holder.binding.tvExpenseAmount.text = expense.expense.amount.toString()
-        holder.binding.tvExpenseDate.text = df.format(expense.expense.date)
+        holder.binding.tvExpenseDate.text = formatDate(expense.expense.date)
         val bitmap = BitmapFactory.decodeByteArray(
             expense.expenseCategory.image,
             0,
             expense.expenseCategory.image!!.size
         )
         holder.binding.ivIconExpense.setImageBitmap(bitmap)
-        holder.binding.clIconExpense.background = ResourcesCompat.getDrawable(activity.resources,
-            Constants.roundIcons[expense.expenseCategory.color],
-            null
-        )
+        holder.binding.clIconExpense.background =
+            drawable(activity, Constants.roundIcons[expense.expenseCategory.color])
     }
-
 
 
     override fun getItemCount(): Int {

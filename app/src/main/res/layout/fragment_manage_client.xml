@@ -125,7 +125,7 @@
                 android:hint="@string/message_hint_description"
                 android:imeOptions="actionDone"
                 android:inputType="textMultiLine"
-                android:lines="4" />
+                android:lines="2" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>

@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Filter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.findNavController
@@ -22,7 +21,7 @@ import it.ssplus.barbershop.databinding.ItemReservationBinding
 import it.ssplus.barbershop.model.entity.Service
 import it.ssplus.barbershop.model.pojo.ReservationPojo
 import it.ssplus.barbershop.ui.reservation.ReservationFragment
-import it.ssplus.barbershop.utils.Constants
+import it.ssplus.barbershop.utils.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -106,24 +105,24 @@ class AdapterReservation(
                     sheetBinding.ivPhotoClientEmpty.visibility = View.VISIBLE
                 }
                 sheetBinding.tvNameClient.text = reservation.client.name
-                sheetBinding.tvHourTurn.text = reservation.turn.hour
-                sheetBinding.tvAdditionalCost.text = "$" + reservation.reservation.additionalCost.toString()
+                sheetBinding.tvHourTurn.text = formatTime(
+                    reservation.turn.hour.split(":")[0].trim().toInt(),
+                    reservation.turn.hour.split(":")[1].trim().toInt()
+                )
+                sheetBinding.tvDateReservation.text = formatDate(reservation.reservation.date)
+                sheetBinding.tvAdditionalCost.text =
+                    reservation.reservation.additionalCost.toString().textMoney()
                 val result = reservation.services.map { it.cost }.sum()
                 sheetBinding.tvTotalCost.text =
-                    "$" + (result + reservation.reservation.additionalCost).toString()
+                    (result + reservation.reservation.additionalCost).toString().textMoney()
+
+                val pos = Constants.serviceStatusName.indexOf(reservation.reservation.status)
                 sheetBinding.tvStatus.text =
-                    if (reservation.reservation.status) activity.resources.getText(R.string.active) else activity.resources.getText(
-                        R.string.inactive
-                    )
-                sheetBinding.tvStatus.background =
-                    if (reservation.reservation.status) ResourcesCompat.getDrawable(
-                        activity.resources,
-                        R.drawable.round_shape_active, null
-                    ) else ResourcesCompat.getDrawable(
-                        activity.resources,
-                        R.drawable.round_shape_inactive,
-                        null
-                    )
+                    activity.resources.getString(reservation.reservation.status)
+                sheetBinding.statusConatinerReservation.background =
+                    drawable(activity, Constants.serviceStatusColor[pos])
+                sheetBinding.ivStatusIcon.background =
+                    drawable(activity, Constants.serviceStatusIcon[pos])
 
                 sheetBinding.toolbar.inflateMenu(R.menu.reservation_details)
 
@@ -163,20 +162,18 @@ class AdapterReservation(
         }
 
         holder.binding.tvItemClientName.text = reservation.client.name
-        holder.binding.tvHourTurn.text = reservation.turn.hour
+        holder.binding.tvHourTurn.text = formatTime(
+            reservation.turn.hour.split(":")[0].trim().toInt(),
+            reservation.turn.hour.split(":")[1].trim().toInt()
+        )
+        holder.binding.tvDateTurn.text = formatDate(reservation.reservation.date)
+        val pos = Constants.serviceStatusName.indexOf(reservation.reservation.status)
         holder.binding.tvStatus.text =
-            if (reservation.reservation.status) activity.resources.getText(R.string.active) else activity.resources.getText(
-                R.string.inactive
-            )
-        holder.binding.tvStatus.background =
-            if (reservation.reservation.status) ResourcesCompat.getDrawable(
-                activity.resources,
-                R.drawable.round_shape_active, null
-            ) else ResourcesCompat.getDrawable(
-                activity.resources,
-                R.drawable.round_shape_inactive,
-                null
-            )
+            activity.resources.getString(reservation.reservation.status)
+        holder.binding.itemStatusConatinerReservation.background =
+            drawable(activity, Constants.serviceStatusColor[pos])
+        holder.binding.ivStatusIcon.background =
+            drawable(activity, Constants.serviceStatusIcon[pos])
     }
 
     @SuppressLint("ResourceAsColor")

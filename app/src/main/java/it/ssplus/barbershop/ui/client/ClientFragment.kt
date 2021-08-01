@@ -12,12 +12,9 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -33,6 +30,7 @@ import it.ssplus.barbershop.databinding.DialogConfirmDangerBinding
 import it.ssplus.barbershop.databinding.FragmentClientBinding
 import it.ssplus.barbershop.model.entity.Client
 import it.ssplus.barbershop.utils.Constants
+import it.ssplus.barbershop.utils.searchview
 import java.util.*
 
 class ClientFragment : Fragment(), View.OnClickListener {
@@ -73,7 +71,7 @@ class ClientFragment : Fragment(), View.OnClickListener {
         clientViewModel = ViewModelProvider(this).get(ClientViewModel::class.java)
         _binding = FragmentClientBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        
+
         binding.fabAddClient.setOnClickListener(this)
 
         noDataContainerClient = binding.noDataContainerClient
@@ -88,52 +86,11 @@ class ClientFragment : Fragment(), View.OnClickListener {
             noDataContainerClient.visibility =
                 if (items.isEmpty()) View.VISIBLE else View.GONE
         })
-        
+
         binding.rvListClient.adapter = adapterClient
         binding.rvListClient.layoutManager = LinearLayoutManager(context)
 
-      
-        binding.svClient.setOnClickListener {
-            binding.svClient.setIconifiedByDefault(true)
-            binding.svClient.isFocusable = true
-            binding.svClient.isIconified = false
-            binding.svClient.requestFocusFromTouch()
-        }
-
-        binding.svClient.setOnSearchClickListener {
-        }
-
-        binding.svClient.setOnCloseListener {
-            false
-        }
-
-        val searchEditText =
-            binding.svClient.findViewById<View>(androidx.appcompat.R.id.search_src_text) as EditText
-        searchEditText.setTextColor(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.secondaryTextColor
-            ).defaultColor
-        )
-        searchEditText.textSize = 16f
-        searchEditText.hint = requireActivity().resources.getString(R.string.message_hint_search)
-        val searchIcon =
-            binding.svClient.findViewById<View>(androidx.appcompat.R.id.search_button) as ImageView
-        searchIcon.drawable.setTint(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.primaryTextColor
-            ).defaultColor
-        )
-        val searchMagIcon =
-            binding.svClient.findViewById<View>(androidx.appcompat.R.id.search_close_btn) as ImageView
-        searchMagIcon.drawable.setTint(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.primaryTextColor
-            ).defaultColor
-        )
-        binding.svClient.queryHint = this.resources.getString(R.string.message_hint_search)
+        searchview(binding.svClient)
         binding.svClient.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

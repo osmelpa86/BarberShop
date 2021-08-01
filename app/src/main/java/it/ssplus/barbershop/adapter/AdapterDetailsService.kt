@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import it.ssplus.barbershop.databinding.ItemServiceBinding
 import it.ssplus.barbershop.model.entity.Service
+import it.ssplus.barbershop.utils.textMoney
 
 class AdapterDetailsService(
     val activity: AppCompatActivity
@@ -35,7 +36,7 @@ class AdapterDetailsService(
 
         holder.binding.tvNameService.text = service.name
         holder.binding.tvDescriptionService.text = service.description
-        holder.binding.tvServiceCost.text = "$" + service.cost.toString()
+        holder.binding.tvServiceCost.text = service.cost.toString().textMoney()
     }
 
     override fun getItemCount(): Int {

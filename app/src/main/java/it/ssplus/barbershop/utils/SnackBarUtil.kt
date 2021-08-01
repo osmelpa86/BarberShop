@@ -210,7 +210,7 @@ object SnackBarUtil {
         val snackBarView = getSnackBarLayout(snackbar)
         if (snackBarView != null) {
             try {
-                if (background != 0) snackBarView.background = ContextCompat.getDrawable(
+                if (background != 0) snackBarView.background = drawable(
                     context!!,
                     background
                 )

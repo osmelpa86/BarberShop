@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Filter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.res.ResourcesCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -18,7 +17,9 @@ import it.ssplus.barbershop.databinding.ItemExpenseBinding
 import it.ssplus.barbershop.model.pojo.ExpensePojo
 import it.ssplus.barbershop.ui.expense.ExpenseFragment
 import it.ssplus.barbershop.utils.Constants
-import java.text.SimpleDateFormat
+import it.ssplus.barbershop.utils.drawable
+import it.ssplus.barbershop.utils.formatDate
+import it.ssplus.barbershop.utils.textMoney
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -31,9 +32,6 @@ class AdapterExpense(
     internal var expenses = arrayListOf<ExpensePojo>()
     var multiSelect = false
     val selectedItems = arrayListOf<ExpensePojo>()
-
-    @SuppressLint("SimpleDateFormat")
-    private val df = SimpleDateFormat("d/M/yyyy")
 
     fun setData(expenses: ArrayList<ExpensePojo>) {
         this.expenses.clear()
@@ -83,10 +81,7 @@ class AdapterExpense(
                     false
                 )
 
-                sheetBinding.clIconExpenseCategory.background = ResourcesCompat.getDrawable(
-                    activity.resources,
-                    Constants.roundIcons[expenses[position].expenseCategory.color], null
-                )
+                sheetBinding.clIconExpenseCategory.background = drawable(activity,Constants.roundIcons[expenses[position].expenseCategory.color])
                 val bitmap = BitmapFactory.decodeByteArray(
                     expense.expenseCategory.image,
                     0,
@@ -94,8 +89,8 @@ class AdapterExpense(
                 )
                 sheetBinding.ivIconExpenseCategory.setImageBitmap(bitmap)
                 sheetBinding.tvNameExpense.text = expenses[position].expenseCategory.name
-                sheetBinding.tvDateExpense.text = df.format(expenses[position].expense.date)
-                sheetBinding.tvAmountExpense.text = expenses[position].expense.amount.toString()
+                sheetBinding.tvDateExpense.text = formatDate(expenses[position].expense.date)
+                sheetBinding.tvAmountExpense.text = expenses[position].expense.amount.toString().textMoney()
                 sheetBinding.tvDescriptionExpense.text = expenses[position].expense.description
                 sheetBinding.toolbar.inflateMenu(R.menu.expense_details)
 
@@ -121,19 +116,15 @@ class AdapterExpense(
 
         holder.binding.tvNameExpense.text = expense.expenseCategory.name
         holder.binding.tvDescriptionExpense.text = expense.expense.description
-        holder.binding.tvExpenseAmount.text = expense.expense.amount.toString()
-        holder.binding.tvExpenseDate.text = df.format(expense.expense.date)
+        holder.binding.tvExpenseAmount.text = expense.expense.amount.toString().textMoney()
+        holder.binding.tvExpenseDate.text = formatDate(expense.expense.date)
         val bitmap = BitmapFactory.decodeByteArray(
             expense.expenseCategory.image,
             0,
             expense.expenseCategory.image!!.size
         )
         holder.binding.ivIconExpense.setImageBitmap(bitmap)
-        holder.binding.clIconExpense.background = ResourcesCompat.getDrawable(
-            activity.resources,
-            Constants.roundIcons[expense.expenseCategory.color],
-            null
-        )
+        holder.binding.clIconExpense.background = drawable(activity, Constants.roundIcons[expense.expenseCategory.color])
     }
 
     @SuppressLint("ResourceAsColor")

@@ -23,6 +23,7 @@ import it.ssplus.barbershop.databinding.ItemClientBinding
 import it.ssplus.barbershop.model.entity.Client
 import it.ssplus.barbershop.ui.client.ClientFragment
 import it.ssplus.barbershop.utils.Constants
+import it.ssplus.barbershop.utils.isNull
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 import java.util.*
@@ -81,26 +82,11 @@ class AdapterClient(
                 toolbar.title =
                     activity.resources.getString(R.string.title_selected) + " " + this.selectedItems.size.toString()
             } else {
-//                val view = LayoutInflater.from(activity)
-//                    .inflate(R.layout.bottom_sheet_client_details, null, false)
-
                 val sheetBinding = BottomSheetClientDetailsBinding.inflate(
                     LayoutInflater.from(activity),
                     null,
                     false
                 )
-
-//                val toolbar: Toolbar = view.findViewById(R.id.toolbar)
-//
-//                val ivPhotoClient: CircleImageView = view.findViewById(R.id.ivPhotoClient)
-//                val ivPhotoClientEmpty: CircleImageView = view.findViewById(R.id.ivPhotoClientEmpty)
-//                val tvNameClient: TextView = view.findViewById(R.id.tvNameClient)
-//                val llButtonCallPhone: LinearLayout = view.findViewById(R.id.llButtonCallPhone)
-//                val tvCellPhoneNumber: TextView = view.findViewById(R.id.tvCellPhoneNumber)
-//                val ivSMS: ImageButton = view.findViewById(R.id.ivSMS)
-//                val llButtonPhone: LinearLayout = view.findViewById(R.id.llButtonPhone)
-//                val tvPhoneNumber: TextView = view.findViewById(R.id.tvPhoneNumber)
-//                val tvDescription: TextView = view.findViewById(R.id.tvDescription)
 
                 if (client.picture != null) {
                     sheetBinding.ivPhotoClientEmpty.visibility = View.GONE
@@ -126,10 +112,15 @@ class AdapterClient(
                     activity.startActivity(sms)
                 }
 
-                sheetBinding.llButtonCallPhone.setOnClickListener {
-                    val call = Intent(Constants.Actions.call_phone)
-                    call.putExtra("phone", client.cellPhone)
-                    LocalBroadcastManager.getInstance(activity).sendBroadcast(call)
+                if (client.cellPhone?.length == 0 && client.phoneNumber.isNull()) {
+                    sheetBinding.llButtonCallPhone.visibility = View.GONE
+                } else {
+                    sheetBinding.llButtonCallPhone.visibility = View.VISIBLE
+                    sheetBinding.llButtonCallPhone.setOnClickListener {
+                        val call = Intent(Constants.Actions.call_phone)
+                        call.putExtra("phone", client.cellPhone)
+                        LocalBroadcastManager.getInstance(activity).sendBroadcast(call)
+                    }
                 }
 
                 sheetBinding.llButtonPhone.visibility =
@@ -178,13 +169,23 @@ class AdapterClient(
         }
 
         holder.binding.tvItemClientName.text = client.name
-        holder.binding.ibItemClientCall.setOnClickListener {
-            if (client.phoneNumber == null) {
-                val call = Intent(Constants.Actions.call_phone)
-                call.putExtra("phone", client.cellPhone)
-                LocalBroadcastManager.getInstance(activity).sendBroadcast(call)
-            } else {
-                photoMenu(holder.binding.ibItemClientCall, client.cellPhone!!, client.phoneNumber)
+        if (client.cellPhone?.length == 0 && client.phoneNumber.isNull()) {
+            holder.binding.ibItemClientCall.visibility = View.GONE
+        } else {
+            holder.binding.ibItemClientCall.visibility = View.VISIBLE
+            holder.binding.ibItemClientCall.setOnClickListener {
+                if (client.phoneNumber.isNull()) {
+                    val call = Intent(Constants.Actions.call_phone)
+                    call.putExtra("phone", client.cellPhone)
+                    LocalBroadcastManager.getInstance(activity).sendBroadcast(call)
+                } else {
+                    client.phoneNumber?.let { it1 ->
+                        photoMenu(
+                            holder.binding.ibItemClientCall, client.cellPhone!!,
+                            it1
+                        )
+                    }
+                }
             }
         }
     }

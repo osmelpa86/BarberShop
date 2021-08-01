@@ -82,29 +82,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/message_hint_hour"
-                    android:textAlignment="center"
-                    android:textColor="@color/primaryTextColor" />
-
-                <TextView
-                    android:id="@+id/tvHourTurn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/round_shape_white_hour"
-                    android:text="TextView"
-                    android:textAlignment="center"
-                    android:textColor="@color/primaryColor" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -164,8 +141,90 @@
                     android:textAlignment="center"
                     android:textColor="@color/primaryTextColor" />
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/statusConatinerReservation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:padding="4dp">
+
+                    <ImageView
+                        android:id="@+id/ivStatusIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/primaryTextColor" />
+
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="TextView"
+                        android:textAlignment="center"
+                        android:textColor="@color/primaryTextColor"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ivStatusIcon"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <TextView
-                    android:id="@+id/tvStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/message_hint_hour"
+                    android:textAlignment="center"
+                    android:textColor="@color/primaryTextColor" />
+
+                <TextView
+                    android:id="@+id/tvHourTurn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_shape_white_hour"
+                    android:text="TextView"
+                    android:textAlignment="center"
+                    android:textColor="@color/primaryColor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/message_hint_date"
+                    android:textAlignment="center"
+                    android:textColor="@color/primaryTextColor" />
+
+                <TextView
+                    android:id="@+id/tvDateReservation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/round_shape_white_hour"
@@ -180,7 +239,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
-            android:background="?android:attr/listDivider"/>
+            android:background="?android:attr/listDivider" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"

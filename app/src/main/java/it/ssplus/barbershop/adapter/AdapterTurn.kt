@@ -16,6 +16,7 @@ import it.ssplus.barbershop.databinding.ItemTurnBinding
 import it.ssplus.barbershop.model.entity.Turn
 import it.ssplus.barbershop.ui.turn.TurnFragment
 import it.ssplus.barbershop.utils.Constants
+import it.ssplus.barbershop.utils.formatTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -77,7 +78,10 @@ class AdapterTurn(
                 )
 
                 sheetBinding.tvNameTurn.text = turns[position].name
-                sheetBinding.tvHourTurn.text = turns[position].hour
+                sheetBinding.tvHourTurn.text = formatTime(
+                    turns[position].hour.split(":")[0].trim().toInt(),
+                    turns[position].hour.split(":")[1].trim().toInt()
+                )
 
                 sheetBinding.toolbar.inflateMenu(R.menu.turn_details)
 
@@ -102,7 +106,11 @@ class AdapterTurn(
         }
 
         holder.binding.tvNameTurn.text = turn.name
-        holder.binding.tvHourTurn.text = turn.hour
+        holder.binding.tvHourTurn.text =
+            formatTime(
+                turn.hour.split(":")[0].trim().toInt(),
+                turn.hour.split(":")[1].trim().toInt()
+            )
     }
 
     @SuppressLint("ResourceAsColor")

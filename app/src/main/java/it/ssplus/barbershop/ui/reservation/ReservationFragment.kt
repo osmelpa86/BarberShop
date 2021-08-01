@@ -9,11 +9,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -27,6 +24,7 @@ import it.ssplus.barbershop.databinding.DialogConfirmDangerBinding
 import it.ssplus.barbershop.databinding.FragmentReservationBinding
 import it.ssplus.barbershop.model.pojo.ReservationPojo
 import it.ssplus.barbershop.utils.Constants
+import it.ssplus.barbershop.utils.searchview
 
 class ReservationFragment : Fragment(), View.OnClickListener {
 
@@ -79,47 +77,7 @@ class ReservationFragment : Fragment(), View.OnClickListener {
         binding.rvListReservation.adapter = adapterReservation
         binding.rvListReservation.layoutManager = LinearLayoutManager(context)
 
-        binding.svReservation.setOnClickListener {
-            binding.svReservation.setIconifiedByDefault(true)
-            binding.svReservation.isFocusable = true
-            binding.svReservation.isIconified = false
-            binding.svReservation.requestFocusFromTouch()
-        }
-
-        binding.svReservation.setOnSearchClickListener {
-        }
-
-        binding.svReservation.setOnCloseListener {
-            false
-        }
-
-        val searchEditText =
-            binding.svReservation.findViewById<View>(androidx.appcompat.R.id.search_src_text) as EditText
-        searchEditText.setTextColor(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.secondaryTextColor
-            ).defaultColor
-        )
-        searchEditText.textSize = 16f
-        searchEditText.hint = requireActivity().resources.getString(R.string.message_hint_search)
-        val searchIcon =
-            binding.svReservation.findViewById<View>(androidx.appcompat.R.id.search_button) as ImageView
-        searchIcon.drawable.setTint(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.primaryTextColor
-            ).defaultColor
-        )
-        val searchMagIcon =
-            binding.svReservation.findViewById<View>(androidx.appcompat.R.id.search_close_btn) as ImageView
-        searchMagIcon.drawable.setTint(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.primaryTextColor
-            ).defaultColor
-        )
-        binding.svReservation.queryHint = this.resources.getString(R.string.message_hint_search)
+        searchview(binding.svReservation)
         binding.svReservation.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -223,5 +181,6 @@ class ReservationFragment : Fragment(), View.OnClickListener {
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
         super.onDestroy()
     }
+
 
 }

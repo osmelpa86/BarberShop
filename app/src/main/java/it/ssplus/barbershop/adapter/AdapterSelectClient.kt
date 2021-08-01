@@ -16,6 +16,8 @@ import it.ssplus.barbershop.databinding.ItemSelectClientBinding
 import it.ssplus.barbershop.model.entity.Client
 import it.ssplus.barbershop.ui.reservation.ManageReservationFragment
 import it.ssplus.barbershop.utils.Constants
+import it.ssplus.barbershop.utils.drawable
+import it.ssplus.barbershop.utils.isNull
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -38,26 +40,26 @@ class AdapterSelectClient(
     inner class ClientViewHolder(val binding: ItemSelectClientBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(client: Client) {
-            if (checkedPosition == null) {
-                binding.root.background = ContextCompat.getDrawable(
+            if (checkedPosition.isNull()) {
+                binding.root.background = drawable(
                     activity,
                     R.drawable.item_color_bg_transparent
                 )
             } else {
                 if (checkedPosition == clients[adapterPosition]) {
-                    binding.root.background = ContextCompat.getDrawable(
+                    binding.root.background = drawable(
                         activity,
                         R.drawable.item_color_bg_roud_shape_linear
                     )
                 } else {
                     binding.root.background =
-                        ContextCompat.getDrawable(activity, R.drawable.item_color_bg_transparent)
+                        drawable(activity, R.drawable.item_color_bg_transparent)
                 }
             }
 
             binding.root.setOnClickListener {
                 binding.root.background =
-                    ContextCompat.getDrawable(activity, R.drawable.item_color_bg_roud_shape_linear)
+                    drawable(activity, R.drawable.item_color_bg_roud_shape_linear)
                 if (checkedPosition != clients[adapterPosition]) {
                     notifyItemChanged(clients.indexOf(checkedPosition))
                     checkedPosition = clients[adapterPosition]

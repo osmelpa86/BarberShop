@@ -34,11 +34,6 @@ object Constants {
 
         )
 
-    object DateFormats {
-        const val database = "yyyy-MM-dd"
-        const val display = "dd/MM/yyyy"
-    }
-
     object Actions {
         const val expense_category_item_selected = "expense_category_item_selected"
         const val expense_item_selected = "expense_item_selected"
@@ -54,4 +49,25 @@ object Constants {
 
         const val call_phone = "call_phone"
     }
+
+    val serviceStatusName = arrayListOf(
+        R.string.service_status_open,
+        R.string.service_status_cancel,
+        R.string.service_status_completed,
+        R.string.service_status_closed
+    )
+
+    val serviceStatusColor = arrayListOf(
+        R.drawable.status_round_shape_blue,
+        R.drawable.status_round_shape_red,
+        R.drawable.status_round_shape_green,
+        R.drawable.status_round_shape_orange
+    )
+
+    val serviceStatusIcon = arrayListOf(
+        R.drawable.ic_more_horiz_24,
+        R.drawable.ic_close,
+        R.drawable.ic_check,
+        R.drawable.ic_close
+    )
 }

@@ -1,5 +1,6 @@
 package it.ssplus.barbershop.ui.reservation
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -9,6 +10,9 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
+import android.widget.AdapterView
+import android.widget.AutoCompleteTextView
+import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -18,11 +22,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import it.ssplus.barbershop.R
 import it.ssplus.barbershop.adapter.AdapterSelectClient
 import it.ssplus.barbershop.adapter.AdapterSelectService
 import it.ssplus.barbershop.adapter.AdapterSelectTurn
+import it.ssplus.barbershop.adapter.AdapterStatus
 import it.ssplus.barbershop.databinding.*
 import it.ssplus.barbershop.model.entity.Client
 import it.ssplus.barbershop.model.entity.Reservation
@@ -32,11 +36,14 @@ import it.ssplus.barbershop.model.pojo.ReservationPojo
 import it.ssplus.barbershop.ui.client.ClientViewModel
 import it.ssplus.barbershop.ui.service.ServiceViewModel
 import it.ssplus.barbershop.ui.turn.TurnViewModel
-import it.ssplus.barbershop.utils.Constants
-import it.ssplus.barbershop.utils.SnackBarUtil
+import it.ssplus.barbershop.utils.*
 import it.ssplus.barbershop.utils.validators.RequiredFieldValidator
+import java.text.SimpleDateFormat
+import java.util.*
 
-class ManageReservationFragment : Fragment(), View.OnClickListener {
+
+class ManageReservationFragment : Fragment(), View.OnClickListener,
+    AdapterView.OnItemClickListener {
 
     private var _binding: FragmentManageReservationBinding? = null
     private val binding get() = _binding!!
@@ -52,16 +59,9 @@ class ManageReservationFragment : Fragment(), View.OnClickListener {
     lateinit var listTurns: ArrayList<Turn>
     private lateinit var adapterSelectService: AdapterSelectService
 
-    //    private lateinit var rvListServiceSelect: RecyclerView
     private var selectClient: Client? = null
     private var selectTurn: Turn? = null
 
-    //    private lateinit var tilClientReservation: TextInputLayout
-//    private lateinit var ivSelectClientReservation: ImageView
-//    private lateinit var tilTurnReservation: TextInputLayout
-//    private lateinit var ivSelectTurnReservation: ImageView
-//    private lateinit var tilCostReservation: TextInputLayout
-//    private lateinit var swStatusReservation: SwitchCompat
     private lateinit var noDataContainerServices: LinearLayout
     private lateinit var clNoSelectItemTurn: ConstraintLayout
     private lateinit var clNoSelectItemClient: ConstraintLayout
@@ -70,6 +70,7 @@ class ManageReservationFragment : Fragment(), View.OnClickListener {
     private lateinit var adapterSelectTurn: AdapterSelectTurn
     private lateinit var menu: Menu
     var reservation: ReservationPojo? = null
+    var status: Int = -1
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -93,6 +94,7 @@ class ManageReservationFragment : Fragment(), View.OnClickListener {
     ): View {
         _binding = FragmentManageReservationBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
         reservationViewModel = ViewModelProvider(this).get(ReservationViewModel::class.java)
         serviceViewModel = ViewModelProvider(this).get(ServiceViewModel::class.java)
         clientViewModel = ViewModelProvider(this).get(ClientViewModel::class.java)
@@ -100,6 +102,26 @@ class ManageReservationFragment : Fragment(), View.OnClickListener {
 
         binding.ivSelectClientReservation.setOnClickListener(this)
         binding.ivSelectTurnReservation.setOnClickListener(this)
+        binding.ivSelectDateReservation.setOnClickListener(this)
+
+        val adapterStatus = AdapterStatus(
+            requireActivity(),
+            R.layout.item_status_dropdown
+        )
+        status = R.string.service_status_open
+        (binding.tilStatusReservation.editText as? AutoCompleteTextView)!!.background =
+            drawable(Constants.serviceStatusColor[0])
+        binding.tilStatusReservation.startIconDrawable = drawable(Constants.serviceStatusIcon[0])
+        (binding.tilStatusReservation.editText as? AutoCompleteTextView)!!.setText(
+            resources.getString(
+                R.string.service_status_open
+            )
+        )
+        binding.acStatusReservation.setDropDownBackgroundDrawable(drawable(R.drawable.dropdown_background_round_shape))
+        (binding.tilStatusReservation.editText as? AutoCompleteTextView)?.setAdapter(
+            adapterStatus
+        )
+        (binding.tilStatusReservation.editText as? AutoCompleteTextView)?.onItemClickListener = this
 
         listServices = arrayListOf()
         listServicesDelete = arrayListOf()
@@ -143,7 +165,20 @@ class ManageReservationFragment : Fragment(), View.OnClickListener {
             if (reservation!!.reservation.additionalCost != 0.0) binding.tilCostReservation.editText!!.setText(
                 reservation!!.reservation.additionalCost.toString()
             )
-            binding.swStatusReservation.isChecked = reservation!!.reservation.status
+            binding.tilDateReservation.editText!!.setText(formatDate(reservation!!.reservation.date))
+            val pos = Constants.serviceStatusName.indexOf(reservation!!.reservation.status)
+            status = reservation!!.reservation.status
+            (binding.tilStatusReservation.editText as? AutoCompleteTextView)!!.background =
+                drawable(Constants.serviceStatusColor[pos])
+            binding.tilStatusReservation.startIconDrawable =
+                drawable(Constants.serviceStatusIcon[pos])
+            (binding.tilStatusReservation.editText as? AutoCompleteTextView)!!.setText(
+                resources.getString(
+                    Constants.serviceStatusName[pos]
+                )
+            )
+
+            binding.tilDateReservation.editText!!.setText(formatDate(reservation!!.reservation.date))
             adapterSelectService.selectedItems = reservation!!.services as ArrayList<Service>
         }
 
@@ -181,7 +216,47 @@ class ManageReservationFragment : Fragment(), View.OnClickListener {
         when (v?.id) {
             R.id.ivSelectClientReservation -> clientsList()
             R.id.ivSelectTurnReservation -> turnsList()
+            R.id.ivSelectDateReservation -> showCalendar(binding.tilDateReservation.editText)
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun showCalendar(editText: EditText?) {
+        val builderAdd =
+            AlertDialog.Builder(activity, R.style.AppCompatAlertDialogStyle)
+
+        val convertView = DialogDatePickerBinding.inflate(layoutInflater, null, false)
+
+        builderAdd.setView(convertView.root)
+
+        val c = Calendar.getInstance()
+        val mYear = c.get(Calendar.YEAR)
+        val mMonth = c.get(Calendar.MONTH)
+        val mDay = c.get(Calendar.DAY_OF_MONTH)
+
+        convertView.datePicker.updateDate(mYear, mMonth, mDay)
+
+        if (editText!!.text.isNotEmpty()) {
+            convertView.datePicker.maxDate = parseDate(editText.text.toString()).time
+        } else {
+            convertView.datePicker.maxDate = System.currentTimeMillis()
+        }
+
+        val dialogAdd: AlertDialog = builderAdd.create()
+        dialogAdd.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogAdd.setCanceledOnTouchOutside(false)
+
+        convertView.buttonCancel.setOnClickListener { dialogAdd.dismiss() }
+        convertView.buttonSelect.setOnClickListener {
+            val calendar = GregorianCalendar.getInstance()
+            calendar.set(GregorianCalendar.YEAR, convertView.datePicker.year)
+            calendar.set(GregorianCalendar.MONTH, convertView.datePicker.month)
+            calendar.set(GregorianCalendar.DAY_OF_MONTH, convertView.datePicker.dayOfMonth)
+            editText.setText(formatDate(calendar.time))
+            dialogAdd.dismiss()
+        }
+
+        dialogAdd.show()
     }
 
     private fun add() {
@@ -196,41 +271,26 @@ class ManageReservationFragment : Fragment(), View.OnClickListener {
                 requireActivity()
             ).validate(binding.tilTurnReservation.editText!!.text.toString())
 
-            if (validClient && validTurn) {
-                if (reservation == null) {
+            val validDate = RequiredFieldValidator(
+                binding.tilDateReservation,
+                requireActivity()
+            ).validate(binding.tilDateReservation.editText!!.text.toString())
+
+            if (validClient && validTurn && validDate) {
+                if (reservation.isNull()) {
                     val reservation = Reservation(
                         idTurn = selectTurn!!.id,
                         idClient = selectClient!!.id,
-                        status = binding.swStatusReservation.isChecked,
+                        status = status,
                         additionalCost = if (binding.tilCostReservation.editText!!.text.toString()
                                 .isEmpty()
-                        ) 0.0 else binding.tilCostReservation.editText!!.text.toString().toDouble()
+                        ) 0.0 else binding.tilCostReservation.editText!!.text.toString().toDouble(),
+                        date = parseDate(binding.tilDateReservation.editText!!.text.toString()),
                     )
                     reservationViewModel.insert(reservation, adapterSelectService.selectedItems)
 
-                    val customSnackBar: Snackbar = Snackbar.make(
-                        binding.root,
-                        "",
-                        Snackbar.LENGTH_LONG
-                    )
-                    SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
-                        customSnackBar,
-                        requireActivity(),
-                        R.drawable.snackbar_background_roud_shape,
-                        R.color.primaryTextColor,
-                        R.color.primaryTextColor
-                    )
-                    val layout: Snackbar.SnackbarLayout =
-                        customSnackBar.view as Snackbar.SnackbarLayout
-                    val snackBinding =
-                        SnackbarMessageSimpleBinding.inflate(layoutInflater, null, false)
-                    snackBinding.smpSimpleMessage.text =
-                        resources.getString(R.string.message_success_add)
-                    snackBinding.smpCancel.setOnClickListener { customSnackBar.dismiss() }
-                    layout.setPadding(0, 0, 0, 0)
-                    layout.addView(snackBinding.root, 0)
-                    customSnackBar.show()
-                    findNavController().navigate(R.id.nav_reservation)
+                    snackbar(binding.root, R.string.message_success_add)
+                    findNavController().navigate(R.id.action_manage_reservation_to_nav_reservation)
                 } else {
                     listServicesDelete.addAll(listAuxServices subtract adapterSelectService.selectedItems)
                     val aux: ArrayList<Service> = arrayListOf()
@@ -241,10 +301,11 @@ class ManageReservationFragment : Fragment(), View.OnClickListener {
                         id = reservation!!.reservation.id,
                         idTurn = selectTurn!!.id,
                         idClient = selectClient!!.id,
-                        status = binding.swStatusReservation.isChecked,
+                        status = status,
                         additionalCost = if (binding.tilCostReservation.editText!!.text.toString()
                                 .isEmpty()
-                        ) 0.0 else binding.tilCostReservation.editText!!.text.toString().toDouble()
+                        ) 0.0 else binding.tilCostReservation.editText!!.text.toString().toDouble(),
+                        date = parseDate(binding.tilDateReservation.editText!!.text.toString())
                     )
 
                     reservationViewModel.update(
@@ -252,29 +313,9 @@ class ManageReservationFragment : Fragment(), View.OnClickListener {
                         aux,
                         listServicesDelete
                     )
-                    val customSnackBar: Snackbar = Snackbar.make(
-                        binding.root,
-                        "",
-                        Snackbar.LENGTH_LONG
-                    )
-                    SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
-                        customSnackBar,
-                        requireActivity(),
-                        R.drawable.snackbar_background_roud_shape,
-                        R.color.primaryTextColor,
-                        R.color.primaryTextColor
-                    )
-                    val layout: Snackbar.SnackbarLayout =
-                        customSnackBar.view as Snackbar.SnackbarLayout
-                    val snackBinding =
-                        SnackbarMessageSimpleBinding.inflate(layoutInflater, null, false)
-                    snackBinding.smpSimpleMessage.text =
-                        resources.getString(R.string.message_success_edit)
-                    snackBinding.smpCancel.setOnClickListener { customSnackBar.dismiss() }
-                    layout.setPadding(0, 0, 0, 0)
-                    layout.addView(snackBinding.root, 0)
-                    customSnackBar.show()
-                    findNavController().navigate(R.id.nav_reservation)
+                    snackbar(binding.root, R.string.message_success_edit)
+                    reservation = null
+                    findNavController().navigate(R.id.action_manage_reservation_to_nav_reservation)
                 }
             }
 
@@ -389,5 +430,13 @@ class ManageReservationFragment : Fragment(), View.OnClickListener {
     override fun onDestroy() {
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
         super.onDestroy()
+    }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        status = Constants.serviceStatusName[position]
+        (binding.tilStatusReservation.editText as? AutoCompleteTextView)!!.background =
+            drawable(Constants.serviceStatusColor[position])
+        binding.tilStatusReservation.startIconDrawable =
+            drawable(Constants.serviceStatusIcon[position])
     }
 }

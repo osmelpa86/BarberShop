@@ -2,6 +2,7 @@ package it.ssplus.barbershop.model.entity
 
 import androidx.room.*
 import java.io.Serializable
+import java.util.*
 
 @Entity(
     tableName = "reservation",
@@ -33,9 +34,10 @@ data class Reservation(
     val idTurn: Long,
     @ColumnInfo(name = "id_client")
     val idClient: Long,
-    val status: Boolean,
+    val status: Int,
     @ColumnInfo(name = "additional_cost")
     val additionalCost: Double = 0.0,
+    val date: Date,
 ) : Serializable {
 
     override fun equals(other: Any?): Boolean {

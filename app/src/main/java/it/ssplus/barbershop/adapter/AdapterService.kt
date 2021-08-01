@@ -16,6 +16,7 @@ import it.ssplus.barbershop.databinding.ItemServiceBinding
 import it.ssplus.barbershop.model.entity.Service
 import it.ssplus.barbershop.ui.service.ServiceFragment
 import it.ssplus.barbershop.utils.Constants
+import it.ssplus.barbershop.utils.textMoney
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -79,7 +80,7 @@ class AdapterService(
 
                 sheetBinding.tvNameService.text = services[position].name
                 sheetBinding.tvDescriptionService.text = services[position].description
-                sheetBinding.tvCostService.text = "$" + services[position].cost.toString()
+                sheetBinding.tvCostService.text = services[position].cost.toString().textMoney()
                 sheetBinding.toolbar.inflateMenu(R.menu.service_details)
 
                 val dialog = BottomSheetDialog(activity, R.style.BottomSheetDialogTheme)
@@ -104,7 +105,7 @@ class AdapterService(
 
         holder.binding.tvNameService.text = service.name
         holder.binding.tvDescriptionService.text = service.description
-        holder.binding.tvServiceCost.text = "$" + service.cost.toString()
+        holder.binding.tvServiceCost.text = service.cost.toString().textMoney()
     }
 
     @SuppressLint("ResourceAsColor")

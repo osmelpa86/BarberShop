@@ -21,6 +21,7 @@ import it.ssplus.barbershop.model.pojo.ExpensePojo
 import it.ssplus.barbershop.ui.expense_category.ExpenseCategoryFragment
 import it.ssplus.barbershop.utils.Constants
 import it.ssplus.barbershop.utils.ImageUtils
+import it.ssplus.barbershop.utils.drawable
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -138,11 +139,7 @@ class AdapterExpenseCategory(
             expenseCategory.image!!.size
         )
         holder.binding.ivIconExpenseCategory.setImageBitmap(bitmap)
-        holder.binding.clIconExpenseCategory.background = ResourcesCompat.getDrawable(
-            activity.resources,
-            Constants.roundIcons[expenseCategory.color],
-            null
-        )
+        holder.binding.clIconExpenseCategory.background = drawable(activity, Constants.roundIcons[expenseCategory.color])
     }
 
     @SuppressLint("ResourceAsColor")

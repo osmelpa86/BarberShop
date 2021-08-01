@@ -64,7 +64,7 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginBottom="14dp"
                     android:adjustViewBounds="true"
                     android:clickable="true"
                     android:cropToPadding="true"
@@ -81,68 +81,142 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/containerSelectTurnReservation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilTurnReservation"
-                style="@style/CustomTextInputLayoutLeftRadius"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                app:layout_constraintEnd_toStartOf="@+id/clSelectTurnReservation"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:startIconTint="@android:color/transparent"
-                app:startIconTintMode="src_over">
-
-                <EditText
-                    android:id="@+id/etTurnReservation"
-                    style="@style/CustomEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:hint="@string/message_hint_turn"
-                    android:imeOptions="actionNone"
-                    android:inputType="none"
-                    android:lines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginEnd="8dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clSelectTurnReservation"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/icon_picker_roud_shape"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tilTurnReservation"
+                android:id="@+id/containerSelectTurnReservation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                app:layout_constraintEnd_toStartOf="@+id/containerSelectDateReservation"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/ivSelectTurnReservation"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilTurnReservation"
+                    style="@style/CustomTextInputLayoutLeftRadius"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:adjustViewBounds="true"
-                    android:clickable="true"
-                    android:cropToPadding="true"
-                    android:focusable="true"
-                    android:foreground="?selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_event"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:gravity="end"
+                    app:layout_constraintEnd_toStartOf="@+id/clSelectTurnReservation"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@android:color/white" />
+                    app:startIconTint="@android:color/transparent"
+                    app:startIconTintMode="src_over">
+
+                    <EditText
+                        android:id="@+id/etTurnReservation"
+                        style="@style/CustomEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/message_hint_turn"
+                        android:imeOptions="actionNone"
+                        android:inputType="none"
+                        android:lines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clSelectTurnReservation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/icon_picker_roud_shape"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tilTurnReservation"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ivSelectTurnReservation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginBottom="14dp"
+                        android:adjustViewBounds="true"
+                        android:clickable="true"
+                        android:cropToPadding="true"
+                        android:focusable="true"
+                        android:foreground="?selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_event"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@android:color/white" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/containerSelectDateReservation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/containerSelectTurnReservation"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilDateReservation"
+                    style="@style/CustomTextInputLayoutLeftRadius"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    app:layout_constraintEnd_toStartOf="@+id/clSelectDateReservation"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:startIconTint="@android:color/transparent"
+                    app:startIconTintMode="src_over">
+
+                    <EditText
+                        android:id="@+id/etDateReservation"
+                        style="@style/CustomEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/message_hint_date"
+                        android:imeOptions="actionNone"
+                        android:inputType="none"
+                        android:lines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clSelectDateReservation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/icon_picker_roud_shape"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tilDateReservation"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ivSelectDateReservation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginBottom="14dp"
+                        android:adjustViewBounds="true"
+                        android:clickable="true"
+                        android:cropToPadding="true"
+                        android:focusable="true"
+                        android:foreground="?selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_calendar_today"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@android:color/white" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -153,49 +227,55 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilCostReservation"
                 style="@style/CustomTextInputLayout"
-                android:layout_width="0dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="0"
+                android:layout_marginEnd="4dp"
                 android:gravity="end"
                 app:endIconDrawable="@drawable/ic_attach_money"
                 app:endIconMode="custom"
                 app:endIconTint="@color/primaryTextColor"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/swStatusReservation"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintEnd_toStartOf="@+id/tilStatusReservation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <EditText
                     android:id="@+id/etCostReservation"
                     style="@style/CustomEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:hint="@string/message_hint_cost"
                     android:imeOptions="actionNext"
                     android:inputType="numberDecimal"
                     android:lines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/swStatusReservation"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginStart="8dp"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilStatusReservation"
+                style="@style/CustomTextInputSpinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:layout_marginEnd="8dp"
-                android:background="@drawable/edit_text_roud_shape"
-                android:clickable="true"
-                android:checked="true"
-                android:switchPadding="5dp"
-                android:text="@string/message_hint_status"
-                android:textColor="@color/primaryTextColor"
-                android:thumbTint="@android:color/white"
+                app:endIconTint="@color/primaryTextColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tilCostReservation"
                 app:layout_constraintTop_toTopOf="parent"
-                android:focusable="true" />
+                app:startIconTint="@android:color/white">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/acStatusReservation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:dropDownVerticalOffset="0dp"
+                    android:hint="@string/message_hint_status"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

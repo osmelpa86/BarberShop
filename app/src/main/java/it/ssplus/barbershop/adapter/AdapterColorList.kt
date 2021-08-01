@@ -10,6 +10,7 @@ import it.ssplus.barbershop.R
 import it.ssplus.barbershop.databinding.ItemColorBinding
 import it.ssplus.barbershop.ui.expense_category.ExpenseCategoryFragment
 import it.ssplus.barbershop.utils.Constants
+import it.ssplus.barbershop.utils.drawable
 
 
 class AdapterColorList(
@@ -26,29 +27,17 @@ class AdapterColorList(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(name: Int, icon: Int) {
             if (checkedPosition == -1) {
-                binding.root.background = ContextCompat.getDrawable(
-                    expenseCategoryFragment.requireActivity(),
-                    R.drawable.item_color_bg_transparent
-                )
+                binding.root.background = drawable(expenseCategoryFragment.requireContext(),R.drawable.item_color_bg_transparent)
             } else {
                 if (checkedPosition == adapterPosition) {
-                    binding.root.background = ContextCompat.getDrawable(
-                        expenseCategoryFragment.requireActivity(),
-                        R.drawable.item_color_bg_roud_shape
-                    )
+                    binding.root.background = drawable(expenseCategoryFragment.requireContext(),R.drawable.item_color_bg_roud_shape)
                 } else {
-                    binding.root.background = ContextCompat.getDrawable(
-                        expenseCategoryFragment.requireActivity(),
-                        R.drawable.item_color_bg_transparent
-                    )
+                    binding.root.background = drawable(expenseCategoryFragment.requireContext(),R.drawable.item_color_bg_transparent)
                 }
             }
 
             binding.root.setOnClickListener {
-                binding.root.background = ContextCompat.getDrawable(
-                    expenseCategoryFragment.requireActivity(),
-                    R.drawable.item_color_bg_roud_shape
-                )
+                binding.root.background = drawable(expenseCategoryFragment.requireContext(),R.drawable.item_color_bg_roud_shape)
                 if (checkedPosition != adapterPosition) {
                     notifyItemChanged(checkedPosition)
                     checkedPosition = adapterPosition

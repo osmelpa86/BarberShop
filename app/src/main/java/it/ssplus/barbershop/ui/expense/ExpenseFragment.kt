@@ -9,13 +9,13 @@ import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.*
 import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import it.ssplus.barbershop.R
 import it.ssplus.barbershop.adapter.AdapterExpense
@@ -34,11 +33,8 @@ import it.ssplus.barbershop.model.entity.Expense
 import it.ssplus.barbershop.model.entity.ExpenseCategory
 import it.ssplus.barbershop.model.pojo.ExpensePojo
 import it.ssplus.barbershop.ui.expense_category.ExpenseCategoryViewModel
-import it.ssplus.barbershop.utils.Constants
-import it.ssplus.barbershop.utils.ImageUtils
-import it.ssplus.barbershop.utils.SnackBarUtil
+import it.ssplus.barbershop.utils.*
 import it.ssplus.barbershop.utils.validators.RequiredFieldValidator
-import java.text.SimpleDateFormat
 import java.util.*
 
 class ExpenseFragment : Fragment(), View.OnClickListener {
@@ -53,9 +49,6 @@ class ExpenseFragment : Fragment(), View.OnClickListener {
     private lateinit var noDataContainerExpense: LinearLayout
     var expense: ExpensePojo? = null
     private lateinit var menu: Menu
-
-    @SuppressLint("SimpleDateFormat")
-    private val df = SimpleDateFormat("d/M/yyyy")
 
     private lateinit var listExpenseCategories: ArrayList<ExpenseCategory>
     private lateinit var ivSelectExpenseCategory: ImageView
@@ -110,47 +103,7 @@ class ExpenseFragment : Fragment(), View.OnClickListener {
         binding.rvListExpense.adapter = adapterExpense
         binding.rvListExpense.layoutManager = LinearLayoutManager(context)
 
-        binding.svExpense.setOnClickListener {
-            binding.svExpense.setIconifiedByDefault(true)
-            binding.svExpense.isFocusable = true
-            binding.svExpense.isIconified = false
-            binding.svExpense.requestFocusFromTouch()
-        }
-
-        binding.svExpense.setOnSearchClickListener {
-        }
-
-        binding.svExpense.setOnCloseListener {
-            false
-        }
-
-        val searchEditText =
-            binding.svExpense.findViewById<View>(androidx.appcompat.R.id.search_src_text) as EditText
-        searchEditText.setTextColor(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.secondaryTextColor
-            ).defaultColor
-        )
-        searchEditText.textSize = 16f
-        searchEditText.hint = requireActivity().resources.getString(R.string.message_hint_search)
-        val searchIcon =
-            binding.svExpense.findViewById<View>(androidx.appcompat.R.id.search_button) as ImageView
-        searchIcon.drawable.setTint(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.primaryTextColor
-            ).defaultColor
-        )
-        val searchMagIcon =
-            binding.svExpense.findViewById<View>(androidx.appcompat.R.id.search_close_btn) as ImageView
-        searchMagIcon.drawable.setTint(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.primaryTextColor
-            ).defaultColor
-        )
-        binding.svExpense.queryHint = this.resources.getString(R.string.message_hint_search)
+        searchview(binding.svExpense)
         binding.svExpense.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -332,25 +285,34 @@ class ExpenseFragment : Fragment(), View.OnClickListener {
 
         builderAdd.setView(convertView.root)
 
+        val c = Calendar.getInstance()
+        val mYear = c.get(Calendar.YEAR)
+        val mMonth = c.get(Calendar.MONTH)
+        val mDay = c.get(Calendar.DAY_OF_MONTH)
+
+        convertView.datePicker.updateDate(mYear, mMonth, mDay)
+
+        if (editText!!.text.isNotEmpty()) {
+            convertView.datePicker.maxDate = parseDate(editText.text.toString()).time
+        } else {
+            convertView.datePicker.maxDate = System.currentTimeMillis()
+        }
+
         val dialogAdd: AlertDialog = builderAdd.create()
         dialogAdd.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialogAdd.setCanceledOnTouchOutside(false)
 
         convertView.buttonCancel.setOnClickListener { dialogAdd.dismiss() }
         convertView.buttonSelect.setOnClickListener {
-            editText!!.setText(convertView.datePicker.dayOfMonth.toString() + "/" + convertView.datePicker.month + "/" + convertView.datePicker.year)
+            val calendar = GregorianCalendar.getInstance()
+            calendar.set(GregorianCalendar.YEAR, convertView.datePicker.year)
+            calendar.set(GregorianCalendar.MONTH, convertView.datePicker.month)
+            calendar.set(GregorianCalendar.DAY_OF_MONTH, convertView.datePicker.dayOfMonth)
+            editText.setText(formatDate(calendar.time))
             dialogAdd.dismiss()
         }
 
         dialogAdd.show()
-
-        val c = Calendar.getInstance()
-        val mYear = c.get(Calendar.YEAR)
-        val mMonth = c.get(Calendar.MONTH)
-        val mDay = c.get(Calendar.DAY_OF_MONTH)
-
-        convertView.datePicker.minDate = System.currentTimeMillis()
-        convertView.datePicker.updateDate(mYear, mMonth, mDay)
     }
 
     fun add() {
@@ -359,7 +321,7 @@ class ExpenseFragment : Fragment(), View.OnClickListener {
         val convertView = DialogManageExpenseBinding.inflate(layoutInflater, null, false)
         val titleCustomView = DialogCustomTitleBinding.inflate(layoutInflater, null, false)
 
-        titleCustomView.customDialogTitleName.setText(if (expense == null) R.string.menu_add else R.string.menu_edit)
+        titleCustomView.customDialogTitleName.setText(if (expense.isNull()) R.string.menu_add else R.string.menu_edit)
         titleCustomView.customDialogTitleIcon.setImageResource(R.drawable.ic_arrow_back)
         builderAdd.setCustomTitle(titleCustomView.root)
         builderAdd.setView(convertView.root)
@@ -371,6 +333,7 @@ class ExpenseFragment : Fragment(), View.OnClickListener {
         ivSelectDateExpense = convertView.ivSelectDateExpense
         ivSelectDateExpense.setOnClickListener { showCalendar(tilDateExpense.editText) }
         tilDateExpense = convertView.tilDateExpense
+        convertView.tilDescriptionExpense.editText!!.filters = arrayOf(InputFilter.LengthFilter(60))
 
         if (expense != null) {
             expenseCategorySelected = listExpenseCategories.indexOf(expense!!.expenseCategory)
@@ -382,7 +345,7 @@ class ExpenseFragment : Fragment(), View.OnClickListener {
                 )
             })
             ivIconCategory.visibility = View.VISIBLE
-            tilDateExpense.editText!!.setText(df.format(expense!!.expense.date))
+            tilDateExpense.editText!!.setText(formatDate(expense!!.expense.date))
             convertView.tilAmountExpense.editText!!.setText(expense!!.expense.amount.toString())
             convertView.tilDescriptionExpense.editText!!.setText(expense!!.expense.description)
         }
@@ -412,42 +375,21 @@ class ExpenseFragment : Fragment(), View.OnClickListener {
                 requireActivity()
             ).validate(convertView.tilDescriptionExpense.editText!!.text.toString())
 
-            if (expense == null) {
+            if (expense.isNull()) {
                 if (validExpenseCategory && validAmount && validDate && validDescription) {
                     expenseViewModel.insert(
                         Expense(
                             idExpenseCategory = listExpenseCategories[expenseCategorySelected].id,
                             amount = convertView.tilAmountExpense.editText!!.text.toString()
                                 .toDouble(),
-                            date = df.parse(tilDateExpense.editText!!.text.toString()),
+                            date = parseDate(tilDateExpense.editText!!.text.toString()),
                             description = convertView.tilDescriptionExpense.editText!!.text.toString()
                         )
                     )
                     dialogAdd.dismiss()
                     expenseCategorySelected = -1
 
-                    val customSnackBar: Snackbar = Snackbar.make(
-                        binding.root,
-                        "",
-                        Snackbar.LENGTH_LONG
-                    )
-                    SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
-                        customSnackBar,
-                        requireActivity(),
-                        R.drawable.snackbar_background_roud_shape,
-                        R.color.primaryTextColor,
-                        R.color.primaryTextColor
-                    )
-                    val layout: Snackbar.SnackbarLayout =
-                        customSnackBar.view as Snackbar.SnackbarLayout
-                    val snackBinding =
-                        SnackbarMessageSimpleBinding.inflate(layoutInflater, null, false)
-                    snackBinding.smpSimpleMessage.text =
-                        resources.getString(R.string.message_success_add)
-                    snackBinding.smpCancel.setOnClickListener { customSnackBar.dismiss() }
-                    layout.setPadding(0, 0, 0, 0)
-                    layout.addView(snackBinding.root, 0)
-                    customSnackBar.show()
+                    snackbar(binding.root, R.string.message_success_add)
                 }
             } else {
                 if (validExpenseCategory && validAmount && validDate && validDescription) {
@@ -457,35 +399,13 @@ class ExpenseFragment : Fragment(), View.OnClickListener {
                             idExpenseCategory = listExpenseCategories[expenseCategorySelected].id,
                             amount = convertView.tilAmountExpense.editText!!.text.toString()
                                 .toDouble(),
-                            date = df.parse(tilDateExpense.editText!!.text.toString()),
+                            date = parseDate(tilDateExpense.editText!!.text.toString()),
                             description = convertView.tilDescriptionExpense.editText!!.text.toString()
                         )
                     )
                     dialogAdd.dismiss()
                     expenseCategorySelected = -1
-
-                    val customSnackBar: Snackbar = Snackbar.make(
-                        binding.root,
-                        "",
-                        Snackbar.LENGTH_LONG
-                    )
-                    SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
-                        customSnackBar,
-                        requireActivity(),
-                        R.drawable.snackbar_background_roud_shape,
-                        R.color.primaryTextColor,
-                        R.color.primaryTextColor
-                    )
-                    val layout: Snackbar.SnackbarLayout =
-                        customSnackBar.view as Snackbar.SnackbarLayout
-                    val snackBinding =
-                        SnackbarMessageSimpleBinding.inflate(layoutInflater, null, false)
-                    snackBinding.smpSimpleMessage.text =
-                        resources.getString(R.string.message_success_edit)
-                    snackBinding.smpCancel.setOnClickListener { customSnackBar.dismiss() }
-                    layout.setPadding(0, 0, 0, 0)
-                    layout.addView(snackBinding.root, 0)
-                    customSnackBar.show()
+                    snackbar(binding.root, R.string.message_success_edit)
                     expense = null
                 }
             }

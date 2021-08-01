@@ -65,6 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
+                app:autoSizeTextType="uniform"
                 android:textColor="@color/primaryTextColor" />
         </LinearLayout>
 

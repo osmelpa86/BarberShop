@@ -8,10 +8,10 @@ import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.*
-import android.widget.*
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +22,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import it.ssplus.barbershop.R
 import it.ssplus.barbershop.adapter.AdapterColorList
@@ -31,9 +30,7 @@ import it.ssplus.barbershop.databinding.*
 import it.ssplus.barbershop.model.entity.ExpenseCategory
 import it.ssplus.barbershop.model.pojo.ExpensePojo
 import it.ssplus.barbershop.ui.expense.ExpenseViewModel
-import it.ssplus.barbershop.utils.Constants
-import it.ssplus.barbershop.utils.ImageUtils
-import it.ssplus.barbershop.utils.SnackBarUtil
+import it.ssplus.barbershop.utils.*
 import it.ssplus.barbershop.utils.validators.ExpenseCategoryFieldValidator
 import it.ssplus.barbershop.utils.validators.RequiredFieldValidator
 import it.ssplus.iconpickert.IconPicker
@@ -104,47 +101,7 @@ class ExpenseCategoryFragment : Fragment(), View.OnClickListener {
         binding.rvListExpenseCategory.adapter = adapterExpenseCategory
         binding.rvListExpenseCategory.layoutManager = LinearLayoutManager(context)
 
-        binding.svExpenseCategory.setOnClickListener {
-            binding.svExpenseCategory.setIconifiedByDefault(true)
-            binding.svExpenseCategory.isFocusable = true
-            binding.svExpenseCategory.isIconified = false
-            binding.svExpenseCategory.requestFocusFromTouch()
-        }
-
-        binding.svExpenseCategory.setOnSearchClickListener {
-        }
-
-        binding.svExpenseCategory.setOnCloseListener {
-            false
-        }
-
-        val searchEditText =
-            binding.svExpenseCategory.findViewById<View>(androidx.appcompat.R.id.search_src_text) as EditText
-        searchEditText.setTextColor(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.secondaryTextColor
-            ).defaultColor
-        )
-        searchEditText.textSize = 16f
-        searchEditText.hint = requireActivity().resources.getString(R.string.message_hint_search)
-        val searchIcon =
-            binding.svExpenseCategory.findViewById<View>(androidx.appcompat.R.id.search_button) as ImageView
-        searchIcon.drawable.setTint(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.primaryTextColor
-            ).defaultColor
-        )
-        val searchMagIcon =
-            binding.svExpenseCategory.findViewById<View>(androidx.appcompat.R.id.search_close_btn) as ImageView
-        searchMagIcon.drawable.setTint(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.primaryTextColor
-            ).defaultColor
-        )
-        binding.svExpenseCategory.queryHint = this.resources.getString(R.string.message_hint_search)
+        searchview(binding.svExpenseCategory)
         binding.svExpenseCategory.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -200,6 +157,7 @@ class ExpenseCategoryFragment : Fragment(), View.OnClickListener {
 
         tilColorExpenseCategory = convertView.tilColorExpenseCategory
         convertView.ivSelectColorExpenseCategory.setOnClickListener { colorList() }
+        convertView.tilDescriptionExpenseCategory.editText!!.filters = arrayOf(InputFilter.LengthFilter(60))
         val iconPicker: IconPicker = convertView.iconPickert
 
         if (expenseCategory != null) {
@@ -219,7 +177,7 @@ class ExpenseCategoryFragment : Fragment(), View.OnClickListener {
         dialogAdd.setCanceledOnTouchOutside(false)
 
         titleCustomView.imageButton.setOnClickListener {
-            if (expenseCategory == null) {
+            if (expenseCategory.isNull()) {
                 val validName = ExpenseCategoryFieldValidator(
                     convertView.tilNameExpenseCategory,
                     requireActivity(),
@@ -250,28 +208,7 @@ class ExpenseCategoryFragment : Fragment(), View.OnClickListener {
                     dialogAdd.dismiss()
                     colorSelected = -1
 
-                    val customSnackBar: Snackbar = Snackbar.make(
-                        binding.root,
-                        "",
-                        Snackbar.LENGTH_LONG
-                    )
-                    SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
-                        customSnackBar,
-                        requireActivity(),
-                        R.drawable.snackbar_background_roud_shape,
-                        R.color.primaryTextColor,
-                        R.color.primaryTextColor
-                    )
-                    val layout: Snackbar.SnackbarLayout =
-                        customSnackBar.view as Snackbar.SnackbarLayout
-                    val snackBinding =
-                        SnackbarMessageSimpleBinding.inflate(layoutInflater, null, false)
-                    snackBinding.smpSimpleMessage.text =
-                        resources.getString(R.string.message_success_add)
-                    snackBinding.smpCancel.setOnClickListener { customSnackBar.dismiss() }
-                    layout.setPadding(0, 0, 0, 0)
-                    layout.addView(snackBinding.root, 0)
-                    customSnackBar.show()
+                    snackbar(binding.root, R.string.message_success_add)
                 }
             } else {
                 val validName = ExpenseCategoryFieldValidator(
@@ -304,28 +241,7 @@ class ExpenseCategoryFragment : Fragment(), View.OnClickListener {
                     )
                     dialogAdd.dismiss()
                     colorSelected = -1
-                    val customSnackBar: Snackbar = Snackbar.make(
-                        binding.root,
-                        "",
-                        Snackbar.LENGTH_LONG
-                    )
-                    SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
-                        customSnackBar,
-                        requireActivity(),
-                        R.drawable.snackbar_background_roud_shape,
-                        R.color.primaryTextColor,
-                        R.color.primaryTextColor
-                    )
-                    val layout: Snackbar.SnackbarLayout =
-                        customSnackBar.view as Snackbar.SnackbarLayout
-                    val snackBinding =
-                        SnackbarMessageSimpleBinding.inflate(layoutInflater, null, false)
-                    snackBinding.smpSimpleMessage.text =
-                        resources.getString(R.string.message_success_edit)
-                    snackBinding.smpCancel.setOnClickListener { customSnackBar.dismiss() }
-                    layout.setPadding(0, 0, 0, 0)
-                    layout.addView(snackBinding.root, 0)
-                    customSnackBar.show()
+                    snackbar(binding.root, R.string.message_success_edit)
                     expenseCategory = null
                 }
             }
@@ -399,8 +315,8 @@ class ExpenseCategoryFragment : Fragment(), View.OnClickListener {
         val builderAdd =
             AlertDialog.Builder(activity, R.style.AppCompatAlertDialogStyle)
 
-        val convertView =DialogListColorBinding.inflate(layoutInflater,null,false)
-        val titleCustomView =DialogCustomTitleBinding.inflate(layoutInflater,null,false)
+        val convertView = DialogListColorBinding.inflate(layoutInflater, null, false)
+        val titleCustomView = DialogCustomTitleBinding.inflate(layoutInflater, null, false)
 
         titleCustomView.customDialogTitleName.setText(R.string.title_list_color_select)
         titleCustomView.customDialogTitleIcon.setImageResource(R.drawable.ic_arrow_back)
@@ -410,9 +326,10 @@ class ExpenseCategoryFragment : Fragment(), View.OnClickListener {
         adapterColorList = AdapterColorList(this, colorSelected)
 
         convertView.rvListColors.adapter = adapterColorList
-        convertView.rvListColors.layoutManager = GridLayoutManager(activity, 4, RecyclerView.VERTICAL, false)
+        convertView.rvListColors.layoutManager =
+            GridLayoutManager(activity, 4, RecyclerView.VERTICAL, false)
 
-        clNoSelectItemColorExpenseCategory =convertView.clNoSelectItemColorExpenseCategory
+        clNoSelectItemColorExpenseCategory = convertView.clNoSelectItemColorExpenseCategory
 
         val dialogAdd: AlertDialog = builderAdd.create()
         dialogAdd.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

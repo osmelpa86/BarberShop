@@ -2,13 +2,10 @@ package it.ssplus.barbershop.adapter
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import it.ssplus.barbershop.R
@@ -16,6 +13,9 @@ import it.ssplus.barbershop.databinding.ItemTurnBinding
 import it.ssplus.barbershop.model.entity.Turn
 import it.ssplus.barbershop.ui.reservation.ManageReservationFragment
 import it.ssplus.barbershop.utils.Constants
+import it.ssplus.barbershop.utils.drawable
+import it.ssplus.barbershop.utils.formatTime
+import it.ssplus.barbershop.utils.isNull
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -38,26 +38,26 @@ class AdapterSelectTurn(
     inner class TurnViewHolder(val binding: ItemTurnBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(turn: Turn) {
-            if (checkedPosition == null) {
-                binding.root.background = ContextCompat.getDrawable(
+            if (checkedPosition.isNull()) {
+                binding.root.background = drawable(
                     activity,
                     R.drawable.item_color_bg_transparent
                 )
             } else {
                 if (checkedPosition == turns[adapterPosition]) {
-                    binding.root.background = ContextCompat.getDrawable(
+                    binding.root.background = drawable(
                         activity,
                         R.drawable.item_color_bg_roud_shape_linear
                     )
                 } else {
                     binding.root.background =
-                        ContextCompat.getDrawable(activity, R.drawable.item_color_bg_transparent)
+                        drawable(activity, R.drawable.item_color_bg_transparent)
                 }
             }
 
             binding.root.setOnClickListener {
                 binding.root.background =
-                    ContextCompat.getDrawable(activity, R.drawable.item_color_bg_roud_shape_linear)
+                    drawable(activity, R.drawable.item_color_bg_roud_shape_linear)
                 if (checkedPosition != turns[adapterPosition]) {
                     notifyItemChanged(turns.indexOf(checkedPosition))
                     checkedPosition = turns[adapterPosition]
@@ -68,7 +68,11 @@ class AdapterSelectTurn(
 
 
             binding.tvNameTurn.text = turn.name
-            binding.tvHourTurn.text = turn.hour
+            binding.tvHourTurn.text =
+                formatTime(
+                    turn.hour.split(":")[0].trim().toInt(),
+                    turn.hour.split(":")[1].trim().toInt()
+                )
         }
     }
 

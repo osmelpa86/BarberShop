@@ -8,25 +8,27 @@ import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.*
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import it.ssplus.barbershop.R
 import it.ssplus.barbershop.adapter.AdapterService
-import it.ssplus.barbershop.databinding.*
+import it.ssplus.barbershop.databinding.DialogConfirmDangerBinding
+import it.ssplus.barbershop.databinding.DialogCustomTitleBinding
+import it.ssplus.barbershop.databinding.DialogManageServiceBinding
+import it.ssplus.barbershop.databinding.FragmentServiceBinding
 import it.ssplus.barbershop.model.entity.Service
 import it.ssplus.barbershop.utils.Constants
-import it.ssplus.barbershop.utils.SnackBarUtil
+import it.ssplus.barbershop.utils.isNull
+import it.ssplus.barbershop.utils.searchview
+import it.ssplus.barbershop.utils.snackbar
 import it.ssplus.barbershop.utils.validators.RequiredFieldValidator
 import java.util.*
 
@@ -83,47 +85,7 @@ class ServiceFragment : Fragment(), View.OnClickListener {
         binding.rvListService.adapter = adapterService
         binding.rvListService.layoutManager = LinearLayoutManager(context)
 
-        binding.svService.setOnClickListener {
-            binding.svService.setIconifiedByDefault(true)
-            binding.svService.isFocusable = true
-            binding.svService.isIconified = false
-            binding.svService.requestFocusFromTouch()
-        }
-
-        binding.svService.setOnSearchClickListener {
-        }
-
-        binding.svService.setOnCloseListener {
-            false
-        }
-
-        val searchEditText =
-            binding.svService.findViewById<View>(androidx.appcompat.R.id.search_src_text) as EditText
-        searchEditText.setTextColor(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.secondaryTextColor
-            ).defaultColor
-        )
-        searchEditText.textSize = 16f
-        searchEditText.hint = requireActivity().resources.getString(R.string.message_hint_search)
-        val searchIcon =
-            binding.svService.findViewById<View>(androidx.appcompat.R.id.search_button) as ImageView
-        searchIcon.drawable.setTint(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.primaryTextColor
-            ).defaultColor
-        )
-        val searchMagIcon =
-            binding.svService.findViewById<View>(androidx.appcompat.R.id.search_close_btn) as ImageView
-        searchMagIcon.drawable.setTint(
-            AppCompatResources.getColorStateList(
-                requireActivity(),
-                R.color.primaryTextColor
-            ).defaultColor
-        )
-        binding.svService.queryHint = this.resources.getString(R.string.message_hint_search)
+        searchview(binding.svService)
         binding.svService.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -229,11 +191,13 @@ class ServiceFragment : Fragment(), View.OnClickListener {
             AlertDialog.Builder(activity, R.style.AppCompatAlertDialogStyle)
         val convertView = DialogManageServiceBinding.inflate(layoutInflater, null, false)
         val titleCustomView = DialogCustomTitleBinding.inflate(layoutInflater, null, false)
-      
-        titleCustomView.customDialogTitleName.setText(if (service == null) R.string.menu_add else R.string.menu_edit)
+
+        titleCustomView.customDialogTitleName.setText(if (service.isNull()) R.string.menu_add else R.string.menu_edit)
         titleCustomView.customDialogTitleIcon.setImageResource(R.drawable.ic_arrow_back)
         builderAdd.setCustomTitle(titleCustomView.root)
         builderAdd.setView(convertView.root)
+
+        convertView.tilDescriptionService.editText!!.filters = arrayOf(InputFilter.LengthFilter(60))
 
         if (service != null) {
             convertView.tilNameService.editText!!.setText(service!!.name)
@@ -256,7 +220,7 @@ class ServiceFragment : Fragment(), View.OnClickListener {
             ).validate(convertView.tilCostService.editText!!.text.toString())
 
             if (validName && validCost) {
-                if (service == null) {
+                if (service.isNull()) {
                     serviceViewModel.insert(
                         Service(
                             name = convertView.tilNameService.editText!!.text.toString(),
@@ -265,28 +229,7 @@ class ServiceFragment : Fragment(), View.OnClickListener {
                         )
                     )
                     dialogAdd.dismiss()
-                    val customSnackBar: Snackbar = Snackbar.make(
-                        binding.root,
-                        "",
-                        Snackbar.LENGTH_LONG
-                    )
-                    SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
-                        customSnackBar,
-                        requireActivity(),
-                        R.drawable.snackbar_background_roud_shape,
-                        R.color.primaryTextColor,
-                        R.color.primaryTextColor
-                    )
-                    val layout: Snackbar.SnackbarLayout =
-                        customSnackBar.view as Snackbar.SnackbarLayout
-                    val snackBinding =
-                        SnackbarMessageSimpleBinding.inflate(layoutInflater, null, false)
-                    snackBinding.smpSimpleMessage.text =
-                        resources.getString(R.string.message_success_add)
-                    snackBinding.smpCancel.setOnClickListener { customSnackBar.dismiss() }
-                    layout.setPadding(0, 0, 0, 0)
-                    layout.addView(snackBinding.root, 0)
-                    customSnackBar.show()
+                    snackbar(binding.root, R.string.message_success_add)
                 } else {
                     serviceViewModel.update(
                         Service(
@@ -298,28 +241,7 @@ class ServiceFragment : Fragment(), View.OnClickListener {
                     )
                     dialogAdd.dismiss()
 
-                    val customSnackBar: Snackbar = Snackbar.make(
-                        binding.root,
-                        "",
-                        Snackbar.LENGTH_LONG
-                    )
-                    SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
-                        customSnackBar,
-                        requireActivity(),
-                        R.drawable.snackbar_background_roud_shape,
-                        R.color.primaryTextColor,
-                        R.color.primaryTextColor
-                    )
-                    val layout: Snackbar.SnackbarLayout =
-                        customSnackBar.view as Snackbar.SnackbarLayout
-                    val snackBinding =
-                        SnackbarMessageSimpleBinding.inflate(layoutInflater, null, false)
-                    snackBinding.smpSimpleMessage.text =
-                        resources.getString(R.string.message_success_edit)
-                    snackBinding.smpCancel.setOnClickListener { customSnackBar.dismiss() }
-                    layout.setPadding(0, 0, 0, 0)
-                    layout.addView(snackBinding.root, 0)
-                    customSnackBar.show()
+                    snackbar(binding.root, R.string.message_success_edit)
                     service = null
                 }
             }

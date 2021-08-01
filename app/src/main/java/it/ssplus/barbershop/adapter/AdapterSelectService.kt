@@ -13,6 +13,7 @@ import it.ssplus.barbershop.databinding.ItemServiceBinding
 import it.ssplus.barbershop.model.entity.Service
 import it.ssplus.barbershop.ui.reservation.ManageReservationFragment
 import it.ssplus.barbershop.utils.Constants
+import it.ssplus.barbershop.utils.textMoney
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -59,7 +60,7 @@ class AdapterSelectService(
 
         holder.binding.tvNameService.text = service.name
         holder.binding.tvDescriptionService.text = service.description
-        holder.binding.tvServiceCost.text = "$" + service.cost.toString()
+        holder.binding.tvServiceCost.text = service.cost.toString().textMoney()
     }
 
     @SuppressLint("ResourceAsColor")

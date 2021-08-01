@@ -1,9 +1,10 @@
 package it.ssplus.barbershop.utils.validators
 
 import android.app.Activity
-import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.textfield.TextInputLayout
 import it.ssplus.barbershop.R
+import it.ssplus.barbershop.utils.colorStateListValidation
+import it.ssplus.barbershop.utils.isNull
 
 open class BaseValidator(errorContainer: TextInputLayout, var mainActivity: Activity) {
     private var mErrorContainer: TextInputLayout = errorContainer
@@ -16,58 +17,38 @@ open class BaseValidator(errorContainer: TextInputLayout, var mainActivity: Acti
     }
 
     fun validate(charSequence: String?): Boolean {
-        if (mEmptyMessage != null && (charSequence == null || charSequence.isEmpty())) {
+        if (mEmptyMessage != null && (charSequence.isNull() || charSequence!!.isEmpty())) {
             mErrorContainer.error = mEmptyMessage
             mErrorContainer.setErrorIconTintList(
-                AppCompatResources.getColorStateList(
-                    mainActivity,
-                    R.color.errorColor
-                )
+                colorStateListValidation(mainActivity, R.color.errorColor)
             )
-//            mErrorContainer.editText!!.setTextColor(AppCompatResources.getColorStateList(mainActivity, R.color.errorColor).defaultColor)
+            mErrorContainer.editText!!.setTextColor(colorStateListValidation(mainActivity, R.color.errorColor).defaultColor)
             mErrorContainer.setErrorTextColor(
-                AppCompatResources.getColorStateList(
-                    mainActivity,
-                    R.color.errorColor
-                )
+                colorStateListValidation(mainActivity, R.color.errorColor)
             )
 
-            mErrorContainer.hintTextColor = AppCompatResources.getColorStateList(
-                mainActivity,
-                R.color.errorColor
-            )
+            mErrorContainer.hintTextColor =
+                colorStateListValidation(mainActivity, R.color.errorColor)
 
             return false
         } else if (isValid(charSequence!!)) {
             mErrorContainer.error = null
             mErrorContainer.isErrorEnabled = false
-            mErrorContainer.boxBackgroundColor = AppCompatResources.getColorStateList(
-                mainActivity,
-                R.color.boxBackgroundDefault
-            ).defaultColor
-            mErrorContainer.hintTextColor = AppCompatResources.getColorStateList(
-                mainActivity,
-                R.color.secondaryTextColor
-            )
+            mErrorContainer.boxBackgroundColor =
+                colorStateListValidation(mainActivity, R.color.boxBackgroundDefault).defaultColor
+            mErrorContainer.hintTextColor =
+                colorStateListValidation(mainActivity, R.color.secondaryTextColor)
             return true
         } else {
             mErrorContainer.error = mErrorMessage
             mErrorContainer.setErrorIconTintList(
-                AppCompatResources.getColorStateList(
-                    mainActivity,
-                    R.color.errorColor
-                )
+                colorStateListValidation(mainActivity, R.color.errorColor)
             )
             mErrorContainer.setErrorTextColor(
-                AppCompatResources.getColorStateList(
-                    mainActivity,
-                    R.color.errorColor
-                )
+                colorStateListValidation(mainActivity, R.color.errorColor)
             )
-            mErrorContainer.hintTextColor = AppCompatResources.getColorStateList(
-                mainActivity,
-                R.color.errorColor
-            )
+            mErrorContainer.hintTextColor =
+                colorStateListValidation(mainActivity, R.color.errorColor)
             return false
         }
     }
@@ -76,33 +57,21 @@ open class BaseValidator(errorContainer: TextInputLayout, var mainActivity: Acti
         if (isValid(charSequence)) {
             mErrorContainer.error = null
             mErrorContainer.isErrorEnabled = false
-            mErrorContainer.boxBackgroundColor = AppCompatResources.getColorStateList(
-                mainActivity,
-                R.color.boxBackgroundDefault
-            ).defaultColor
-            mErrorContainer.hintTextColor = AppCompatResources.getColorStateList(
-                mainActivity,
-                R.color.secondaryTextColor
-            )
+            mErrorContainer.boxBackgroundColor =
+                colorStateListValidation(mainActivity, R.color.boxBackgroundDefault).defaultColor
+            mErrorContainer.hintTextColor =
+                colorStateListValidation(mainActivity, R.color.secondaryTextColor)
             return true
         } else {
             mErrorContainer.error = mErrorMessage
             mErrorContainer.setErrorIconTintList(
-                AppCompatResources.getColorStateList(
-                    mainActivity,
-                    R.color.errorColor
-                )
+                colorStateListValidation(mainActivity, R.color.errorColor)
             )
             mErrorContainer.setErrorTextColor(
-                AppCompatResources.getColorStateList(
-                    mainActivity,
-                    R.color.errorColor
-                )
+                colorStateListValidation(mainActivity, R.color.errorColor)
             )
-            mErrorContainer.hintTextColor = AppCompatResources.getColorStateList(
-                mainActivity,
-                R.color.errorColor
-            )
+            mErrorContainer.hintTextColor =
+                colorStateListValidation(mainActivity, R.color.errorColor)
             return false
         }
     }

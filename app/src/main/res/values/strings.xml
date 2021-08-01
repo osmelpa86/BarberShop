@@ -60,7 +60,7 @@
     <string name="message_hint_price">Precio</string>
     <string name="message_hint_client">Cliente</string>
     <string name="message_hint_turn">Turno</string>
-    <string name="message_hint_cost">Costo adicional</string>
+    <string name="message_hint_cost">Costo</string>
     <string name="message_hint_total_cost">Costo total</string>
     <string name="message_hint_status">Estado</string>
     <string name="message_hint_services">Servicios</string>
@@ -72,7 +72,7 @@
     <string name="message_validation_exits_turn_name">Ya existe un turno con ese nombre</string>
     <string name="message_validation_exits_turn_hour">Ya existe un turno con esa hora</string>
     <string name="message_validation_incorrect_start_cell">El número debe empezar con 5</string>
-    <string name="message_validation_lenght_phone">El número debe contener 11 digitos</string>
+    <string name="message_validation_lenght_phone">El número debe contener 8 digitos</string>
     <string name="message_validation_select_expense_category">No se ha seleccionado una categoría de gastos</string>
     <string name="message_validation_select_color_expense_category">No se ha seleccionado un color</string>
     <string name="message_validation_select_turn">No se ha seleccionado un turno</string>
@@ -107,5 +107,11 @@
     <!--    Reservacion-->
     <string name="active">Activa</string>
     <string name="inactive">Inactiva</string>
+
+    <!--Servicio-->
+    <string name="service_status_open">Abierta</string>
+    <string name="service_status_cancel">Cancelada</string>
+    <string name="service_status_completed">Completada</string>
+    <string name="service_status_closed">Cerrada</string>
 
 </resources>

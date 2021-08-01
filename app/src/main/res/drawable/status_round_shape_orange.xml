@@ -5,9 +5,4 @@
         android:endColor="#FF6F00"
         android:startColor="#FF5722" />
     <corners android:radius="500dp" />
-    <padding
-        android:bottom="32px"
-        android:left="32px"
-        android:right="32px"
-        android:top="32px" />
 </shape>

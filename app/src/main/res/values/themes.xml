@@ -50,13 +50,12 @@
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxStrokeWidthFocused">0dp</item>
         <item name="boxBackgroundColor">@color/boxBackgroundDefault</item>
-        <item name="android:paddingTop">1dp</item>
-        <item name="android:paddingBottom">1dp</item>
+        <!--        <item name="android:paddingTop">1dp</item>-->
+        <!--        <item name="android:paddingBottom">1dp</item>-->
         <item name="boxCornerRadiusBottomEnd">@android:dimen/thumbnail_width</item>
         <item name="boxCornerRadiusBottomStart">@android:dimen/thumbnail_width</item>
         <item name="boxCornerRadiusTopEnd">@android:dimen/thumbnail_width</item>
         <item name="boxCornerRadiusTopStart">@android:dimen/thumbnail_width</item>
-
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textColorHighlight">@color/secondaryTextColor</item>
         <item name="android:textColorHint">@color/primaryTextColor</item>
@@ -67,15 +66,10 @@
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxStrokeWidthFocused">0dp</item>
         <item name="boxBackgroundColor">@color/boxBackgroundDefault</item>
-        <!--        <item name="android:paddingTop">1dp</item>-->
-        <!--        <item name="android:paddingBottom">1dp</item>-->
         <item name="boxCornerRadiusTopStart">26dp</item>
         <item name="boxCornerRadiusBottomStart">26dp</item>
         <item name="boxCornerRadiusBottomEnd">0dp</item>
         <item name="boxCornerRadiusTopEnd">0dp</item>
-        <!--        <item name="boxCornerRadiusBottomStart">@android:dimen/thumbnail_width</item>-->
-        <!--        <item name="boxCornerRadiusTopStart">@android:dimen/thumbnail_width</item>-->
-
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textColorHighlight">@color/secondaryTextColor</item>
         <item name="android:textColorHint">@color/primaryTextColor</item>
@@ -86,8 +80,8 @@
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxStrokeWidthFocused">0dp</item>
         <item name="boxBackgroundColor">@color/boxBackgroundDefault</item>
-        <item name="android:paddingTop">1dp</item>
-        <item name="android:paddingBottom">1dp</item>
+        <!--        <item name="android:paddingTop">1dp</item>-->
+        <!--        <item name="android:paddingBottom">1dp</item>-->
         <item name="boxCornerRadiusBottomEnd">25dp</item>
         <item name="boxCornerRadiusBottomStart">25dp</item>
         <item name="boxCornerRadiusTopEnd">25dp</item>
@@ -138,13 +132,6 @@
         <item name="android:textColorHighlight">@color/secondaryTextColor</item>
         <item name="android:textColorHint">@color/primaryTextColor</item>
         <item name="hintTextColor">@color/secondaryTextColor</item>
-    </style>
-
-    <style name="SpinnerRound">
-        <!--        <item name="android:background">@drawable/edit_text_roud_shape</item>-->
-        <item name="colorAccent">@color/primaryTextColor</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
-        <item name="android:textColorHint">@color/secondaryTextColor</item>
     </style>
 
     <!--    <style name="CustomMultilineEditText" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">-->

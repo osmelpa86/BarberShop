@@ -6,8 +6,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class Converters {
-    @SuppressLint("SimpleDateFormat")
-    private val df = SimpleDateFormat("d/M/yyyy")
 
     @TypeConverter
     fun fromTimestamp(value: Long?): Date? {
@@ -22,7 +20,7 @@ class Converters {
     @TypeConverter
     fun dateToTime(value: Date?): String? {
         return if (value != null) {
-            df.format(value)
+            formatDate(value)
         } else {
             null
         }

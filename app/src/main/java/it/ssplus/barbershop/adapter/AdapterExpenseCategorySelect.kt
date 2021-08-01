@@ -18,6 +18,7 @@ import it.ssplus.barbershop.R
 import it.ssplus.barbershop.databinding.ItemExpenseCategorySelectBinding
 import it.ssplus.barbershop.model.entity.ExpenseCategory
 import it.ssplus.barbershop.utils.Constants
+import it.ssplus.barbershop.utils.drawable
 
 class AdapterExpenseCategorySelect(val activity: Activity, selected: Int) :
     RecyclerView.Adapter<AdapterExpenseCategorySelect.ExpenseCategoryViewHolder>() {
@@ -35,23 +36,20 @@ class AdapterExpenseCategorySelect(val activity: Activity, selected: Int) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(expenseCategory: ExpenseCategory) {
             if (checkedPosition == -1) {
-                binding.root.background =
-                    ContextCompat.getDrawable(activity, R.drawable.item_color_bg_transparent)
+                binding.root.background = drawable(activity, R.drawable.item_color_bg_transparent)
             } else {
                 if (checkedPosition == adapterPosition) {
-                    binding.root.background = ContextCompat.getDrawable(
-                        activity,
-                        R.drawable.item_color_bg_roud_shape_linear
-                    )
+                    binding.root.background =
+                        drawable(activity, R.drawable.item_color_bg_roud_shape_linear)
                 } else {
                     binding.root.background =
-                        ContextCompat.getDrawable(activity, R.drawable.item_color_bg_transparent)
+                        drawable(activity, R.drawable.item_color_bg_transparent)
                 }
             }
 
             binding.root.setOnClickListener {
                 binding.root.background =
-                    ContextCompat.getDrawable(activity, R.drawable.item_color_bg_roud_shape_linear)
+                    drawable(activity, R.drawable.item_color_bg_roud_shape_linear)
                 if (checkedPosition != adapterPosition) {
                     notifyItemChanged(checkedPosition)
                     checkedPosition = adapterPosition
@@ -68,7 +66,7 @@ class AdapterExpenseCategorySelect(val activity: Activity, selected: Int) :
             )
             binding.ivIconExpenseCategory.setImageBitmap(bitmap)
             binding.clIconExpenseCategory.background =
-                ContextCompat.getDrawable(activity, Constants.roundIcons[expenseCategory.color])
+                drawable(activity, Constants.roundIcons[expenseCategory.color])
         }
     }
 

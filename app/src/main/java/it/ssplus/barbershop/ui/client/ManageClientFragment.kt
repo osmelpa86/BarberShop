@@ -15,7 +15,6 @@ import android.text.InputFilter.LengthFilter
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -25,14 +24,14 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import com.yalantis.ucrop.UCrop
 import it.ssplus.barbershop.R
 import it.ssplus.barbershop.databinding.FragmentManageClientBinding
-import it.ssplus.barbershop.databinding.SnackbarMessageSimpleBinding
 import it.ssplus.barbershop.model.entity.Client
 import it.ssplus.barbershop.utils.ImageUtils
-import it.ssplus.barbershop.utils.SnackBarUtil
+import it.ssplus.barbershop.utils.colorStateList
+import it.ssplus.barbershop.utils.isNull
+import it.ssplus.barbershop.utils.snackbar
 import it.ssplus.barbershop.utils.validators.CellFieldValidator
 import it.ssplus.barbershop.utils.validators.PhoneFieldValidator
 import it.ssplus.barbershop.utils.validators.RequiredFieldValidator
@@ -84,6 +83,7 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
         binding.fabClientTakePicture.setOnClickListener(this)
         binding.tilPhoneNumberClient.editText!!.filters = arrayOf(LengthFilter(8))
         binding.tilCellClient.editText!!.filters = arrayOf(LengthFilter(8))
+        binding.tilDescriptionClient.editText!!.filters = arrayOf(LengthFilter(60))
 
         if (arguments?.getSerializable("client") != null) {
             client = arguments?.getSerializable("client") as Client
@@ -130,7 +130,7 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
         val validCell = CellFieldValidator(
             binding.tilCellClient,
             requireActivity()
-        ).validate(binding.tilCellClient.editText!!.text.toString())
+        ).validateIgnoreNull(binding.tilCellClient.editText!!.text.toString())
 
         val validPhone = PhoneFieldValidator(
             binding.tilPhoneNumberClient,
@@ -138,7 +138,7 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
         ).validateIgnoreNull(binding.tilPhoneNumberClient.editText!!.text.toString())
 
         if (validName && validCell && validPhone) {
-            if (client == null) { //Add
+            if (client.isNull()) { //Add
                 clientViewModel.insert(
                     Client(
                         name = binding.tilNameClient.editText!!.text.toString(),
@@ -149,29 +149,8 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
                     )
                 )
 
-                val customSnackBar: Snackbar = Snackbar.make(
-                    binding.root,
-                    "",
-                    Snackbar.LENGTH_LONG
-                )
-                SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
-                    customSnackBar,
-                    requireActivity(),
-                    R.drawable.snackbar_background_roud_shape,
-                    R.color.primaryTextColor,
-                    R.color.primaryTextColor
-                )
-                val layout: Snackbar.SnackbarLayout =
-                    customSnackBar.view as Snackbar.SnackbarLayout
-                val snackBinding =
-                    SnackbarMessageSimpleBinding.inflate(layoutInflater, null, false)
-                snackBinding.smpSimpleMessage.text =
-                    resources.getString(R.string.message_success_add)
-                snackBinding.smpCancel.setOnClickListener { customSnackBar.dismiss() }
-                layout.setPadding(0, 0, 0, 0)
-                layout.addView(snackBinding.root, 0)
-                customSnackBar.show()
-                findNavController().navigate(R.id.nav_client)
+                snackbar(binding.root, R.string.message_success_add)
+                findNavController().navigate(R.id.action_manage_client_to_nav_client)
             } else //Editar
             {
                 clientViewModel.update(
@@ -185,37 +164,9 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
                     )
                 )
 
-                val customSnackBar: Snackbar = Snackbar.make(
-                    binding.root,
-                    "",
-                    Snackbar.LENGTH_LONG
-                )
-                SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
-                    customSnackBar,
-                    requireActivity(),
-                    R.drawable.snackbar_background_roud_shape,
-                    R.color.primaryTextColor,
-                    R.color.primaryTextColor
-                )
-                SnackBarUtil.getColorfulAndDrawableBacgroundSnackBar(
-                    customSnackBar,
-                    requireActivity(),
-                    R.drawable.snackbar_background_roud_shape,
-                    R.color.primaryTextColor,
-                    R.color.primaryTextColor
-                )
-                val layout: Snackbar.SnackbarLayout =
-                    customSnackBar.view as Snackbar.SnackbarLayout
-                val snackBinding =
-                    SnackbarMessageSimpleBinding.inflate(layoutInflater, null, false)
-                snackBinding.smpSimpleMessage.text =
-                    resources.getString(R.string.message_success_edit)
-                snackBinding.smpCancel.setOnClickListener { customSnackBar.dismiss() }
-                layout.setPadding(0, 0, 0, 0)
-                layout.addView(snackBinding.root, 0)
-                customSnackBar.show()
+                snackbar(binding.root, R.string.message_success_edit)
                 client = null
-                findNavController().navigate(R.id.nav_client)
+                findNavController().navigate(R.id.action_manage_client_to_nav_client)
             }
         }
     }
@@ -353,29 +304,18 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
         croppedImage?.let {
             val options = UCrop.Options()
             options.setStatusBarColor(
-                AppCompatResources.getColorStateList(
-                    requireActivity(),
-                    R.color.primaryColor
-                ).defaultColor
+                colorStateList(R.color.primaryColor)
             )
             options.setToolbarColor(
-                AppCompatResources.getColorStateList(
-                    requireActivity(),
-                    R.color.primaryColor
-                ).defaultColor
+                colorStateList(R.color.primaryColor)
             )
             options.setToolbarTitle(getString(R.string.crop_image))
             options.setToolbarWidgetColor(
-                AppCompatResources.getColorStateList(
-                    requireActivity(),
-                    android.R.color.white
-                ).defaultColor
+                colorStateList(android.R.color.white)
             )
+
             options.setActiveControlsWidgetColor(
-                AppCompatResources.getColorStateList(
-                    requireActivity(),
-                    R.color.primaryColor
-                ).defaultColor
+                colorStateList(R.color.primaryColor)
             )
             UCrop.of(captureImage.toUri(), it.toUri())
                 .withOptions(options)
@@ -413,29 +353,17 @@ class ManageClientFragment : Fragment(), View.OnClickListener {
             croppedImage?.let {
                 val options = UCrop.Options()
                 options.setStatusBarColor(
-                    AppCompatResources.getColorStateList(
-                        requireActivity(),
-                        R.color.primaryColor
-                    ).defaultColor
+                    colorStateList(R.color.primaryColor)
                 )
                 options.setToolbarColor(
-                    AppCompatResources.getColorStateList(
-                        requireActivity(),
-                        R.color.primaryColor
-                    ).defaultColor
+                    colorStateList(R.color.primaryColor)
                 )
                 options.setToolbarTitle(getString(R.string.crop_image))
                 options.setToolbarWidgetColor(
-                    AppCompatResources.getColorStateList(
-                        requireActivity(),
-                        android.R.color.white
-                    ).defaultColor
+                    colorStateList(android.R.color.white)
                 )
                 options.setActiveControlsWidgetColor(
-                    AppCompatResources.getColorStateList(
-                        requireActivity(),
-                        R.color.primaryColor
-                    ).defaultColor
+                    colorStateList(R.color.primaryColor)
                 )
                 UCrop.of(uri, it.toUri())
                     .withOptions(options)

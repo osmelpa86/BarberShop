@@ -56,7 +56,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="14dp"
                 android:adjustViewBounds="true"
                 android:clickable="true"
                 android:cropToPadding="true"
@@ -137,7 +137,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="14dp"
                 android:adjustViewBounds="true"
                 android:clickable="true"
                 android:cropToPadding="true"
@@ -203,7 +203,7 @@
             android:hint="@string/message_hint_description"
             android:imeOptions="actionDone"
             android:inputType="textMultiLine"
-            android:lines="4"
+            android:lines="2"
              />
     </com.google.android.material.textfield.TextInputLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
