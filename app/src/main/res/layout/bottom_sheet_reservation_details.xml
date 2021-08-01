@@ -234,11 +234,23 @@
             </LinearLayout>
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tvTitleServices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/message_hint_services"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="12sp" />
+
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
             android:background="?android:attr/listDivider" />
 
         <androidx.core.widget.NestedScrollView
