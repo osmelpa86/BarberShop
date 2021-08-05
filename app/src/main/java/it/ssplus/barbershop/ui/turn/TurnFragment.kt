@@ -202,7 +202,7 @@ class TurnFragment : Fragment(), View.OnClickListener {
         if (turn != null) {
             convertView.tilNameTurn.editText!!.setText(turn!!.name)
             originalTime = turn!!.hour
-            convertView.tilHourTurn.editText!!.setText(turn!!.hour)
+            convertView.tilHourTurn.editText!!.setText(formatTime(originalTime!!.split(":")[0].toInt(), originalTime!!.split(":")[1].toInt()))
         }
 
         val dialogAdd: AlertDialog = builderAdd.create()

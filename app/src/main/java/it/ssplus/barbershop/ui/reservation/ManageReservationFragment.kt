@@ -237,9 +237,9 @@ class ManageReservationFragment : Fragment(), View.OnClickListener,
         convertView.datePicker.updateDate(mYear, mMonth, mDay)
 
         if (editText!!.text.isNotEmpty()) {
-            convertView.datePicker.maxDate = parseDate(editText.text.toString()).time
+            convertView.datePicker.minDate = parseDate(editText.text.toString()).time
         } else {
-            convertView.datePicker.maxDate = System.currentTimeMillis()
+            convertView.datePicker.minDate = System.currentTimeMillis()
         }
 
         val dialogAdd: AlertDialog = builderAdd.create()
